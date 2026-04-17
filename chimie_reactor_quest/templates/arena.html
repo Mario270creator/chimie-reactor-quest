@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Arena · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Arena de quiz-uri</div>
+      <h1>Boss fights cu scor, istoric și XP.</h1>
+    </div>
+
+    {% if current_user.role == 'profesor' %}
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Creează boss fight nou</h2>
+        <span class="tiny-muted">Builder cu întrebări dinamice</span>
+      </div>
+      <form method="post" action="{{ url_for('create_quiz') }}" class="stack-form" id="quizBuilderForm">
+        <div class="grid-form two">
+          <label>
+            <span>Clasa</span>
+            <select name="class_id" required>
+              {% for cls in classes %}
+              <option value="{{ cls.id }}">{{ cls.name }} {{ cls.section }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>
+            <span>XP</span>
+            <input type="number" name="xp" min="20" max="300" value="120">
+          </label>
+          <label class="full">
+            <span>Titlu</span>
+            <input type="text" name="title" placeholder="Arena · ..." required>
+          </label>
+          <label class="full">
+            <span>Descriere</span>
+            <textarea name="description" rows="3" placeholder="Explică ce testează quiz-ul." required></textarea>
+          </label>
+          <label>
+            <span>Dificultate</span>
+            <select name="difficulty">
+              <option>Boss fight</option>
+              <option>Elite</option>
+              <option>Final boss</option>
+            </select>
+          </label>
+        </div>
+
+        <input type="hidden" name="questions_payload" id="questionsPayload">
+
+        <div class="builder-head">
+          <h3>Întrebări</h3>
+          <button class="btn ghost small" type="button" id="addQuestionBtn">+ Adaugă întrebare</button>
+        </div>
+        <div id="questionBuilder" class="builder-list"></div>
+
+        <div class="form-actions">
+          <button class="btn primary" type="submit">Publică boss fight-ul</button>
+        </div>
+      </form>
+    </section>
+    {% endif %}
+
+    <section class="arena-grid">
+      {% for quiz in quizzes %}
+      <article class="arena-card big">
+        <div class="arena-topline">
+          <span class="pill">{{ quiz.class_name }} {{ quiz.class_section }}</span>
+          <span class="pill accent">{{ quiz.xp }} XP</span>
+        </div>
+        <h3>{{ quiz.title }}</h3>
+        <p>{{ quiz.description }}</p>
+        <div class="arena-meta">
+          <span>{{ quiz.difficulty }}</span>
+          {% if current_user.role == 'elev' %}
+            <span>Best score: {{ "%.0f"|format(quiz.best_score) }}%</span>
+            <span>Încercări: {{ quiz.attempt_count }}</span>
+          {% else %}
+            <span>Participanți: {{ quiz.participant_count }}</span>
+          {% endif %}
+        </div>
+        <a class="btn primary" href="{{ url_for('play_quiz', quiz_id=quiz.id) }}">Intră în arenă</a>
+      </article>
+      {% else %}
+      <div class="empty-state">Niciun quiz activ.</div>
+      {% endfor %}
+    </section>
+  </div>
+</section>
+{% endblock %}

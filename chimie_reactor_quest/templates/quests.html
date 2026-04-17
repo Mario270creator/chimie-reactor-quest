@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Misiuni · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Quest board</div>
+      <h1>Lecțiile arată ca misiuni, dar rămân extrem de ușor de administrat.</h1>
+    </div>
+
+    {% if current_user.role == 'profesor' %}
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Adaugă o misiune nouă</h2>
+        <span class="tiny-muted">XP + dificultate</span>
+      </div>
+      <form method="post" action="{{ url_for('create_lesson') }}" class="grid-form two">
+        <label>
+          <span>Clasa</span>
+          <select name="class_id" required>
+            {% for cls in classes %}
+            <option value="{{ cls.id }}">{{ cls.name }} {{ cls.section }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>
+          <span>XP</span>
+          <input type="number" name="xp" value="50" min="10" max="200">
+        </label>
+        <label class="full">
+          <span>Titlu</span>
+          <input type="text" name="title" placeholder="Misiunea 3 · ..." required>
+        </label>
+        <label class="full">
+          <span>Rezumat</span>
+          <textarea name="summary" rows="3" placeholder="Scurtă descriere a misiunii" required></textarea>
+        </label>
+        <label class="full">
+          <span>Conținut</span>
+          <textarea name="content" rows="6" placeholder="Explică lecția clar și atractiv." required></textarea>
+        </label>
+        <label>
+          <span>Dificultate</span>
+          <select name="difficulty">
+            <option>Start</option>
+            <option selected>Mediu</option>
+            <option>Avansat</option>
+            <option>Elite</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button class="btn primary" type="submit">Adaugă misiunea</button>
+        </div>
+      </form>
+    </section>
+    {% endif %}
+
+    <section class="mission-columns">
+      {% for lesson in lessons %}
+      <article class="mission-card">
+        <div class="mission-card-head">
+          <span class="pill">{{ lesson.class_name }} {{ lesson.class_section }}</span>
+          <span class="pill accent">{{ lesson.xp }} XP</span>
+        </div>
+        <h3>{{ lesson.title }}</h3>
+        <p class="mission-summary">{{ lesson.summary }}</p>
+        <details>
+          <summary>Deschide conținutul misiunii</summary>
+          <div class="details-body">{{ lesson.content }}</div>
+        </details>
+        <div class="mission-foot">
+          <span class="tiny-muted">{{ lesson.difficulty }}</span>
+          {% if current_user.role == 'elev' %}
+            {% if lesson.is_completed %}
+            <span class="status good">Finalizată</span>
+            {% else %}
+            <form method="post" action="{{ url_for('complete_lesson', lesson_id=lesson.id) }}">
+              <button class="btn primary small" type="submit">Completează</button>
+            </form>
+            {% endif %}
+          {% else %}
+            <span class="status">{{ lesson.completion_count }} completări</span>
+          {% endif %}
+        </div>
+      </article>
+      {% else %}
+      <div class="empty-state">Nu există misiuni încă.</div>
+      {% endfor %}
+    </section>
+  </div>
+</section>
+{% endblock %}

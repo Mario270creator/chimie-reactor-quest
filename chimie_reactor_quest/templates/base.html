@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08111f">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Chimie Academy Reactor Quest - joc educațional de chimie, laborator interactiv și modul ONCS.">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>{% block title %}{{ site_name }}{% endblock %}</title>
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Sari la conținut</a>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="{{ url_for('home') }}">
+          <div class="brand-badge">⚗️</div>
+          <div>
+            <strong>Chimie Academy</strong>
+            <small>Reactor Quest</small>
+          </div>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-label="Deschide meniul" data-nav-toggle>☰</button>
+
+        <nav class="topnav" data-nav-menu>
+          {% if current_user %}
+            <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">HQ</a>
+            <a class="{% if request.endpoint == 'classes_page' %}active{% endif %}" href="{{ url_for('classes_page') }}">Clase</a>
+            <a class="{% if request.endpoint == 'quests_page' %}active{% endif %}" href="{{ url_for('quests_page') }}">Misiuni</a>
+            <a class="{% if request.endpoint in ['arena_page', 'play_quiz'] %}active{% endif %}" href="{{ url_for('arena_page') }}">Arena</a>
+            <a class="{% if request.endpoint == 'oncs_page' or request.endpoint == 'export_project' %}active{% endif %}" href="{{ url_for('oncs_page') }}">ONCS Studio</a>
+            <a class="{% if request.endpoint == 'lab_page' or request.endpoint == 'pitch_timer' %}active{% endif %}" href="{{ url_for('lab_page') }}">Lab</a>
+            <a class="{% if request.endpoint == 'leaderboard_page' %}active{% endif %}" href="{{ url_for('leaderboard_page') }}">Leaderboard</a>
+            <a class="{% if request.endpoint == 'vault_page' %}active{% endif %}" href="{{ url_for('vault_page') }}">Vault</a>
+          {% else %}
+            <a href="#features">Funcții</a>
+            <a href="#oncs">ONCS</a>
+            <a href="#publish">Publicare</a>
+          {% endif %}
+        </nav>
+
+        <div class="topbar-actions">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Schimbă tema">🌗</button>
+          {% if current_user %}
+            <div class="user-pill">
+              <span>{{ user_level.icon }}</span>
+              <div>
+                <strong>{{ current_user.full_name }}</strong>
+                <small>{{ current_user.role|capitalize }} · {{ user_level.title }}</small>
+              </div>
+            </div>
+            <a class="btn ghost small" href="{{ url_for('logout') }}">Logout</a>
+          {% else %}
+            <a class="btn ghost small" href="{{ url_for('login') }}">Login</a>
+            <a class="btn primary small" href="{{ url_for('register') }}">Creează cont</a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+      <div class="container flash-stack">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+
+    <main id="mainContent">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <div class="footer-title">Reactor Quest</div>
+          <p>{{ footer_credits }}</p>
+        </div>
+        <div>
+          <div class="footer-title">Compatibilitate</div>
+          <p>Telefon, laptop și desktop, din browser. Include backend Flask, export JSON/CSV și modul PWA.</p>
+        </div>
+        <div>
+          <div class="footer-title">Acces rapid</div>
+          <p>
+            {% if current_user %}
+              <a href="{{ url_for('lab_page') }}">Intră în laborator</a> ·
+              <a href="{{ url_for('oncs_page') }}">Deschide ONCS Studio</a>
+            {% else %}
+              <a href="{{ url_for('demo_login', role='elev') }}">Demo elev</a> ·
+              <a href="{{ url_for('demo_login', role='profesor') }}">Demo profesor</a>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

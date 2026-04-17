@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Cont nou · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="container auth-grid">
+    <div class="auth-intro">
+      <div class="eyebrow">Înregistrare</div>
+      <h1>Creează-ți baza de lansare.</h1>
+      <p>Poți porni fie ca profesor, fie ca elev. După intrare, site-ul te duce direct în dashboard.</p>
+      <ul class="bullet-list">
+        <li>Profesor: creează clase, lecții, quiz-uri și proiecte ONCS.</li>
+        <li>Elev: completează misiuni, joacă arena și își urmărește progresul.</li>
+        <li>Totul rămâne organizat în backend-ul local.</li>
+      </ul>
+    </div>
+
+    <div class="panel form-panel">
+      <form method="post" class="stack-form">
+        <label>
+          <span>Nume complet</span>
+          <input type="text" name="full_name" placeholder="Nume Prenume" required>
+        </label>
+        <label>
+          <span>Utilizator</span>
+          <input type="text" name="username" placeholder="utilizator" required>
+        </label>
+        <label>
+          <span>Parolă</span>
+          <input type="password" name="password" placeholder="minim 4 caractere" required>
+        </label>
+        <label>
+          <span>Rol</span>
+          <select name="role" required>
+            <option value="elev">Elev</option>
+            <option value="profesor">Profesor</option>
+          </select>
+        </label>
+        <label>
+          <span>Bio scurt</span>
+          <textarea name="bio" rows="4" placeholder="Ex: coordonez un club de chimie / sunt pasionat de experimente și proiecte."></textarea>
+        </label>
+        <button class="btn primary large" type="submit">Creează contul</button>
+      </form>
+      <p class="small-note">Ai deja cont? <a href="{{ url_for('login') }}">Autentifică-te</a>.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

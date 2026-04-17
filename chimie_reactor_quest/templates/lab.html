@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Lab · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Reactor Lab</div>
+      <h1>Laboratorul vizual rămâne inclus și acum este integrat în ecosistemul jocului.</h1>
+      <p class="lead">Ai tabel periodic interactiv, motor de reacții, quiz rapid și calculator de masă molară. Pe mobil îl poți deschide și fullscreen.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Instrumente rapide</h2>
+          <a href="{{ url_for('pitch_timer') }}">Pitch timer</a>
+        </div>
+        <div class="rules-grid">
+          <div class="rule-card">
+            <strong>Lab complet</strong>
+            <p>Deschide laboratorul în pagină sau într-un tab separat, dacă vrei mai mult spațiu.</p>
+            <a class="btn primary small" href="{{ url_for('static', filename='legacy_lab/laborator.html') }}" target="_blank">Deschide separat</a>
+          </div>
+          <div class="rule-card">
+            <strong>ONCS practice</strong>
+            <p>Combină laboratorul cu ONCS Studio și exersează apoi prezentarea în timerul 10 + 5.</p>
+            <a class="btn ghost small" href="{{ url_for('oncs_page') }}">Mergi la ONCS Studio</a>
+          </div>
+          <div class="rule-card">
+            <strong>Telefon + desktop</strong>
+            <p>Pe telefon glisezi în tabel și folosești fullscreen; pe desktop ai spațiu pentru explorare rapidă.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Preview live</h2>
+          <span class="tiny-muted">Mod integrat</span>
+        </div>
+        <div class="lab-frame-shell">
+          <iframe src="{{ url_for('static', filename='legacy_lab/laborator.html') }}" title="Reactor Lab legacy module"></iframe>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+{% endblock %}

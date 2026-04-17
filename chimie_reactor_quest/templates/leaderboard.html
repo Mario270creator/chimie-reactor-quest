@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Clasament</div>
+      <h1>Toți jucătorii, într-un singur tablou.</h1>
+    </div>
+
+    <section class="panel">
+      <div class="leaderboard-table full">
+        {% for item in board %}
+        <div class="leader-row {% if loop.index == 1 %}top{% endif %}">
+          <div class="leader-row-rank">#{{ loop.index }}</div>
+          <div class="leader-row-name">{{ item.icon }} {{ item.full_name }}</div>
+          <div class="leader-row-role">{{ item.role|capitalize }}</div>
+          <div class="leader-row-score">{{ item.xp }} XP</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

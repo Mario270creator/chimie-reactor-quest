@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Clase · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Clase și comunicare</div>
+      <h1>Organizează totul ușor și clar.</h1>
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="panel">
+        {% if current_user.role == 'profesor' %}
+        <div class="panel-head">
+          <h2>Creează o clasă nouă</h2>
+          <span class="tiny-muted">Mentor control</span>
+        </div>
+        <form method="post" action="{{ url_for('create_class') }}" class="stack-form">
+          <label><span>Nume clasă</span><input type="text" name="name" placeholder="Clasa IX" required></label>
+          <label><span>Secțiune</span><input type="text" name="section" placeholder="A" required></label>
+          <label><span>Descriere</span><textarea name="description" rows="4" placeholder="Ce învață elevii în această clasă?" required></textarea></label>
+          <button class="btn primary" type="submit">Generează clasa</button>
+        </form>
+        {% else %}
+        <div class="panel-head">
+          <h2>Intră într-o clasă</h2>
+          <span class="tiny-muted">Cod primit de la profesor</span>
+        </div>
+        <form method="post" action="{{ url_for('join_class') }}" class="stack-form">
+          <label><span>Cod de acces</span><input type="text" name="code" placeholder="REACT7A" required></label>
+          <button class="btn primary" type="submit">Intră în clasă</button>
+        </form>
+        {% endif %}
+      </section>
+
+      {% if current_user.role == 'profesor' %}
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Publică anunț</h2>
+          <span class="tiny-muted">Apare în feed-ul elevilor</span>
+        </div>
+        <form method="post" action="{{ url_for('create_announcement', class_id=classes[0].id if classes else 0) }}" class="stack-form" data-announce-form>
+          <label>
+            <span>Clasa</span>
+            <select name="class_id" data-announce-select>
+              {% for cls in classes %}
+              <option value="{{ cls.id }}" data-action="{{ url_for('create_announcement', class_id=cls.id) }}">{{ cls.name }} {{ cls.section }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label><span>Titlu</span><input type="text" name="title" placeholder="Anunț nou" required></label>
+          <label><span>Mesaj</span><textarea name="content" rows="4" placeholder="Scrie noutatea pentru clasă." required></textarea></label>
+          <button class="btn primary" type="submit">Publică</button>
+        </form>
+      </section>
+      {% endif %}
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Clasele tale</h2>
+        <span class="tiny-muted">{{ classes|length }} total</span>
+      </div>
+      <div class="class-grid">
+        {% for cls in classes %}
+        <article class="class-card">
+          <div class="class-card-top">
+            <div>
+              <h3>{{ cls.name }} {{ cls.section }}</h3>
+              <p>{{ cls.description }}</p>
+            </div>
+            <span class="pill accent">{{ cls.code }}</span>
+          </div>
+          <div class="class-stats">
+            <span>📘 {{ cls.lesson_count }} misiuni</span>
+            <span>🏆 {{ cls.quiz_count }} arene</span>
+            {% if current_user.role == 'profesor' %}
+            <span>👥 {{ cls.student_count }} elevi</span>
+            {% endif %}
+          </div>
+          <button class="btn ghost small" type="button" data-copy-text="{{ cls.code }}">Copiază codul</button>
+        </article>
+        {% else %}
+        <div class="empty-state">Nu există încă nicio clasă.</div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Feed / anunțuri</h2>
+        <span class="tiny-muted">cele mai recente</span>
+      </div>
+      <div class="feed-list">
+        {% for ann in announcements %}
+        <article class="feed-item">
+          <span class="pill">{{ ann.class_name }} {{ ann.class_section }}</span>
+          <h3>{{ ann.title }}</h3>
+          <p>{{ ann.content }}</p>
+        </article>
+        {% else %}
+        <div class="empty-state">Nu există încă anunțuri.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,4259 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png">
+  <title>Reactor Lab – Chimie Academy</title>
+  <style>
+    
+body {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  background:
+    linear-gradient(rgba(255,255,255,0.72), rgba(255,255,255,0.72)),
+    url('data:image/svg+xml;utf8,%0A%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221600%22%20height%3D%221200%22%20viewBox%3D%220%200%201600%201200%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23e0f7fa%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23f3e5f5%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23fff8e1%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%221600%22%20height%3D%221200%22%20fill%3D%22url%28%23bg%29%22/%3E%0A%20%20%3Cg%20opacity%3D%220.18%22%20stroke%3D%22%231565c0%22%20stroke-width%3D%226%22%20fill%3D%22none%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22220%22%20cy%3D%22180%22%20r%3D%2280%22/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22220%22%20cy%3D%22180%22%20r%3D%2222%22%20fill%3D%22%2342a5f5%22%20opacity%3D%220.35%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%22220%22%20cy%3D%22180%22%20rx%3D%22120%22%20ry%3D%2242%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%22220%22%20cy%3D%22180%22%20rx%3D%22120%22%20ry%3D%2242%22%20transform%3D%22rotate%2860%20220%20180%29%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%22220%22%20cy%3D%22180%22%20rx%3D%22120%22%20ry%3D%2242%22%20transform%3D%22rotate%28120%20220%20180%29%22/%3E%0A%0A%20%20%20%20%3Ccircle%20cx%3D%221320%22%20cy%3D%22240%22%20r%3D%2288%22/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%221320%22%20cy%3D%22240%22%20r%3D%2224%22%20fill%3D%22%2366bb6a%22%20opacity%3D%220.35%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%221320%22%20cy%3D%22240%22%20rx%3D%22132%22%20ry%3D%2248%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%221320%22%20cy%3D%22240%22%20rx%3D%22132%22%20ry%3D%2248%22%20transform%3D%22rotate%2860%201320%20240%29%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%221320%22%20cy%3D%22240%22%20rx%3D%22132%22%20ry%3D%2248%22%20transform%3D%22rotate%28120%201320%20240%29%22/%3E%0A%0A%20%20%20%20%3Ccircle%20cx%3D%221280%22%20cy%3D%22920%22%20r%3D%2272%22/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%221280%22%20cy%3D%22920%22%20r%3D%2220%22%20fill%3D%22%23ef5350%22%20opacity%3D%220.35%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%221280%22%20cy%3D%22920%22%20rx%3D%22108%22%20ry%3D%2238%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%221280%22%20cy%3D%22920%22%20rx%3D%22108%22%20ry%3D%2238%22%20transform%3D%22rotate%2860%201280%20920%29%22/%3E%0A%20%20%20%20%3Cellipse%20cx%3D%221280%22%20cy%3D%22920%22%20rx%3D%22108%22%20ry%3D%2238%22%20transform%3D%22rotate%28120%201280%20920%29%22/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Cg%20opacity%3D%220.16%22%20fill%3D%22%2300897b%22%20stroke%3D%22%2300897b%22%20stroke-width%3D%225%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22520%22%20cy%3D%22220%22%20r%3D%2222%22/%3E%3Ccircle%20cx%3D%22590%22%20cy%3D%22180%22%20r%3D%2222%22/%3E%3Ccircle%20cx%3D%22660%22%20cy%3D%22220%22%20r%3D%2222%22/%3E%0A%20%20%20%20%3Cline%20x1%3D%22542%22%20y1%3D%22210%22%20x2%3D%22568%22%20y2%3D%22192%22/%3E%3Cline%20x1%3D%22612%22%20y1%3D%22192%22%20x2%3D%22638%22%20y2%3D%22210%22/%3E%0A%0A%20%20%20%20%3Ccircle%20cx%3D%22260%22%20cy%3D%22860%22%20r%3D%2222%22/%3E%3Ccircle%20cx%3D%22330%22%20cy%3D%22820%22%20r%3D%2222%22/%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22860%22%20r%3D%2222%22/%3E%3Ccircle%20cx%3D%22470%22%20cy%3D%22820%22%20r%3D%2222%22/%3E%0A%20%20%20%20%3Cline%20x1%3D%22282%22%20y1%3D%22850%22%20x2%3D%22308%22%20y2%3D%22832%22/%3E%3Cline%20x1%3D%22352%22%20y1%3D%22832%22%20x2%3D%22378%22%20y2%3D%22850%22/%3E%3Cline%20x1%3D%22422%22%20y1%3D%22850%22%20x2%3D%22448%22%20y2%3D%22832%22/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Cg%20opacity%3D%220.16%22%20stroke%3D%22%238e24aa%22%20stroke-width%3D%226%22%20fill%3D%22rgba%28142%2C36%2C170%2C0.08%29%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M760%20140%20q40%2090%200%20180%20q-40%2090%200%20180%22%20/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M820%20140%20q-40%2090%200%20180%20q40%2090%200%20180%22%20/%3E%0A%20%20%20%20%3Cline%20x1%3D%22760%22%20y1%3D%22140%22%20x2%3D%22820%22%20y2%3D%22140%22/%3E%0A%20%20%20%20%3Cline%20x1%3D%22760%22%20y1%3D%22320%22%20x2%3D%22820%22%20y2%3D%22320%22/%3E%0A%20%20%20%20%3Cline%20x1%3D%22760%22%20y1%3D%22500%22%20x2%3D%22820%22%20y2%3D%22500%22/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Cg%20opacity%3D%220.14%22%20fill%3D%22%23fb8c00%22%20stroke%3D%22%23ef6c00%22%20stroke-width%3D%225%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M1120%20560%20L1160%20700%20Q1168%20740%201140%20760%20L1040%20760%20Q1012%20740%201020%20700%20L1060%20560%20Z%22/%3E%0A%20%20%20%20%3Crect%20x%3D%221088%22%20y%3D%22500%22%20width%3D%2264%22%20height%3D%2260%22%20rx%3D%2212%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M1080%20710%20Q1098%20690%201120%20710%20T1160%20710%22%20fill%3D%22none%22/%3E%0A%20%20%3C/g%3E%0A%0A%20%20%3Cg%20opacity%3D%220.12%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2272%22%20font-weight%3D%22700%22%20fill%3D%22%23263238%22%3E%0A%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%221120%22%3EH%E2%82%82O%3C/text%3E%0A%20%20%20%20%3Ctext%20x%3D%221280%22%20y%3D%221120%22%3ENaCl%3C/text%3E%0A%20%20%20%20%3Ctext%20x%3D%221180%22%20y%3D%22120%22%3ECO%E2%82%82%3C/text%3E%0A%20%20%20%20%3Ctext%20x%3D%2290%22%20y%3D%22110%22%3EO%E2%82%82%3C/text%3E%0A%20%20%3C/g%3E%0A%3C/svg%3E%0A');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  text-align: center;
+  padding: 50px;
+  position: relative;
+}
+input {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 10px;
+      width: 320px;
+      border: 1px solid #ccc;
+      margin: 6px;
+    }
+    button {
+      padding: 12px 22px;
+      font-size: 1.05em;
+      background-color: #558b2f;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .result {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      font-size: 1em;
+      color: #2e7d32;
+    }
+    table {
+      width: 95%;
+      font-size: 1.2em;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 16px 18px;
+      border: 1px solid #e0e0e0;
+    }
+    th { background: #f7f7f7; }
+    .author {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.95em;
+      color: #33691e;
+      font-weight: bold;
+      background: rgba(255,255,255,0.7);
+      padding: 6px 10px;
+      border-radius: 10px;
+      backdrop-filter: blur(4px);
+    }
+    .panel {
+      max-width: 980px;
+      margin: 20px auto 0;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid #c8e6c9;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: left;
+    }
+    .chips {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+    .chip {
+      background:#e8f5e9;
+      border:1px solid #c8e6c9;
+      color:#1b5e20;
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:bold;
+    }
+    .chip:hover { filter: brightness(0.98); }
+    .bigResult {
+      font-size: 1.9em;
+      font-weight: 900;
+      color: #1b5e20;
+      margin-top: 18px;
+      word-break: break-word;
+    }
+    .hint {
+      color:#33691e;
+      font-weight:bold;
+      margin: 6px 0 0;
+    }
+  
+    /* --- Design upgrade (v10.1) --- */
+    :root{
+      --bg1:#f7f9ff;
+      --bg2:#e8f3ff;
+      --card: rgba(255,255,255,.78);
+      --card2: rgba(255,255,255,.92);
+      --text:#0f172a;
+      --muted:#475569;
+      --border: rgba(15,23,42,.12);
+      --shadow: 0 10px 30px rgba(2,6,23,.12);
+      --shadow2: 0 6px 18px rgba(2,6,23,.10);
+      --accent:#3b82f6;
+      --accent2:#22c55e;
+      --typeColor: var(--accent2);
+      --focus: 0 0 0 4px rgba(59,130,246,.20);
+      --radius: 18px;
+    }
+    body{
+      padding: 26px;
+      background: radial-gradient(1200px 700px at 20% 10%, var(--bg2), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 30%, #e9ffe7, transparent 55%),
+                  linear-gradient(135deg, var(--bg1), #ffffff);
+      color: var(--text);
+    }
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .topbar{
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      margin: 0 auto 18px auto;
+      max-width: 1100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+    }
+    .brand{ text-align:left; }
+    .brand-title{ font-weight: 800; letter-spacing: .2px; font-size: 1.05rem; }
+    .brand-subtitle{ color: var(--muted); font-size: .92rem; margin-top: 2px; }
+
+    h1{
+      margin: 16px 0 12px;
+      letter-spacing: .2px;
+    }
+    hr{ opacity:.25; }
+
+    .panel, .result{
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+    }
+    .panel{ padding: 18px 16px; }
+    .result{ padding: 18px 16px; }
+
+    input{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.9);
+      transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+    }
+    input:focus{
+      outline:none;
+      box-shadow: var(--focus);
+      border-color: rgba(59,130,246,.35);
+      transform: translateY(-1px);
+    }
+
+    button{
+      background: linear-gradient(135deg, var(--accent), #2563eb);
+      box-shadow: 0 8px 20px rgba(37,99,235,.22);
+      transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    button:hover{ transform: translateY(-1px); filter: brightness(1.02); box-shadow: 0 12px 26px rgba(37,99,235,.28); }
+    button:active{ transform: translateY(0px); box-shadow: 0 6px 14px rgba(37,99,235,.18); }
+
+    .icon-btn{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.65);
+      color: var(--text);
+      cursor:pointer;
+      box-shadow: none;
+    }
+    .icon-btn:hover{ transform: translateY(-1px); }
+    .icon-btn:active{ transform: translateY(0px); }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      justify-content:center;
+    }
+    .chip{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 6px 14px rgba(2,6,23,.08);
+      border-radius: 999px;
+      padding: 8px 12px;
+      transition: transform .12s ease, box-shadow .12s ease;
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(2,6,23,.12); }
+
+    .hint{
+      color: var(--muted);
+    }
+
+    /* Better table look */
+    table{
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow:hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.92);
+    }
+    th{
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      z-index: 2;
+    }
+
+    /* Dark mode */
+    body.dark{
+      --bg1:#0b1220;
+      --bg2:#0f1c33;
+      --card: rgba(15,23,42,.70);
+      --card2: rgba(15,23,42,.86);
+      --text:#e5e7eb;
+      --muted:#a7b2c3;
+      --border: rgba(226,232,240,.12);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --shadow2: 0 6px 18px rgba(0,0,0,.30);
+      --accent:#60a5fa;
+      --typeColor: var(--accent2);
+    }
+    body.dark input{ background: rgba(2,6,23,.35); color: var(--text); }
+    body.dark table{ background: rgba(2,6,23,.22); }
+    body.dark th{ background: rgba(15,23,42,.92); }
+
+    body.neon{
+      --bg1:#050712;
+      --bg2:#0b1030;
+      --card: rgba(8,12,34,.74);
+      --card2: rgba(10,15,44,.88);
+      --text:#ecfeff;
+      --muted:#9fb4d1;
+      --border: rgba(34,211,238,.16);
+      --shadow: 0 12px 36px rgba(8,145,178,.18);
+      --shadow2: 0 10px 24px rgba(168,85,247,.16);
+      --accent:#22d3ee;
+      --accent2:#c084fc;
+      --typeColor:#67e8f9;
+    }
+    body.neon{
+      background:
+        radial-gradient(1200px 700px at 18% 12%, rgba(34,211,238,.18), transparent 58%),
+        radial-gradient(900px 680px at 88% 18%, rgba(168,85,247,.18), transparent 52%),
+        radial-gradient(800px 600px at 50% 100%, rgba(52,211,153,.10), transparent 48%),
+        linear-gradient(135deg, var(--bg1), #050816);
+    }
+    body.neon input{ background: rgba(6,10,28,.78); color: var(--text); border-color: rgba(34,211,238,.20); }
+    body.neon table{ background: rgba(6,10,28,.68); }
+    body.neon th{ background: rgba(10,15,44,.96); }
+
+    .reaction-type{ margin-top:10px; font-size:0.95em; font-weight:800; color: var(--typeColor); }
+
+    /* Reaction actions (copy / favorite) */
+    .rx-actions{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .rx-mini-btn{
+      padding: 10px 14px;
+      font-size: 0.98em;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 18px rgba(2,6,23,.14);
+      background: linear-gradient(135deg, var(--accent), #2563eb);
+      color: white;
+    }
+    
+    .rx-reactants-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+    }
+    .rx-input-wrap{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      justify-content:center;
+    }
+    .rx-input-wrap input{
+      margin: 6px 0;
+    }
+.rx-mini-btn.secondary{
+      background: linear-gradient(135deg, var(--accent2), #16a34a);
+      box-shadow: 0 8px 18px rgba(34,197,94,.18);
+    }
+    .rx-mini-btn.ghost{
+      background: rgba(255,255,255,.85);
+      color: var(--text);
+      box-shadow: 0 6px 14px rgba(2,6,23,.08);
+    }
+    body.dark .rx-mini-btn.ghost{
+      background: rgba(2,6,23,.35);
+      color: var(--text);
+    }
+    .rx-mini-btn:active{ transform: translateY(0px); }
+    .fav-on{ filter: brightness(1.05) saturate(1.05); }
+
+    .fav-wrap{ margin-top: 14px; }
+    .fav-list{ margin-top: 6px; font-size: 1.02em; }
+    .fav-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 6px 14px rgba(2,6,23,.08);
+      margin: 8px 0;
+    }
+    body.dark .fav-item{ background: rgba(2,6,23,.25); }
+    .fav-eq{ text-align:left; line-height: 1.35; word-break: break-word; }
+    .fav-meta{ font-size: 0.92em; font-weight: 800; color: var(--typeColor); margin-top: 4px; }
+    .fav-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .fav-actions button{ padding: 9px 12px; font-size: 0.95em; border-radius: 12px; }
+
+
+    @media (max-width: 720px){
+      body{ padding: 16px; }
+      input{ width: min(92vw, 340px); }
+      .topbar{ top: 8px; }
+    }
+
+  
+    /* --- Design upgrade v10.2 --- */
+    *{ box-sizing:border-box; }
+    body{ font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
+    h1{ font-size: clamp(1.6rem, 2.6vw, 2.25rem) !important; margin: 18px 0 10px !important; }
+    .brand-title{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip:text;
+      color: transparent;
+    }
+    .author{
+      position: static;
+      margin: 10px auto 0;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.65);
+      border-radius: 999px;
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      font-weight: 600;
+      max-width: 1100px;
+    }
+    body.dark .author{ background: rgba(15,23,42,.55); }
+
+    .container{ padding-bottom: 42px; }
+    .search-wrap{
+      max-width: 1100px;
+      margin: 14px auto 0;
+      padding: 18px 16px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+    }
+    .search-row{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .search-row input{ margin: 0; }
+    .search-row button{ margin: 0; }
+
+    .result{ margin-top: 14px; }
+    .bigResult{
+      margin-top: 14px;
+      padding: 14px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(59,130,246,.35);
+      background: rgba(59,130,246,.06);
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.45;
+      min-height: 52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      transition: transform .15s ease;
+    }
+    body.dark .bigResult{ background: rgba(96,165,250,.12); border-color: rgba(96,165,250,.28); }
+
+    table{ width: 100% !important; margin: 14px auto 0 !important; }
+    tbody tr:nth-child(even){ background: rgba(2,6,23,.03); }
+    body.dark tbody tr:nth-child(even){ background: rgba(255,255,255,.04); }
+    tbody tr:hover{ background: rgba(34,197,94,.09); }
+    body.dark tbody tr:hover{ background: rgba(34,197,94,.12); }
+    th, td{ border-color: rgba(226,232,240,.6) !important; }
+    body.dark th, body.dark td{ border-color: rgba(226,232,240,.12) !important; }
+
+    hr{ margin: 34px auto !important; max-width: 1100px; }
+
+    /* Smooth appearance */
+    .panel, .search-wrap, table{ animation: pop .25s ease-out; }
+    @keyframes pop{ from{ transform: translateY(4px); opacity:.0; } to{ transform: translateY(0); opacity:1; } }
+
+    /* Better spacing for reactions section */
+    #reactResult.bigResult{ max-width: 900px; margin-left:auto; margin-right:auto; }
+
+    @media (max-width: 720px){
+      .search-wrap{ padding: 16px 12px; }
+      .panel{ padding: 16px 12px; }
+      th, td{ padding: 12px 10px; font-size: 0.98em; }
+    }
+
+  
+    /* Quiz / test */
+    .quiz-wrap{ margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.10); }
+    .quiz-controls{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+    .quiz-box{ margin-top:12px; text-align:left; }
+    .quiz-q{ padding:12px; border-radius:14px; background: rgba(127,127,127,0.10); margin:10px 0; }
+    .quiz-q h3{ margin:0 0 8px 0; font-size:1.08em; }
+    .quiz-options label{ display:flex; gap:10px; align-items:flex-start; padding:8px 10px; border-radius:12px; cursor:pointer; }
+    .quiz-options label:hover{ background: rgba(127,127,127,0.12); }
+    .quiz-options input{ margin-top:4px; }
+    .quiz-result{ margin-top:12px; padding:12px; border-radius:14px; background: rgba(127,127,127,0.10); }
+    .quiz-correct{ outline: 2px solid rgba(46,125,50,0.45); }
+    .quiz-wrong{ outline: 2px solid rgba(198,40,40,0.45); }
+    .quiz-muted{ opacity:0.85; font-size:0.98em; }
+
+  
+    /* === Calculator de masă molară === */
+    .calc-wrap{
+      margin-top:18px;
+      padding:16px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: var(--card);
+      box-shadow: var(--shadow2);
+      text-align:left;
+      max-width: 980px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .calc-controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:10px;
+    }
+    #molarInput{
+      flex: 1 1 360px;
+      max-width: 520px;
+    }
+    .calc-out{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px dashed var(--border);
+      background: rgba(255,255,255,.4);
+      color: var(--text);
+      line-height:1.35;
+    }
+    body.dark .calc-out{
+      background: rgba(15,23,42,.35);
+    }
+    .calc-out code{
+      background: rgba(2,6,23,.08);
+      padding:2px 6px;
+      border-radius:8px;
+    }
+    body.dark .calc-out code{
+      background: rgba(248,250,252,.10);
+    }
+    .calc-step{
+      margin-top:8px;
+      color: var(--muted);
+      font-size: 0.98em;
+    }
+    .calc-step strong{ color: var(--text); }
+
+  
+
+    /* === Tabel periodic interactiv === */
+    .periodic-wrap{ overflow:hidden; }
+    .periodic-legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      margin-bottom:16px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .periodic-legend span{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--border);
+    }
+    body.dark .periodic-legend span{ background:rgba(2,6,23,.28); }
+    .legend-box{
+      width:14px;
+      height:14px;
+      border-radius:4px;
+      display:inline-block;
+      border:1px solid rgba(15,23,42,.12);
+    }
+    .periodic-table{
+      display:grid;
+      grid-template-columns: repeat(18, minmax(46px, 1fr));
+      gap:8px;
+      width:100%;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .periodic-spacer{ min-height:72px; }
+    .element-cell{
+      min-height:72px;
+      border:none;
+      border-radius:16px;
+      padding:8px 6px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:space-between;
+      text-align:left;
+      box-shadow:0 8px 18px rgba(2,6,23,.08);
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+      color:#0f172a;
+      position:relative;
+      overflow:hidden;
+    }
+    .element-cell:hover{ transform:translateY(-2px); box-shadow:0 14px 24px rgba(2,6,23,.14); filter:brightness(1.02); }
+    .element-cell.active{ outline:3px solid rgba(59,130,246,.35); transform:translateY(-2px); }
+    .element-number{ font-size:.72rem; opacity:.8; font-weight:700; }
+    .element-symbol{ font-size:1.2rem; font-weight:900; line-height:1; }
+    .element-name{ font-size:.7rem; line-height:1.1; font-weight:700; word-break:break-word; }
+    .element-mass{ font-size:.68rem; opacity:.85; }
+    .periodic-empty{
+      width:100%;
+      text-align:center;
+      color:var(--muted);
+      padding:16px;
+      border:1px dashed var(--border);
+      border-radius:16px;
+      background:rgba(255,255,255,.4);
+    }
+    body.dark .periodic-empty{ background:rgba(2,6,23,.22); }
+    .element-card{
+      width:100%;
+      max-width:980px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(180px, 240px) 1fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .element-hero{
+      border-radius:18px;
+      padding:18px;
+      color:#0f172a;
+      box-shadow:0 12px 24px rgba(2,6,23,.10);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:220px;
+    }
+    .element-hero-symbol{ font-size:3.8rem; font-weight:900; line-height:1; }
+    .element-hero-name{ font-size:1.55rem; font-weight:900; margin-top:8px; }
+    .element-hero-type{ font-weight:800; margin-top:10px; opacity:.9; }
+    .element-hero small{ display:block; margin-top:8px; font-size:.95rem; opacity:.9; }
+    .element-meta{
+      background:rgba(255,255,255,.65);
+      border:1px solid var(--border);
+      border-radius:18px;
+      overflow:hidden;
+    }
+    body.dark .element-meta{ background:rgba(2,6,23,.22); }
+    .element-meta table{ margin:0 !important; width:100% !important; border:none; box-shadow:none; }
+    .element-meta th{ width:38%; }
+    .cat-nemetal{ background:#a7f3d0; }
+    .cat-gaz-nobil{ background:#bfdbfe; }
+    .cat-metal-alcalin{ background:#fecaca; }
+    .cat-metal-alcalino-pamantos{ background:#fde68a; }
+    .cat-metaloid{ background:#c4b5fd; }
+    .cat-halogen{ background:#f9a8d4; }
+    .cat-metal-post-tranzitie{ background:#fdba74; }
+    .cat-metal-tranzitie{ background:#93c5fd; }
+    .cat-lantanid{ background:#f5d0fe; }
+    .cat-actinid{ background:#ddd6fe; }
+    .cat-necunoscut{ background:#d1d5db; }
+    @media (max-width: 980px){
+      .periodic-table{ grid-template-columns: repeat(18, minmax(38px, 1fr)); gap:6px; }
+      .element-cell{ min-height:64px; padding:6px 4px; }
+      .element-symbol{ font-size:1rem; }
+      .element-name,.element-mass{ font-size:.62rem; }
+    }
+    @media (max-width: 780px){
+      .periodic-table{ overflow-x:auto; padding-bottom:8px; }
+      .element-card{ grid-template-columns:1fr; }
+      .element-hero{ min-height:auto; }
+    }
+
+
+    html{ -webkit-text-size-adjust:100%; }
+    body{ padding-bottom:max(18px, env(safe-area-inset-bottom)); }
+    button, input{ touch-action:manipulation; }
+    .periodic-wrap{ overflow:visible; }
+    .periodic-scroll{
+      width:100%;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:8px;
+    }
+    .mobile-scroll-hint{
+      display:none;
+      margin:0 0 10px;
+      color:var(--muted);
+      font-weight:800;
+      text-align:left;
+    }
+    @media (max-width: 980px){
+      body{
+        background-attachment:scroll;
+        padding:18px;
+      }
+      .topbar{ top:max(8px, env(safe-area-inset-top)); }
+      .periodic-table{ min-width:920px; }
+      .mobile-scroll-hint{ display:block; }
+      .rx-input-wrap{
+        width:100%;
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .rx-input-wrap input{ width:100%; }
+      button{ min-height:46px; }
+    }
+    @media (max-width: 720px){
+      .periodic-legend{ justify-content:flex-start; }
+      .periodic-legend span{ font-size:.85rem; }
+      .search-row,
+      .calc-controls,
+      .quiz-controls{ align-items:stretch; }
+      .search-row button,
+      .calc-controls button,
+      .quiz-controls button,
+      .rx-mini-btn,
+      .icon-btn,
+      .topbar button,
+      .panel > button,
+      .panel button,
+      button{ max-width:100%; }
+      .topbar{ padding:12px 14px; }
+      .author{ font-size:.88rem; }
+      .panel,
+      .search-wrap,
+      .result{ border-radius:16px; }
+    }
+
+  
+
+    /* Neon mode */
+    body.neon .topbar,
+    body.neon .panel,
+    body.neon .result,
+    body.neon .calc-wrap{
+      box-shadow:
+        0 0 0 1px rgba(34,211,238,.08),
+        0 18px 38px rgba(8,145,178,.14),
+        0 0 26px rgba(168,85,247,.08);
+    }
+    body.neon .icon-btn{
+      background: rgba(7,10,31,.72);
+      border-color: rgba(34,211,238,.18);
+      color: var(--text);
+      box-shadow: 0 0 0 1px rgba(34,211,238,.06), 0 0 18px rgba(168,85,247,.10);
+    }
+    body.neon .rx-mini-btn.ghost{
+      background: rgba(6,10,28,.72);
+      color: var(--text);
+      border-color: rgba(34,211,238,.18);
+    }
+    body.neon .fav-item{ background: rgba(6,10,28,.56); }
+    body.neon .bigResult{
+      background: rgba(34,211,238,.12);
+      border-color: rgba(34,211,238,.24);
+      box-shadow: 0 0 26px rgba(34,211,238,.10);
+    }
+    body.neon tbody tr:nth-child(even){ background: rgba(255,255,255,.03); }
+    body.neon tbody tr:hover{ background: rgba(34,211,238,.10); }
+    body.neon th, body.neon td{ border-color: rgba(34,211,238,.14) !important; }
+    body.neon .calc-out{
+      background: rgba(7,10,31,.74);
+      border-color: rgba(34,211,238,.18);
+      box-shadow: 0 0 24px rgba(34,211,238,.08);
+    }
+    body.neon .calc-out code{ background: rgba(34,211,238,.12); }
+    body.neon .author{ background: rgba(7,10,31,.68); }
+    body.neon .periodic-legend span{
+      background: rgba(7,10,31,.58);
+      border-color: rgba(34,211,238,.14);
+    }
+    body.neon .periodic-empty{ background: rgba(7,10,31,.52); }
+    body.neon .element-meta{ background: rgba(7,10,31,.52); }
+
+  </style>
+  <link rel="stylesheet" href="assets/lab-enhancements.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Reactor Lab</div>
+      <div class="brand-subtitle">118 elemente + reacții + quiz rapid</div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <a href="/lab" class="icon-btn" aria-label="Înapoi la portal" title="Înapoi la portal" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">↩</a>
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Schimbă tema" title="Schimbă tema">🌙</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+  <div class="author">Mod laborator actualizat pentru Chimie Academy · Reactor Quest</div>
+
+  <div class="search-wrap periodic-wrap">
+  <h1 style="font-size: clamp(1.65rem, 6vw, 2.6em);">Tabel periodic interactiv (118 elemente)</h1>
+  <div class="hint" style="text-align:center; margin-bottom:12px;">Apasă pe un element ca să vezi rapid informațiile lui.</div>
+  <div class="legend periodic-legend">
+    <span><i class="legend-box cat-nemetal"></i>Nemetal</span>
+    <span><i class="legend-box cat-gaz-nobil"></i>Gaz nobil</span>
+    <span><i class="legend-box cat-metal-alcalin"></i>Metal alcalin</span>
+    <span><i class="legend-box cat-metal-alcalino-pamantos"></i>Metal alcalino-pământos</span>
+    <span><i class="legend-box cat-metaloid"></i>Metaloid</span>
+    <span><i class="legend-box cat-halogen"></i>Halogen</span>
+    <span><i class="legend-box cat-metal-post-tranzitie"></i>Metal post-tranziție</span>
+    <span><i class="legend-box cat-metal-tranzitie"></i>Metal de tranziție</span>
+    <span><i class="legend-box cat-lantanid"></i>Lantanid</span>
+    <span><i class="legend-box cat-actinid"></i>Actinid</span>
+  </div>
+  <div class="mobile-scroll-hint">Pe telefon, glisează tabelul stânga-dreapta ca să vezi toate grupele.</div>
+  <div class="periodic-scroll">
+    <div id="periodicTable" class="periodic-table" aria-label="Tabel periodic interactiv"></div>
+  </div>
+  <div class="result" id="rezultat">
+    <div class="periodic-empty">Selectează un element din tabel pentru a vedea proprietățile lui.</div>
+  </div>
+  </div>
+
+  <hr style="margin:60px;">
+
+  <h1 style="font-size: clamp(1.5rem, 5.5vw, 2.3em);">Reacții chimice (nivel clasa a VII-a / a VIII-a)</h1>
+  <div class="panel">
+    <div class="hint">Scrie formule (ex: HCl, H2SO4, NaOH, NaCl, AgNO3, BaCl2, Na2SO4, Na2CO3, CaO, CO2, O2, Cl2, CH4 etc.)</div>
+    <div style="margin-top:12px; text-align:center;">
+      <div class="rx-reactants-row">
+        <div class="rx-input-wrap">
+          <input type="text" id="react1" placeholder="Reactant 1 (ex: NaCl)">
+          <button type="button" class="rx-mini-btn ghost" onclick="clearReactant(1)" title="Șterge reactantul 1">Șterge</button>
+        </div>
+        <div class="rx-input-wrap">
+          <input type="text" id="react2" placeholder="Reactant 2 (ex: AgNO3)">
+          <button type="button" class="rx-mini-btn ghost" onclick="clearReactant(2)" title="Șterge reactantul 2">Șterge</button>
+        </div>
+      </div>
+      <br><br>
+      <button onclick="reaction()">Reacționează</button>
+      <div id="rxActions" class="rx-actions" style="display:none;">
+        <button id="copyBtn" class="rx-mini-btn ghost" type="button" onclick="copyCurrentReaction()" title="Copiază ecuația">📋 Copiază</button>
+        <button id="favBtn" class="rx-mini-btn secondary" type="button" onclick="toggleFavoriteCurrent()" title="Adaugă/Șterge din favorite">⭐ Favorit</button>
+      </div>
+      <div id="reactResult" class="bigResult"></div>
+    </div>
+
+    <div class="hint" style="margin-top:16px;">Exemple rapide (apasă pe ele):</div>
+    <div class="chips">
+      <div class="chip" onclick="setRx('HCl','NaOH')">HCl + NaOH</div>
+      <div class="chip" onclick="setRx('H2SO4','NaOH')">H2SO4 + NaOH</div>
+      <div class="chip" onclick="setRx('CO2','NaOH')">CO2 + NaOH</div>
+      <div class="chip" onclick="setRx('CaO','HCl')">CaO + HCl</div>
+      <div class="chip" onclick="setRx('NaCl','AgNO3')">NaCl + AgNO3</div>
+      <div class="chip" onclick="setRx('BaCl2','Na2SO4')">BaCl2 + Na2SO4</div>
+      <div class="chip" onclick="setRx('CuSO4','NaOH')">CuSO4 + NaOH</div>
+      <div class="chip" onclick="setRx('FeCl3','NaOH')">FeCl3 + NaOH</div>
+      <div class="chip" onclick="setRx('Na2CO3','HCl')">Na2CO3 + HCl</div>
+      <div class="chip" onclick="setRx('Zn','HCl')">Zn + HCl</div>
+      <div class="chip" onclick="setRx('Na','H2O')">Na + H2O</div>
+      <div class="chip" onclick="setRx('Mg','O2')">Mg + O2</div>
+      <div class="chip" onclick="setRx('Fe','Cl2')">Fe + Cl2</div>
+      <div class="chip" onclick="setRx('CH4','O2')">CH4 + O2</div>
+      <div class="chip" onclick="setRx('CaCO3','')">CaCO3 (descomp.)</div>
+      <div class="chip" onclick="setRx('NaHCO3','')">NaHCO3 (descomp.)</div>
+      <div class="chip" onclick="setRx('Cu(OH)2','')">Cu(OH)2 (descomp.)</div>
+    </div>
+
+    <div class="hint" style="margin-top:16px;">Istoric (ultimele 10):</div>
+    <div id="hist" style="margin-top:6px; font-size:1.05em; color:#2e7d32;"></div>
+
+    <div class="fav-wrap">
+      <div class="hint" style="margin-top:14px;">Favorite ⭐ (se salvează pe dispozitivul tău):</div>
+      <div id="favList" class="fav-list"></div>
+    </div>
+
+    <div class="quiz-wrap">
+      <div class="hint" style="margin-top:6px;">Test (10 reacții la întâmplare din listă): alege varianta corectă.</div>
+      <div class="quiz-controls">
+        <button id="quizStartBtn" class="rx-mini-btn secondary" type="button" onclick="startQuiz10()">🎲 Generează 10</button>
+        <button id="quizSubmitBtn" class="rx-mini-btn ghost" type="button" onclick="submitQuiz()" style="display:none;">✅ Trimite</button>
+        <button id="quizSaveBtn" class="rx-mini-btn secondary" type="button" onclick="saveQuizReport()" style="display:none;">💾 Salvează testul</button>
+        <button id="quizResetBtn" class="rx-mini-btn ghost" type="button" onclick="resetQuiz()" style="display:none;">🧹 Resetează</button>
+      </div>
+      <div id="quizBox" class="quiz-box"></div>
+    </div>
+  </div>
+
+    <div class="calc-wrap">
+      <div class="hint">Calculator de masă molară: scrie formula (ex: <b>H2SO4</b>, <b>Ca(OH)2</b>, <b>2Al2(SO4)3</b>). Folosește mase atomice aproximative (rotunjite).</div>
+      <div class="calc-controls">
+        <input id="molarInput" type="text" placeholder="Ex: Ca(OH)2 sau 2H2SO4 (coeficientul e opțional)" />
+        <button class="rx-mini-btn secondary" type="button" onclick="calcMolarMass()">🧮 Calculează</button>
+        <button class="rx-mini-btn ghost" type="button" onclick="clearMolarCalc()">🧹 Șterge</button>
+      </div>
+      <div id="molarOut" class="calc-out" style="display:none;"></div>
+    </div>
+
+  <script>
+    const elemente = {
+  "hidrogen": {
+    "simbol": "H",
+    "numar": 1,
+    "masa": "1.008",
+    "valente": "1",
+    "exemple": "H2O, HCl",
+    "topire": "-259 °C",
+    "fierbere": "-253 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s1"
+  },
+  "heliu": {
+    "simbol": "He",
+    "numar": 2,
+    "masa": "4.003",
+    "valente": "0",
+    "exemple": "Gaz inert (reacții foarte rare)",
+    "topire": "-272 °C",
+    "fierbere": "-269 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2"
+  },
+  "litiu": {
+    "simbol": "Li",
+    "numar": 3,
+    "masa": "6.94",
+    "valente": "1",
+    "exemple": "LiCl, LiOH",
+    "topire": "180 °C",
+    "fierbere": "1330 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.98",
+    "configuratie_electronica": "1s2 2s1"
+  },
+  "beriliu": {
+    "simbol": "Be",
+    "numar": 4,
+    "masa": "9.012",
+    "valente": "2",
+    "exemple": "BeO, BeCl2",
+    "topire": "1287 °C",
+    "fierbere": "2469 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.57",
+    "configuratie_electronica": "1s2 2s2"
+  },
+  "bor": {
+    "simbol": "B",
+    "numar": 5,
+    "masa": "10.81",
+    "valente": "3",
+    "exemple": "B2O3, BF3",
+    "topire": "2076 °C",
+    "fierbere": "3927 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.04",
+    "configuratie_electronica": "1s2 2s2 2p1"
+  },
+  "carbon": {
+    "simbol": "C",
+    "numar": 6,
+    "masa": "12.011",
+    "valente": "2,4",
+    "exemple": "CO2, CH4",
+    "topire": "3550 °C",
+    "fierbere": "4027 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.55",
+    "configuratie_electronica": "1s2 2s2 2p2"
+  },
+  "azot": {
+    "simbol": "N",
+    "numar": 7,
+    "masa": "14.007",
+    "valente": "1,3,5",
+    "exemple": "NH3, HNO3",
+    "topire": "-210 °C",
+    "fierbere": "-196 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "3.04",
+    "configuratie_electronica": "1s2 2s2 2p3"
+  },
+  "oxigen": {
+    "simbol": "O",
+    "numar": 8,
+    "masa": "15.999",
+    "valente": "2",
+    "exemple": "H2O, CO2",
+    "topire": "-219 °C",
+    "fierbere": "-183 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "3.44",
+    "configuratie_electronica": "1s2 2s2 2p4"
+  },
+  "fluor": {
+    "simbol": "F",
+    "numar": 9,
+    "masa": "18.998",
+    "valente": "1",
+    "exemple": "HF, NaF",
+    "topire": "-220 °C",
+    "fierbere": "-188 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "3.98",
+    "configuratie_electronica": "1s2 2s2 2p5"
+  },
+  "neon": {
+    "simbol": "Ne",
+    "numar": 10,
+    "masa": "20.18",
+    "valente": "0",
+    "exemple": "Gaz inert (reacții foarte rare)",
+    "topire": "-249 °C",
+    "fierbere": "-246 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6"
+  },
+  "sodiu": {
+    "simbol": "Na",
+    "numar": 11,
+    "masa": "22.99",
+    "valente": "1",
+    "exemple": "NaCl, NaOH",
+    "topire": "97.8 °C",
+    "fierbere": "883 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.93",
+    "configuratie_electronica": "1s2 2s2 2p6 3s1"
+  },
+  "magneziu": {
+    "simbol": "Mg",
+    "numar": 12,
+    "masa": "24.305",
+    "valente": "2",
+    "exemple": "MgO, MgCl2",
+    "topire": "650 °C",
+    "fierbere": "1090 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.31",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2"
+  },
+  "aluminiu": {
+    "simbol": "Al",
+    "numar": 13,
+    "masa": "26.982",
+    "valente": "3",
+    "exemple": "Al2O3, AlCl3",
+    "topire": "660 °C",
+    "fierbere": "2470 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.61",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p1"
+  },
+  "siliciu": {
+    "simbol": "Si",
+    "numar": 14,
+    "masa": "28.085",
+    "valente": "4",
+    "exemple": "SiO2, SiCl4",
+    "topire": "1414 °C",
+    "fierbere": "3265 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.9",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p2"
+  },
+  "fosfor": {
+    "simbol": "P",
+    "numar": 15,
+    "masa": "30.974",
+    "valente": "3,5",
+    "exemple": "H3PO4, P2O5",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.19",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p3"
+  },
+  "sulf": {
+    "simbol": "S",
+    "numar": 16,
+    "masa": "32.06",
+    "valente": "2,4,6",
+    "exemple": "H2S, H2SO4",
+    "topire": "115 °C",
+    "fierbere": "445 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.58",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p4"
+  },
+  "clor": {
+    "simbol": "Cl",
+    "numar": 17,
+    "masa": "35.45",
+    "valente": "1,3,5,7",
+    "exemple": "HCl, NaCl",
+    "topire": "-102 °C",
+    "fierbere": "-34.0 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "3.16",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p5"
+  },
+  "argon": {
+    "simbol": "Ar",
+    "numar": 18,
+    "masa": "39.948",
+    "valente": "0",
+    "exemple": "Gaz inert (reacții foarte rare)",
+    "topire": "-189 °C",
+    "fierbere": "-186 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6"
+  },
+  "potasiu": {
+    "simbol": "K",
+    "numar": 19,
+    "masa": "39.098",
+    "valente": "1",
+    "exemple": "KCl, KOH",
+    "topire": "63.6 °C",
+    "fierbere": "759 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.82",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s1"
+  },
+  "calciu": {
+    "simbol": "Ca",
+    "numar": 20,
+    "masa": "40.078",
+    "valente": "2",
+    "exemple": "CaO, CaCl2",
+    "topire": "842 °C",
+    "fierbere": "1484 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2"
+  },
+  "scandiu": {
+    "simbol": "Sc",
+    "numar": 21,
+    "masa": "44.956",
+    "valente": "3",
+    "exemple": "ScO, ScClx",
+    "topire": "1541 °C",
+    "fierbere": "2836 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.36",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d1"
+  },
+  "titan": {
+    "simbol": "Ti",
+    "numar": 22,
+    "masa": "47.867",
+    "valente": "3,4",
+    "exemple": "TiO, TiClx",
+    "topire": "1668 °C",
+    "fierbere": "3287 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.54",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d2"
+  },
+  "vanadiu": {
+    "simbol": "V",
+    "numar": 23,
+    "masa": "50.942",
+    "valente": "2,3,4,5",
+    "exemple": "VO, VClx",
+    "topire": "1910 °C",
+    "fierbere": "3407 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.63",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d3"
+  },
+  "crom": {
+    "simbol": "Cr",
+    "numar": 24,
+    "masa": "51.996",
+    "valente": "2,3,6",
+    "exemple": "CrO, CrClx",
+    "topire": "1907 °C",
+    "fierbere": "2671 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.66",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s1 3d5"
+  },
+  "mangan": {
+    "simbol": "Mn",
+    "numar": 25,
+    "masa": "54.938",
+    "valente": "2,4,7",
+    "exemple": "MnO, MnClx",
+    "topire": "1246 °C",
+    "fierbere": "2061 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.55",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d5"
+  },
+  "fier": {
+    "simbol": "Fe",
+    "numar": 26,
+    "masa": "55.845",
+    "valente": "2,3",
+    "exemple": "FeCl2, FeCl3",
+    "topire": "1538 °C",
+    "fierbere": "2861 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.83",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d6"
+  },
+  "cobalt": {
+    "simbol": "Co",
+    "numar": 27,
+    "masa": "58.933",
+    "valente": "2,3",
+    "exemple": "CoO, CoClx",
+    "topire": "1495 °C",
+    "fierbere": "2927 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.88",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d7"
+  },
+  "nichel": {
+    "simbol": "Ni",
+    "numar": 28,
+    "masa": "58.693",
+    "valente": "2,3",
+    "exemple": "NiO, NiClx",
+    "topire": "1455 °C",
+    "fierbere": "2730 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.91",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d8"
+  },
+  "cupru": {
+    "simbol": "Cu",
+    "numar": 29,
+    "masa": "63.546",
+    "valente": "1,2",
+    "exemple": "CuO, CuSO4",
+    "topire": "1085 °C",
+    "fierbere": "2562 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.9",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s1 3d10"
+  },
+  "zinc": {
+    "simbol": "Zn",
+    "numar": 30,
+    "masa": "65.382",
+    "valente": "2",
+    "exemple": "ZnO, ZnCl2",
+    "topire": "420 °C",
+    "fierbere": "907 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.65",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10"
+  },
+  "galiu": {
+    "simbol": "Ga",
+    "numar": 31,
+    "masa": "69.723",
+    "valente": "3",
+    "exemple": "GaO, GaClx",
+    "topire": "29.8 °C",
+    "fierbere": "2400 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.81",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p1"
+  },
+  "germaniu": {
+    "simbol": "Ge",
+    "numar": 32,
+    "masa": "72.631",
+    "valente": "2,4",
+    "exemple": "GeO, GeClx",
+    "topire": "938 °C",
+    "fierbere": "2833 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.01",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p2"
+  },
+  "arsenic": {
+    "simbol": "As",
+    "numar": 33,
+    "masa": "74.922",
+    "valente": "3,5",
+    "exemple": "As2O3, As2O5",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.18",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p3"
+  },
+  "seleniu": {
+    "simbol": "Se",
+    "numar": 34,
+    "masa": "78.972",
+    "valente": "2,4,6",
+    "exemple": "H2Se, SeO2",
+    "topire": "221 °C",
+    "fierbere": "685 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.55",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p4"
+  },
+  "brom": {
+    "simbol": "Br",
+    "numar": 35,
+    "masa": "79.904",
+    "valente": "1,3,5,7",
+    "exemple": "HBr, NaBr",
+    "topire": "-7.35 °C",
+    "fierbere": "58.9 °C",
+    "stare_de_agregare": "liquid",
+    "electronegativitate": "2.96",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p5"
+  },
+  "kripton": {
+    "simbol": "Kr",
+    "numar": 36,
+    "masa": "83.798",
+    "valente": "0",
+    "exemple": "Gaz inert (reacții foarte rare)",
+    "topire": "-157 °C",
+    "fierbere": "-153 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6"
+  },
+  "rubidiu": {
+    "simbol": "Rb",
+    "numar": 37,
+    "masa": "85.468",
+    "valente": "1",
+    "exemple": "RbCl, RbOH",
+    "topire": "39.3 °C",
+    "fierbere": "688 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.82",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1"
+  },
+  "strontiu": {
+    "simbol": "Sr",
+    "numar": 38,
+    "masa": "87.621",
+    "valente": "2",
+    "exemple": "SrO, SrCl2",
+    "topire": "777 °C",
+    "fierbere": "1377 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.95",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2"
+  },
+  "itriu": {
+    "simbol": "Y",
+    "numar": 39,
+    "masa": "88.906",
+    "valente": "3",
+    "exemple": "YO, YClx",
+    "topire": "1526 °C",
+    "fierbere": "2930 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.22",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d1"
+  },
+  "zirconiu": {
+    "simbol": "Zr",
+    "numar": 40,
+    "masa": "91.224",
+    "valente": "4",
+    "exemple": "ZrO, ZrClx",
+    "topire": "1855 °C",
+    "fierbere": "4377 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.33",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d2"
+  },
+  "niobiu": {
+    "simbol": "Nb",
+    "numar": 41,
+    "masa": "92.906",
+    "valente": "3,5",
+    "exemple": "NbO, NbClx",
+    "topire": "2477 °C",
+    "fierbere": "4744 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.6",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d4"
+  },
+  "molibden": {
+    "simbol": "Mo",
+    "numar": 42,
+    "masa": "95.951",
+    "valente": "2,3,4,5,6",
+    "exemple": "MoO, MoClx",
+    "topire": "2623 °C",
+    "fierbere": "4639 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.16",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d5"
+  },
+  "tecnetiu": {
+    "simbol": "Tc",
+    "numar": 43,
+    "masa": "98",
+    "valente": "4,7",
+    "exemple": "TcO, TcClx",
+    "topire": "2157 °C",
+    "fierbere": "4265 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.9",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d5"
+  },
+  "ruteniu": {
+    "simbol": "Ru",
+    "numar": 44,
+    "masa": "101.072",
+    "valente": "2,3,4,6,8",
+    "exemple": "RuO, RuClx",
+    "topire": "2334 °C",
+    "fierbere": "4150 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d7"
+  },
+  "rodiu": {
+    "simbol": "Rh",
+    "numar": 45,
+    "masa": "102.906",
+    "valente": "1,3",
+    "exemple": "RhO, RhClx",
+    "topire": "1964 °C",
+    "fierbere": "3695 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.28",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d8"
+  },
+  "paladiu": {
+    "simbol": "Pd",
+    "numar": 46,
+    "masa": "106.421",
+    "valente": "2,4",
+    "exemple": "PdO, PdClx",
+    "topire": "1555 °C",
+    "fierbere": "2963 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 4d10"
+  },
+  "argint": {
+    "simbol": "Ag",
+    "numar": 47,
+    "masa": "107.868",
+    "valente": "1",
+    "exemple": "AgNO3, AgCl",
+    "topire": "962 °C",
+    "fierbere": "2162 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.93",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s1 4d10"
+  },
+  "cadmiu": {
+    "simbol": "Cd",
+    "numar": 48,
+    "masa": "112.414",
+    "valente": "2",
+    "exemple": "CdO, CdClx",
+    "topire": "321 °C",
+    "fierbere": "767 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.69",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10"
+  },
+  "indiu": {
+    "simbol": "In",
+    "numar": 49,
+    "masa": "114.818",
+    "valente": "3",
+    "exemple": "InO, InClx",
+    "topire": "157 °C",
+    "fierbere": "2072 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.78",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p1"
+  },
+  "staniu": {
+    "simbol": "Sn",
+    "numar": 50,
+    "masa": "118.711",
+    "valente": "2,4",
+    "exemple": "SnCl2, SnCl4",
+    "topire": "232 °C",
+    "fierbere": "2602 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.96",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p2"
+  },
+  "antimoniu": {
+    "simbol": "Sb",
+    "numar": 51,
+    "masa": "121.76",
+    "valente": "3,5",
+    "exemple": "SbO, SbClx",
+    "topire": "631 °C",
+    "fierbere": "1635 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.05",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p3"
+  },
+  "telur": {
+    "simbol": "Te",
+    "numar": 52,
+    "masa": "127.603",
+    "valente": "2,4,6",
+    "exemple": "TeO2, H2Te",
+    "topire": "450 °C",
+    "fierbere": "988 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.1",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p4"
+  },
+  "iod": {
+    "simbol": "I",
+    "numar": 53,
+    "masa": "126.904",
+    "valente": "1,3,5,7",
+    "exemple": "HI, NaI",
+    "topire": "114 °C",
+    "fierbere": "184 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.66",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p5"
+  },
+  "xenon": {
+    "simbol": "Xe",
+    "numar": 54,
+    "masa": "131.294",
+    "valente": "2,4,6,8",
+    "exemple": "Gaz inert (reacții foarte rare)",
+    "topire": "-112 °C",
+    "fierbere": "-108 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "2.6",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6"
+  },
+  "cesiu": {
+    "simbol": "Cs",
+    "numar": 55,
+    "masa": "132.905",
+    "valente": "1",
+    "exemple": "CsCl, CsOH",
+    "topire": "28.6 °C",
+    "fierbere": "671 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.79",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s1"
+  },
+  "bariu": {
+    "simbol": "Ba",
+    "numar": 56,
+    "masa": "137.328",
+    "valente": "2",
+    "exemple": "BaO, BaCl2",
+    "topire": "727 °C",
+    "fierbere": "1845 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.89",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2"
+  },
+  "lantan": {
+    "simbol": "La",
+    "numar": 57,
+    "masa": "138.905",
+    "valente": "3",
+    "exemple": "LaO, LaClx",
+    "topire": "920 °C",
+    "fierbere": "3464 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.1",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 5d1"
+  },
+  "ceriu": {
+    "simbol": "Ce",
+    "numar": 58,
+    "masa": "140.116",
+    "valente": "3,4",
+    "exemple": "CeO, CeClx",
+    "topire": "795 °C",
+    "fierbere": "3443 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.12",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f1 5d1"
+  },
+  "praseodim": {
+    "simbol": "Pr",
+    "numar": 59,
+    "masa": "140.908",
+    "valente": "3,4",
+    "exemple": "PrO, PrClx",
+    "topire": "935 °C",
+    "fierbere": "3130 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.13",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f3"
+  },
+  "neodim": {
+    "simbol": "Nd",
+    "numar": 60,
+    "masa": "144.242",
+    "valente": "3",
+    "exemple": "NdO, NdClx",
+    "topire": "1024 °C",
+    "fierbere": "3074 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.14",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f4"
+  },
+  "prometiu": {
+    "simbol": "Pm",
+    "numar": 61,
+    "masa": "145",
+    "valente": "3",
+    "exemple": "PmO, PmClx",
+    "topire": "1042 °C",
+    "fierbere": "3000 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.13",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f5"
+  },
+  "samariu": {
+    "simbol": "Sm",
+    "numar": 62,
+    "masa": "150.362",
+    "valente": "2,3",
+    "exemple": "SmO, SmClx",
+    "topire": "1072 °C",
+    "fierbere": "1900 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.17",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f6"
+  },
+  "europiu": {
+    "simbol": "Eu",
+    "numar": 63,
+    "masa": "151.964",
+    "valente": "2,3",
+    "exemple": "EuO, EuClx",
+    "topire": "826 °C",
+    "fierbere": "1529 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f7"
+  },
+  "gadoliniu": {
+    "simbol": "Gd",
+    "numar": 64,
+    "masa": "157.253",
+    "valente": "3",
+    "exemple": "GdO, GdClx",
+    "topire": "1312 °C",
+    "fierbere": "3000 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f7 5d1"
+  },
+  "terbiu": {
+    "simbol": "Tb",
+    "numar": 65,
+    "masa": "158.925",
+    "valente": "3,4",
+    "exemple": "TbO, TbClx",
+    "topire": "1356 °C",
+    "fierbere": "3123 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.1",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f9"
+  },
+  "disprosiu": {
+    "simbol": "Dy",
+    "numar": 66,
+    "masa": "162.5",
+    "valente": "3",
+    "exemple": "DyO, DyClx",
+    "topire": "1407 °C",
+    "fierbere": "2567 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.22",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f10"
+  },
+  "holmium": {
+    "simbol": "Ho",
+    "numar": 67,
+    "masa": "164.93",
+    "valente": "3",
+    "exemple": "HoO, HoClx",
+    "topire": "1461 °C",
+    "fierbere": "2600 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.23",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f11"
+  },
+  "erbiu": {
+    "simbol": "Er",
+    "numar": 68,
+    "masa": "167.259",
+    "valente": "3",
+    "exemple": "ErO, ErClx",
+    "topire": "1529 °C",
+    "fierbere": "2868 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.24",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f12"
+  },
+  "tuliu": {
+    "simbol": "Tm",
+    "numar": 69,
+    "masa": "168.934",
+    "valente": "3",
+    "exemple": "TmO, TmClx",
+    "topire": "1545 °C",
+    "fierbere": "1950 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.25",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f13"
+  },
+  "ytterbiu": {
+    "simbol": "Yb",
+    "numar": 70,
+    "masa": "173.045",
+    "valente": "2,3",
+    "exemple": "YbO, YbClx",
+    "topire": "824 °C",
+    "fierbere": "1196 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.1",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14"
+  },
+  "lutetiu": {
+    "simbol": "Lu",
+    "numar": 71,
+    "masa": "174.967",
+    "valente": "3",
+    "exemple": "LuO, LuClx",
+    "topire": "1652 °C",
+    "fierbere": "3402 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.27",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d1"
+  },
+  "hafniu": {
+    "simbol": "Hf",
+    "numar": 72,
+    "masa": "178.492",
+    "valente": "4",
+    "exemple": "HfO, HfClx",
+    "topire": "2233 °C",
+    "fierbere": "4603 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d2"
+  },
+  "tantal": {
+    "simbol": "Ta",
+    "numar": 73,
+    "masa": "180.948",
+    "valente": "5",
+    "exemple": "TaO, TaClx",
+    "topire": "3017 °C",
+    "fierbere": "5458 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.5",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d3"
+  },
+  "wolfram": {
+    "simbol": "W",
+    "numar": 74,
+    "masa": "183.841",
+    "valente": "6",
+    "exemple": "WO, WClx",
+    "topire": "3422 °C",
+    "fierbere": "5930 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.36",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d4"
+  },
+  "reniu": {
+    "simbol": "Re",
+    "numar": 75,
+    "masa": "186.207",
+    "valente": "4,6,7",
+    "exemple": "ReO, ReClx",
+    "topire": "3186 °C",
+    "fierbere": "5596 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.9",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d5"
+  },
+  "osmiu": {
+    "simbol": "Os",
+    "numar": 76,
+    "masa": "190.233",
+    "valente": "4,6,8",
+    "exemple": "OsO, OsClx",
+    "topire": "3033 °C",
+    "fierbere": "5012 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d6"
+  },
+  "iridiu": {
+    "simbol": "Ir",
+    "numar": 77,
+    "masa": "192.217",
+    "valente": "3,4",
+    "exemple": "IrO, IrClx",
+    "topire": "2446 °C",
+    "fierbere": "4130 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d7"
+  },
+  "platina": {
+    "simbol": "Pt",
+    "numar": 78,
+    "masa": "195.085",
+    "valente": "2,4",
+    "exemple": "PtO, PtClx",
+    "topire": "1768 °C",
+    "fierbere": "3825 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.28",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s1 4f14 5d9"
+  },
+  "aur": {
+    "simbol": "Au",
+    "numar": 79,
+    "masa": "196.967",
+    "valente": "1,3",
+    "exemple": "AuCl, AuCl3",
+    "topire": "1064 °C",
+    "fierbere": "2970 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.54",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s1 4f14 5d10"
+  },
+  "mercur": {
+    "simbol": "Hg",
+    "numar": 80,
+    "masa": "200.592",
+    "valente": "1,2",
+    "exemple": "Hg2Cl2, HgCl2",
+    "topire": "-38.8 °C",
+    "fierbere": "357 °C",
+    "stare_de_agregare": "liquid",
+    "electronegativitate": "2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10"
+  },
+  "taliu": {
+    "simbol": "Tl",
+    "numar": 81,
+    "masa": "204.38",
+    "valente": "1,3",
+    "exemple": "TlO, TlClx",
+    "topire": "304 °C",
+    "fierbere": "1473 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.62",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p1"
+  },
+  "plumb": {
+    "simbol": "Pb",
+    "numar": 82,
+    "masa": "207.21",
+    "valente": "2,4",
+    "exemple": "PbO, PbO2",
+    "topire": "327 °C",
+    "fierbere": "1749 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.87",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p2"
+  },
+  "bismut": {
+    "simbol": "Bi",
+    "numar": 83,
+    "masa": "208.98",
+    "valente": "3,5",
+    "exemple": "BiO, BiClx",
+    "topire": "272 °C",
+    "fierbere": "1564 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.02",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p3"
+  },
+  "poloniu": {
+    "simbol": "Po",
+    "numar": 84,
+    "masa": "209",
+    "valente": "2,4,6",
+    "exemple": "PoO, PoClx",
+    "topire": "254 °C",
+    "fierbere": "962 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p4"
+  },
+  "astatin": {
+    "simbol": "At",
+    "numar": 85,
+    "masa": "210",
+    "valente": "1,3,5,7",
+    "exemple": "HAt, NaAt",
+    "topire": "302 °C",
+    "fierbere": "337 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p5"
+  },
+  "radon": {
+    "simbol": "Rn",
+    "numar": 86,
+    "masa": "222",
+    "valente": "0",
+    "exemple": "Gaz inert (reacții foarte rare)",
+    "topire": "-71.1 °C",
+    "fierbere": "-61.6 °C",
+    "stare_de_agregare": "gas",
+    "electronegativitate": "2.2",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6"
+  },
+  "franciu": {
+    "simbol": "Fr",
+    "numar": 87,
+    "masa": "223",
+    "valente": "1",
+    "exemple": "FrCl, FrOH",
+    "topire": "26.9 °C",
+    "fierbere": "677 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.79",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s1"
+  },
+  "radiu": {
+    "simbol": "Ra",
+    "numar": 88,
+    "masa": "226",
+    "valente": "2",
+    "exemple": "RaO, RaCl2",
+    "topire": "960 °C",
+    "fierbere": "1737 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "0.9",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2"
+  },
+  "actiniu": {
+    "simbol": "Ac",
+    "numar": 89,
+    "masa": "227",
+    "valente": "3",
+    "exemple": "AcO, AcClx",
+    "topire": "1227 °C",
+    "fierbere": "3227 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.1",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 6d1"
+  },
+  "toriu": {
+    "simbol": "Th",
+    "numar": 90,
+    "masa": "232.038",
+    "valente": "4",
+    "exemple": "ThO, ThClx",
+    "topire": "1750 °C",
+    "fierbere": "4788 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 6d2"
+  },
+  "protactiniu": {
+    "simbol": "Pa",
+    "numar": 91,
+    "masa": "231.036",
+    "valente": "5",
+    "exemple": "PaO, PaClx",
+    "topire": "1568 °C",
+    "fierbere": "4027 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.5",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f2 6d1"
+  },
+  "uraniu": {
+    "simbol": "U",
+    "numar": 92,
+    "masa": "238.029",
+    "valente": "3,4,5,6",
+    "exemple": "UO, UClx",
+    "topire": "1132 °C",
+    "fierbere": "4131 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.38",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f3 6d1"
+  },
+  "neptuniu": {
+    "simbol": "Np",
+    "numar": 93,
+    "masa": "237",
+    "valente": "3,4,5,6,7",
+    "exemple": "NpO, NpClx",
+    "topire": "639 °C",
+    "fierbere": "4174 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.36",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f4 6d1"
+  },
+  "plutoniu": {
+    "simbol": "Pu",
+    "numar": 94,
+    "masa": "244",
+    "valente": "3,4,5,6,7",
+    "exemple": "PuO, PuClx",
+    "topire": "639 °C",
+    "fierbere": "3232 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.28",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f6"
+  },
+  "americiu": {
+    "simbol": "Am",
+    "numar": 95,
+    "masa": "243",
+    "valente": "3,4,5,6",
+    "exemple": "AmO, AmClx",
+    "topire": "1176 °C",
+    "fierbere": "2607 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.13",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f7"
+  },
+  "curiu": {
+    "simbol": "Cm",
+    "numar": 96,
+    "masa": "247",
+    "valente": "3,4",
+    "exemple": "CmO, CmClx",
+    "topire": "1340 °C",
+    "fierbere": "3110 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.28",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f7 6d1"
+  },
+  "berkeliu": {
+    "simbol": "Bk",
+    "numar": 97,
+    "masa": "247",
+    "valente": "3,4",
+    "exemple": "BkO, BkClx",
+    "topire": "986 °C",
+    "fierbere": "2627 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f9"
+  },
+  "californiu": {
+    "simbol": "Cf",
+    "numar": 98,
+    "masa": "251",
+    "valente": "3,4",
+    "exemple": "CfO, CfClx",
+    "topire": "900 °C",
+    "fierbere": "1470 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f10"
+  },
+  "einsteiniu": {
+    "simbol": "Es",
+    "numar": 99,
+    "masa": "252",
+    "valente": "3",
+    "exemple": "EsO, EsClx",
+    "topire": "860 °C",
+    "fierbere": "996 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f11"
+  },
+  "fermiu": {
+    "simbol": "Fm",
+    "numar": 100,
+    "masa": "257",
+    "valente": "3",
+    "exemple": "FmO, FmClx",
+    "topire": "1527 °C",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f12"
+  },
+  "mendeleviu": {
+    "simbol": "Md",
+    "numar": 101,
+    "masa": "258",
+    "valente": "3",
+    "exemple": "MdO, MdClx",
+    "topire": "827 °C",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f13"
+  },
+  "nobeliu": {
+    "simbol": "No",
+    "numar": 102,
+    "masa": "259",
+    "valente": "2,3",
+    "exemple": "NoO, NoClx",
+    "topire": "827 °C",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14"
+  },
+  "lawrenciu": {
+    "simbol": "Lr",
+    "numar": 103,
+    "masa": "266",
+    "valente": "3",
+    "exemple": "LrO, LrClx",
+    "topire": "1627 °C",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "1.3",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 7p1"
+  },
+  "rutherfordiu": {
+    "simbol": "Rf",
+    "numar": 104,
+    "masa": "267",
+    "valente": "4",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "2127 °C",
+    "fierbere": "5527 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d2"
+  },
+  "dubniu": {
+    "simbol": "Db",
+    "numar": 105,
+    "masa": "268",
+    "valente": "5",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d3"
+  },
+  "seaborgiu": {
+    "simbol": "Sg",
+    "numar": 106,
+    "masa": "269",
+    "valente": "6",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d4"
+  },
+  "bohriu": {
+    "simbol": "Bh",
+    "numar": 107,
+    "masa": "270",
+    "valente": "7",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d5"
+  },
+  "hassiu": {
+    "simbol": "Hs",
+    "numar": 108,
+    "masa": "269",
+    "valente": "8",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "-147 °C",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d6"
+  },
+  "meitneriu": {
+    "simbol": "Mt",
+    "numar": 109,
+    "masa": "278",
+    "valente": "necunoscut/instabil",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d7"
+  },
+  "darmstadtiu": {
+    "simbol": "Ds",
+    "numar": 110,
+    "masa": "281",
+    "valente": "necunoscut/instabil",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d8"
+  },
+  "roentgeniu": {
+    "simbol": "Rg",
+    "numar": 111,
+    "masa": "282",
+    "valente": "necunoscut/instabil",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "—",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d9"
+  },
+  "coperniciu": {
+    "simbol": "Cn",
+    "numar": 112,
+    "masa": "285",
+    "valente": "2",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "3297 °C",
+    "stare_de_agregare": "liquid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10"
+  },
+  "nihoniu": {
+    "simbol": "Nh",
+    "numar": 113,
+    "masa": "286",
+    "valente": "1,3",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "427 °C",
+    "fierbere": "1157 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10 7p1"
+  },
+  "fleroviu": {
+    "simbol": "Fl",
+    "numar": 114,
+    "masa": "289",
+    "valente": "2,4",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "66.9 °C",
+    "fierbere": "147 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10 7p2"
+  },
+  "moscoviu": {
+    "simbol": "Mc",
+    "numar": 115,
+    "masa": "289",
+    "valente": "1,3",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "397 °C",
+    "fierbere": "1127 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10 7p3"
+  },
+  "livermoriu": {
+    "simbol": "Lv",
+    "numar": 116,
+    "masa": "293",
+    "valente": "2,4,6",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "436 °C",
+    "fierbere": "812 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10 7p4"
+  },
+  "tennesin": {
+    "simbol": "Ts",
+    "numar": 117,
+    "masa": "294",
+    "valente": "1,3,5,7",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "450 °C",
+    "fierbere": "610 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10 7p5"
+  },
+  "oganesson": {
+    "simbol": "Og",
+    "numar": 118,
+    "masa": "294",
+    "valente": "0",
+    "exemple": "Element sintetic; compuși foarte rari/instabili",
+    "topire": "—",
+    "fierbere": "76.9 °C",
+    "stare_de_agregare": "solid",
+    "electronegativitate": "—",
+    "configuratie_electronica": "1s2 2s2 2p6 3s2 3p6 4s2 3d10 4p6 5s2 4d10 5p6 6s2 4f14 5d10 6p6 7s2 5f14 6d10 7p6"
+  }
+};
+
+
+    function tradStare(stare) {
+      const s = (stare || "").toLowerCase();
+      if (s === "solid") return "solid";
+      if (s === "liquid") return "lichid";
+      if (s === "gas") return "gaz";
+      return stare || "";
+    }
+
+    function getElementCategory(info) {
+      const z = Number(info.numar);
+      const metalloids = new Set([5,14,32,33,51,52,84]);
+      const nemetals = new Set([1,6,7,8,15,16,34]);
+      const halogens = new Set([9,17,35,53,85,117]);
+      const nobleGases = new Set([2,10,18,36,54,86,118]);
+      const alkali = new Set([3,11,19,37,55,87]);
+      const alkaline = new Set([4,12,20,38,56,88]);
+      const postTransition = new Set([13,31,49,50,81,82,83,113,114,115,116]);
+      if (z >= 57 && z <= 71) return 'lantanid';
+      if (z >= 89 && z <= 103) return 'actinid';
+      if (halogens.has(z)) return 'halogen';
+      if (nobleGases.has(z)) return 'gaz-nobil';
+      if (alkali.has(z)) return 'metal-alcalin';
+      if (alkaline.has(z)) return 'metal-alcalino-pamantos';
+      if (metalloids.has(z)) return 'metaloid';
+      if (nemetals.has(z)) return 'nemetal';
+      if (postTransition.has(z)) return 'metal-post-tranzitie';
+      if ((z >= 21 && z <= 30) || (z >= 39 && z <= 48) || (z >= 72 && z <= 80) || (z >= 104 && z <= 112)) return 'metal-tranzitie';
+      return 'necunoscut';
+    }
+
+    function categoryLabel(cat){
+      const labels = {
+        'nemetal':'Nemetal',
+        'gaz-nobil':'Gaz nobil',
+        'metal-alcalin':'Metal alcalin',
+        'metal-alcalino-pamantos':'Metal alcalino-pământos',
+        'metaloid':'Metaloid',
+        'halogen':'Halogen',
+        'metal-post-tranzitie':'Metal post-tranziție',
+        'metal-tranzitie':'Metal de tranziție',
+        'lantanid':'Lantanid',
+        'actinid':'Actinid',
+        'necunoscut':'Alt tip de element'
+      };
+      return labels[cat] || 'Alt tip de element';
+    }
+
+    const periodicLayout = [
+      [1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 2],
+      [3, 4, '', '', '', '', '', '', '', '', '', '', 5, 6, 7, 8, 9, 10],
+      [11, 12, '', '', '', '', '', '', '', '', '', '', 13, 14, 15, 16, 17, 18],
+      [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36],
+      [37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54],
+      [55, 56, 57, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86],
+      [87, 88, 89, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118],
+      ['', '', 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, ''],
+      ['', '', 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, '']
+    ];
+
+    let periodicByNumber = {};
+    let periodicByName = {};
+
+    function renderElementDetails(key) {
+      const info = elemente[key];
+      const rezultat = document.getElementById('rezultat');
+      if (!info || !rezultat) return;
+      const cat = getElementCategory(info);
+      rezultat.innerHTML = `
+        <div class="element-card">
+          <div class="element-hero cat-${cat}">
+            <div>
+              <div class="element-number">Număr atomic ${info.numar}</div>
+              <div class="element-hero-symbol">${info.simbol}</div>
+              <div class="element-hero-name">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+              <div class="element-hero-type">${categoryLabel(cat)}</div>
+            </div>
+            <small>Masă atomică: ${info.masa}</small>
+          </div>
+          <div class="element-meta">
+            <table>
+              <tr><th>Element</th><td>${key.charAt(0).toUpperCase() + key.slice(1)}</td></tr>
+              <tr><th>Simbol</th><td>${info.simbol}</td></tr>
+              <tr><th>Număr atomic</th><td>${info.numar}</td></tr>
+              <tr><th>Masă atomică</th><td>${info.masa}</td></tr>
+              <tr><th>Categorie</th><td>${categoryLabel(cat)}</td></tr>
+              <tr><th>Electronegativitate (Pauling)</th><td>${info.electronegativitate}</td></tr>
+              <tr><th>Configurație electronică</th><td>${info.configuratie_electronica}</td></tr>
+              <tr><th>Valență/e</th><td>${info.valente}</td></tr>
+              <tr><th>Exemple</th><td>${info.exemple}</td></tr>
+              <tr><th>Punct de topire</th><td>${info.topire}</td></tr>
+              <tr><th>Punct de fierbere</th><td>${info.fierbere}</td></tr>
+              <tr><th>Stare de agregare</th><td>${tradStare(info.stare_de_agregare)}</td></tr>
+            </table>
+          </div>
+        </div>
+      `;
+      document.querySelectorAll('.element-cell').forEach(btn => btn.classList.toggle('active', btn.dataset.key === key));
+    }
+
+    function buildPeriodicTable() {
+      periodicByNumber = {};
+      periodicByName = {};
+      Object.entries(elemente).forEach(([nume, info]) => {
+        periodicByNumber[String(info.numar)] = { key: nume, info };
+        periodicByName[nume] = { key: nume, info };
+      });
+      const table = document.getElementById('periodicTable');
+      if (!table) return;
+      table.innerHTML = periodicLayout.map(row => row.map(cell => {
+        if (!cell) return '<div class="periodic-spacer" aria-hidden="true"></div>';
+        const entry = periodicByNumber[String(cell)];
+        if (!entry) return '<div class="periodic-spacer" aria-hidden="true"></div>';
+        const { key, info } = entry;
+        const cat = getElementCategory(info);
+        return `
+          <button type="button" class="element-cell cat-${cat}" data-key="${key}" onclick="renderElementDetails('${key}')" title="${key}">
+            <span class="element-number">${info.numar}</span>
+            <span class="element-symbol">${info.simbol}</span>
+            <span class="element-name">${key}</span>
+            <span class="element-mass">${info.masa}</span>
+          </button>
+        `;
+      }).join('')).join('');
+    }
+
+    function cauta(value) {
+      const input = String(value || '').toLowerCase().trim();
+      if (!input) return;
+      const entry = Object.entries(elemente).find(([nume, prop]) => nume === input || prop.simbol.toLowerCase() === input || String(prop.numar).toLowerCase() === input);
+      if (entry) renderElementDetails(entry[0]);
+    }
+
+    function clearSearch(){
+      const rezultat = document.getElementById('rezultat');
+      document.querySelectorAll('.element-cell').forEach(btn => btn.classList.remove('active'));
+      if(rezultat) rezultat.innerHTML = '<div class="periodic-empty">Selectează un element din tabel pentru a vedea proprietățile lui.</div>';
+    }
+
+
+    function clearReactants(){
+      const r1 = document.getElementById("react1");
+      const r2 = document.getElementById("react2");
+      if(r1) r1.value = "";
+      if(r2) r2.value = "";
+      // curăță și rezultatul reacției curente
+      const rr = document.getElementById("reactResult");
+      if(rr) rr.innerHTML = "";
+      const actions = document.getElementById("rxActions");
+      if(actions) actions.style.display = "none";
+      if(r1) r1.focus();
+    }
+
+    function clearReactant(which){
+      const r1 = document.getElementById("react1");
+      const r2 = document.getElementById("react2");
+      if(which===1 && r1) { r1.value = ""; r1.focus(); }
+      if(which===2 && r2) { r2.value = ""; r2.focus(); }
+      // curăță și rezultatul reacției curente (pentru că s-a schimbat un reactant)
+      const rr = document.getElementById("reactResult");
+      if(rr) rr.innerHTML = "";
+      const actions = document.getElementById("rxActions");
+      if(actions) actions.style.display = "none";
+    }
+
+
+    buildPeriodicTable();
+    renderElementDetails('hidrogen');
+    document.getElementById("react2").addEventListener("keydown", function(e){
+      if(e.key==="Enter") reaction();
+    });
+  
+// --- Theme toggle (v11.0) ---
+(function(){
+  const btn = document.getElementById('themeToggle');
+  if(!btn) return;
+
+  const THEME_KEY = 'chimieAcademyPro.theme';
+  const LEGACY_THEME_KEY = 'theme';
+  const THEMES = ['light', 'dark', 'neon'];
+  const labels = {
+    light: { icon: '🌙', title: 'Temă luminoasă activă • apasă pentru Dark' },
+    dark: { icon: '⚡', title: 'Temă Dark activă • apasă pentru Neon' },
+    neon: { icon: '☀️', title: 'Temă Neon activă • apasă pentru Luminoasă' }
+  };
+
+  function normalizeTheme(theme){
+    return THEMES.includes(theme) ? theme : 'light';
+  }
+
+  function updateMeta(theme){
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta){
+      meta.setAttribute('content', theme === 'dark' ? '#0b1220' : theme === 'neon' ? '#050816' : '#2563eb');
+    }
+  }
+
+  function syncButton(theme){
+    const state = labels[theme] || labels.light;
+    btn.textContent = state.icon;
+    btn.title = state.title;
+    btn.setAttribute('aria-label', state.title);
+  }
+
+  function getTheme(){
+    return normalizeTheme(localStorage.getItem(THEME_KEY) || localStorage.getItem(LEGACY_THEME_KEY));
+  }
+
+  function applyTheme(theme){
+    const next = normalizeTheme(theme);
+    document.body.classList.toggle('dark', next === 'dark');
+    document.body.classList.toggle('neon', next === 'neon');
+    document.documentElement.dataset.theme = next;
+    try{
+      localStorage.setItem(THEME_KEY, next);
+      localStorage.setItem(LEGACY_THEME_KEY, next);
+    }catch(err){}
+    syncButton(next);
+    updateMeta(next);
+    return next;
+  }
+
+  function nextTheme(){
+    const current = getTheme();
+    const index = THEMES.indexOf(current);
+    return THEMES[(index + 1) % THEMES.length];
+  }
+
+  window.applySharedTheme = applyTheme;
+
+  applyTheme(getTheme());
+
+  btn.addEventListener('click', () => {
+    applyTheme(nextTheme());
+  });
+
+  window.addEventListener('storage', () => {
+    applyTheme(getTheme());
+  });
+})();
+
+</script>
+
+  
+<script>
+// =====================
+// MOTOR DE REACȚII (clasele VII–VIII) – cât mai multe cazuri uzuale
+// Tipuri afișate (simplificat): combinare, descompunere, substituție, dublă substituție
+// =====================
+
+const hist = [];
+function pushHist(line){
+  hist.unshift(line);
+  if(hist.length>10) hist.pop();
+  document.getElementById("hist").innerHTML = hist.map(x=>"• "+x).join("<br>");
+}
+
+// ---------- Favorite reactions (localStorage) ----------
+let currentEqPlain = "";
+let currentType = "";
+
+function readFavs(){
+  try{
+    const raw = localStorage.getItem('favReactions');
+    const data = raw ? JSON.parse(raw) : [];
+    return Array.isArray(data) ? data : [];
+  }catch(e){
+    return [];
+  }
+}
+function writeFavs(list){
+  try{ localStorage.setItem('favReactions', JSON.stringify(list)); }catch(e){}
+}
+function isFav(eq){
+  return readFavs().some(x => x && x.eq === eq);
+}
+function setCurrentReaction(eq, type){
+  currentEqPlain = eq || "";
+  currentType = type || "";
+
+  const actions = document.getElementById('rxActions');
+  if(actions) actions.style.display = currentEqPlain ? 'flex' : 'none';
+
+  const favBtn = document.getElementById('favBtn');
+  if(favBtn){
+    const on = currentEqPlain && isFav(currentEqPlain);
+    favBtn.classList.toggle('fav-on', !!on);
+    favBtn.textContent = on ? '⭐ În favorite' : '⭐ Favorit';
+  }
+}
+
+async function copyTextToClipboard(text){
+  if(!text) return false;
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(e){}
+  // fallback
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }catch(e){
+    return false;
+  }
+}
+
+async function copyCurrentReaction(){
+  if(!currentEqPlain) return;
+  const ok = await copyTextToClipboard(currentEqPlain);
+  const btn = document.getElementById('copyBtn');
+  if(btn){
+    const old = btn.textContent;
+    btn.textContent = ok ? '✅ Copiat' : '❌ Nu pot copia';
+    setTimeout(()=>{ btn.textContent = old; }, 900);
+  }
+}
+
+function toggleFavoriteCurrent(){
+  if(!currentEqPlain) return;
+  let favs = readFavs();
+  const idx = favs.findIndex(x => x && x.eq === currentEqPlain);
+  if(idx >= 0){
+    favs.splice(idx, 1);
+  }else{
+    favs.unshift({ eq: currentEqPlain, type: currentType || '', t: Date.now() });
+    if(favs.length > 50) favs = favs.slice(0, 50);
+  }
+  writeFavs(favs);
+  setCurrentReaction(currentEqPlain, currentType);
+  renderFavorites();
+}
+
+async function copyFavorite(eq){
+  await copyTextToClipboard(eq);
+}
+
+function removeFavorite(eq){
+  let favs = readFavs().filter(x => x && x.eq !== eq);
+  writeFavs(favs);
+  renderFavorites();
+  setCurrentReaction(currentEqPlain, currentType);
+}
+
+function renderFavorites(){
+  const box = document.getElementById('favList');
+  if(!box) return;
+  const favs = readFavs();
+  if(!favs.length){
+    box.innerHTML = '<div style="color:var(--muted); padding:8px 0;">(încă nu ai favorite)</div>';
+    return;
+  }
+  box.innerHTML = favs.map(f => {
+    const t = (f && f.type) ? f.type : '';
+    return `
+      <div class="fav-item">
+        <div class="fav-eq">
+          <div><strong>${escapeHtml(f.eq || '')}</strong></div>
+          ${t ? `<div class="fav-meta">Tip: ${escapeHtml(t)}</div>` : ''}
+        </div>
+        <div class="fav-actions">
+          <button class="rx-mini-btn ghost" type="button" onclick="copyFavorite('${jsString(f.eq || '')}')" title="Copiază">📋</button>
+          <button class="rx-mini-btn secondary" type="button" onclick="removeFavorite('${jsString(f.eq || '')}')" title="Șterge din favorite">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function jsString(s){
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,'');
+}
+
+// ---------- Quiz: 10 reacții (fără timp limită) ----------
+let quizState = null;
+
+function shuffleArray(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function isElementalFormula(f){
+  // consider "elementare" formule fără cifre sau paranteze: Na, Zn, H2, O2, Cl2 etc.
+  const s = cleanMarks(String(f || '').trim());
+  if(!s) return false;
+  // dacă are paranteze sau are un grup (ex: NaCl) => compus
+  if(/[()]/.test(s)) return false;
+  // dacă are cel puțin 2 elemente diferite (ex: NaCl) => compus
+  const parts = s.match(/[A-Z][a-z]?/g) || [];
+  const uniq = Array.from(new Set(parts));
+  if(uniq.length >= 2) return false;
+  // altfel, e un element (poate cu indice)
+  return true;
+}
+
+function buildEquationForQuiz(reactants, productsRaw){
+  const productsClean = (productsRaw||[]).map(cleanMarks);
+  const coefs = balance(reactants, productsClean);
+  if(!coefs){
+    const left = reactants.join(" + ");
+    const right = (productsRaw||[]).join(" + ");
+    return left + " → " + right;
+  }
+  const cr = coefs.slice(0, reactants.length);
+  const cp = coefs.slice(reactants.length);
+  const left = reactants.map((f,i)=> fmtCoef(cr[i]) + f).join(" + ");
+  const right = (productsRaw||[]).map((f,i)=> fmtCoef(cp[i]) + f).join(" + ");
+  return left + " → " + right;
+}
+
+function keyToReactants(key){
+  if(!key) return [];
+  return key.includes("|") ? key.split("|") : [key];
+}
+
+function pickQuizKeys(count){
+  const keys = Object.keys(preset || {});
+  shuffleArray(keys);
+  return keys.slice(0, Math.min(count, keys.length));
+}
+
+
+function mutateFormula(f){
+  let s = cleanMarks(f||"").trim();
+  if(!s) return s;
+
+  // 1) Hidroxizi: (OH)n ↔ oxid / schimbă indicele
+  if(/\(OH\)\d*/.test(s)){
+    if(Math.random() < 0.45){
+      // Cu(OH)2 -> CuO (simplificare "plauzibilă", dar greșită în test)
+      s = s.replace(/\(OH\)\d*/g, "O");
+    }else{
+      // schimbă numărul de grupări OH
+      if(/\(OH\)\d+/.test(s)){
+        s = s.replace(/\(OH\)(\d+)/, (m,d)=>"(OH)"+String(Math.max(1, parseInt(d,10) + (Math.random()<0.5?-1:1))));
+      }else{
+        s = s.replace(/\(OH\)/g, "(OH)"+(Math.random()<0.5?"2":"3"));
+      }
+    }
+    return s;
+  }
+
+  // 2) Anioni asemănători (schimbări mici)
+  if(/SO4/.test(s) && Math.random()<0.55) return s.replace(/SO4/g,"SO3");
+  if(/NO3/.test(s) && Math.random()<0.55) return s.replace(/NO3/g,"NO2");
+  if(/CO3/.test(s) && Math.random()<0.55) return s.replace(/CO3/g,"CO2");
+
+  // 3) Schimbă un indice numeric existent (±1)
+  const nums = [...s.matchAll(/\d+/g)];
+  if(nums.length){
+    const pick = nums[Math.floor(Math.random()*nums.length)];
+    const oldVal = parseInt(pick[0],10);
+    const delta = (Math.random()<0.5 ? -1 : 1);
+    const newVal = Math.max(1, oldVal + delta);
+    s = s.slice(0, pick.index) + String(newVal) + s.slice(pick.index + pick[0].length);
+    return s;
+  }
+
+  // 4) Dacă nu are indici: adaugă un "2" mic (NaCl -> NaCl2)
+  return s + "2";
+}
+
+function makeFakeOptions(reactants, correctProductsRaw, correctEq, wantLen){
+  const correctProducts = (correctProductsRaw||[]).map(cleanMarks);
+  const out = [];
+  const seen = new Set();
+  let guard = 0;
+
+  while(out.length < wantLen && guard < 250){
+    guard++;
+
+    let products = correctProducts.slice();
+
+    const t = Math.random();
+    if(t < 0.60){
+      // mută o singură formulă
+      const i = Math.floor(Math.random()*products.length);
+      products[i] = mutateFormula(products[i]);
+    }else if(t < 0.85){
+      // mută 2 formule (dacă există)
+      if(products.length >= 2){
+        const i = Math.floor(Math.random()*products.length);
+        let j = Math.floor(Math.random()*products.length);
+        if(j === i) j = (i+1) % products.length;
+        products[i] = mutateFormula(products[i]);
+        products[j] = mutateFormula(products[j]);
+      }else{
+        products[0] = mutateFormula(products[0]);
+      }
+    }else{
+      // schimbă "forma" (număr de produși): elimină sau adaugă un produs "clasic"
+      if(products.length > 1 && Math.random()<0.55){
+        products = [products[0]];
+      }else{
+        const extras = ["H2O","CO2","O2","H2"];
+        const ex = extras[Math.floor(Math.random()*extras.length)];
+        products = products.concat([ex]);
+      }
+    }
+
+    products = products.map(cleanMarks);
+
+    // cheie pentru a evita duplicatele
+    const pKey = products.join("+");
+    if(seen.has(pKey)) continue;
+    seen.add(pKey);
+
+    const eq = buildEquationForQuiz(reactants, products);
+
+    if(eq === correctEq) continue;
+    if(out.includes(eq)) continue;
+
+    out.push(eq);
+  }
+
+  // fallback simplu (rar): greșește un coeficient din ecuația corectă
+  while(out.length < wantLen){
+    let eq = correctEq;
+    // schimbă primul coeficient numeric găsit
+    const m = eq.match(/\b(\d+)(?=[A-Za-z(])/);
+    if(m){
+      const oldVal = parseInt(m[1],10);
+      const newVal = (oldVal % 9) + 1;
+      eq = eq.replace(m[1], String(newVal));
+    }else{
+      // dacă nu există coeficienți, pune "2" în față la primul reactant
+      eq = eq.replace(/^([A-Za-z(])/, "2$1");
+    }
+    if(eq !== correctEq && !out.includes(eq)) out.push(eq);
+    else out.push(correctEq + " "); // garantat diferit vizual
+  }
+
+  return out.slice(0, wantLen);
+}
+
+
+
+function startQuiz10(){
+  const keys = pickQuizKeys(10);
+  quizState = {
+    keys,
+    answers: {},   // qIndex -> optionIndex chosen
+    submitted: false
+  };
+  renderQuiz();
+}
+
+function resetQuiz(){
+  quizState = null;
+  const box = document.getElementById('quizBox');
+  if(box) box.innerHTML = '';
+  const submitBtn = document.getElementById('quizSubmitBtn');
+  const saveBtn = document.getElementById('quizSaveBtn');
+  const resetBtn = document.getElementById('quizResetBtn');
+  if(submitBtn) submitBtn.style.display = 'none';
+  if(saveBtn) saveBtn.style.display = 'none';
+  if(resetBtn) resetBtn.style.display = 'none';
+}
+
+function renderQuiz(){
+  const box = document.getElementById('quizBox');
+  if(!box) return;
+
+  if(!quizState || !quizState.keys || !quizState.keys.length){
+    box.innerHTML = '<div class="quiz-muted">Apasă „Generează 10” ca să începi.</div>';
+    return;
+  }
+
+  const submitBtn = document.getElementById('quizSubmitBtn');
+  const saveBtn = document.getElementById('quizSaveBtn');
+  const resetBtn = document.getElementById('quizResetBtn');
+  if(submitBtn) submitBtn.style.display = 'inline-flex';
+  if(saveBtn) saveBtn.style.display = quizState && quizState.submitted ? 'inline-flex' : 'none';
+  if(resetBtn) resetBtn.style.display = 'inline-flex';
+
+  const qs = quizState.keys.map((key, idx) => {
+    const reactants = keyToReactants(key);
+    const productsRaw = preset[key];
+    const correctEq = buildEquationForQuiz(reactants, productsRaw);
+
+    const fakeOptions = makeFakeOptions(reactants, productsRaw, correctEq, 3);
+    const options = [correctEq, ...fakeOptions];
+    shuffleArray(options);
+
+    // memorize correct option index for grading
+    quizState.keys[idx] = { key, correctEq, options };
+
+    const chosen = quizState.answers[idx];
+
+    const optionsHtml = options.map((opt, j) => {
+      const checked = (chosen === j) ? 'checked' : '';
+      const name = `q_${idx}`;
+      return `
+        <label>
+          <input type="radio" name="${name}" value="${j}" ${checked} onchange="selectQuizAnswer(${idx}, ${j})">
+          <div><span style="font-weight:700;">${String.fromCharCode(65+j)}.</span> ${escapeHtml(opt)}</div>
+        </label>
+      `;
+    }).join('');
+
+    return `
+      <div class="quiz-q" id="quizQ_${idx}">
+        <h3>${idx+1}) Completează reacția:</h3>
+        <div class="quiz-muted" style="margin-bottom:8px;"><strong>${escapeHtml(reactants.join(" + "))}</strong> → ?</div>
+        <div class="quiz-options">${optionsHtml}</div>
+      </div>
+    `;
+  }).join('');
+
+  box.innerHTML = qs + '<div id="quizResult" class="quiz-result" style="display:none;"></div>';
+}
+
+function selectQuizAnswer(qIndex, optIndex){
+  if(!quizState || quizState.submitted) return;
+  quizState.answers[qIndex] = optIndex;
+}
+
+function submitQuiz(){
+  if(!quizState || quizState.submitted) return;
+
+  quizState.submitted = true;
+
+  let correct = 0;
+  let total = quizState.keys.length;
+
+  for(let i=0;i<quizState.keys.length;i++){
+    const q = quizState.keys[i];
+    const chosen = quizState.answers[i];
+    const qEl = document.getElementById(`quizQ_${i}`);
+    if(!qEl) continue;
+
+    // clear previous outlines
+    qEl.classList.remove('quiz-correct','quiz-wrong');
+
+    const isRight = (chosen !== undefined && q.options[chosen] === q.correctEq);
+    if(isRight){
+      correct++;
+      qEl.classList.add('quiz-correct');
+    }else{
+      qEl.classList.add('quiz-wrong');
+      // add a small correction line
+      const correction = document.createElement('div');
+      correction.className = 'quiz-muted';
+      correction.style.marginTop = '8px';
+      correction.innerHTML = `Corect: <strong>${escapeHtml(q.correctEq)}</strong>` + (chosen !== undefined ? `<br>Ai ales: ${escapeHtml(q.options[chosen] || '')}` : `<br>Ai ales: (nimic)`);
+      qEl.appendChild(correction);
+    }
+
+    // disable radios
+    const radios = qEl.querySelectorAll('input[type="radio"]');
+    radios.forEach(r => r.disabled = true);
+  }
+
+  quizState.score = correct;
+  quizState.total = total;
+
+  const res = document.getElementById('quizResult');
+  if(res){
+    res.style.display = 'block';
+    res.innerHTML = `<strong>Scor:</strong> ${correct} / ${total}`;
+  }
+
+  const saveBtn = document.getElementById('quizSaveBtn');
+  if(saveBtn) saveBtn.style.display = 'inline-flex';
+}
+
+
+function downloadTextFile(filename, content){
+  if(window.AndroidBridge && typeof window.AndroidBridge.saveTextFile === 'function'){
+    try{
+      const base64 = btoa(unescape(encodeURIComponent(String(content || ''))));
+      const saved = window.AndroidBridge.saveTextFile(String(filename || 'fisier.txt'), 'text/plain;charset=utf-8', base64);
+      if(saved) return;
+    }catch(err){}
+  }
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(link.href);
+    link.remove();
+  }, 0);
+}
+
+function saveQuizReport(){
+  if(!quizState || !quizState.submitted) return;
+
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}`;
+  const lines = [];
+  lines.push('TEST CHIMIE - RAPORT PENTRU PROFESOR');
+  lines.push('Data: ' + now.toLocaleString('ro-RO'));
+  lines.push('Scor: ' + (quizState.score ?? 0) + ' / ' + (quizState.total ?? quizState.keys.length));
+  lines.push('');
+
+  quizState.keys.forEach((q, i) => {
+    if(!q || typeof q !== 'object') return;
+    const chosen = quizState.answers[i];
+    const chosenText = chosen !== undefined ? q.options[chosen] : '(fara raspuns)';
+    const isCorrect = chosen !== undefined && q.options[chosen] === q.correctEq;
+    lines.push((i + 1) + '. ' + q.key.replace(/\|/g, ' + ') + ' -> ?');
+    lines.push('   Raspuns elev: ' + chosenText);
+    lines.push('   Varianta corecta: ' + q.correctEq);
+    lines.push('   Rezultat: ' + (isCorrect ? 'Corect' : 'Gresit'));
+    lines.push('');
+  });
+
+  downloadTextFile(`test_chimie_${stamp}.txt`, lines.join('\n'));
+}
+
+function setRx(a,b=""){
+  document.getElementById("react1").value = a;
+  document.getElementById("react2").value = b;
+}
+
+// init favorites UI
+renderFavorites();
+// init quiz UI
+resetQuiz();
+
+// ---------- Parser formule ----------
+function parseFormula(formula){
+  formula = formula.replace(/\s+/g,"");
+  let i=0;
+  const stack=[{}];
+  function addEl(map, el, n){ map[el]=(map[el]||0)+n; }
+  function readNumber(){
+    let start=i;
+    while(i<formula.length && /\d/.test(formula[i])) i++;
+    if(start===i) return 1;
+    return parseInt(formula.slice(start,i),10);
+  }
+  while(i<formula.length){
+    const ch=formula[i];
+    if(ch==='('){
+      i++; stack.push({});
+    } else if(ch===')'){
+      i++; const mult=readNumber();
+      const top=stack.pop(); const cur=stack[stack.length-1];
+      for(const el in top) addEl(cur, el, top[el]*mult);
+    } else if(/[A-Z]/.test(ch)){
+      let el=ch; i++;
+      if(i<formula.length && /[a-z]/.test(formula[i])){ el+=formula[i]; i++; }
+      const n=readNumber();
+      addEl(stack[stack.length-1], el, n);
+    } else {
+      i++;
+    }
+  }
+  return stack[0];
+}
+
+// ---------- fracții BigInt + RREF (echilibrare) ----------
+function bigGcd(a,b){ a=a<0n?-a:a; b=b<0n?-b:b; while(b!==0n){ const t=a%b; a=b; b=t; } return a; }
+function bigLcm(a,b){ return (a/bigGcd(a,b))*b; }
+function Fr(n,d=1n){
+  if(d<0n){ n=-n; d=-d; }
+  const g=bigGcd(n,d);
+  return {n:n/g, d:d/g};
+}
+function frAdd(a,b){ return Fr(a.n*b.d + b.n*a.d, a.d*b.d); }
+function frSub(a,b){ return Fr(a.n*b.d - b.n*a.d, a.d*b.d); }
+function frMul(a,b){ return Fr(a.n*b.n, a.d*b.d); }
+function frDiv(a,b){ return Fr(a.n*b.d, a.d*b.n); }
+function frNeg(a){ return {n:-a.n,d:a.d}; }
+function frIsZero(a){ return a.n===0n; }
+
+function balance(reactants, products){
+  const all = reactants.concat(products);
+  const comps = all.map(f=>parseFormula(f));
+  const elemsSet = new Set();
+  comps.forEach(m=>{ for(const k in m) elemsSet.add(k); });
+  const elems = Array.from(elemsSet);
+  const m = elems.length, n = all.length;
+
+  let A = Array.from({length:m}, ()=>Array.from({length:n}, ()=>Fr(0n,1n)));
+  for(let r=0;r<m;r++){
+    const el = elems[r];
+    for(let c=0;c<n;c++){
+      const count = BigInt(comps[c][el]||0);
+      const sign = (c<reactants.length) ? 1n : -1n;
+      A[r][c] = Fr(sign*count, 1n);
+    }
+  }
+
+  let row=0;
+  const pivots = [];
+  for(let col=0; col<n && row<m; col++){
+    let pivotRow = -1;
+    for(let r=row; r<m; r++){
+      if(!frIsZero(A[r][col])){ pivotRow=r; break; }
+    }
+    if(pivotRow===-1) continue;
+    if(pivotRow!==row){ const tmp=A[row]; A[row]=A[pivotRow]; A[pivotRow]=tmp; }
+
+    const piv = A[row][col];
+    for(let c=col; c<n; c++) A[row][c] = frDiv(A[row][c], piv);
+
+    for(let r=0;r<m;r++){
+      if(r===row) continue;
+      if(frIsZero(A[r][col])) continue;
+      const factor = A[r][col];
+      for(let c=col; c<n; c++){
+        A[r][c] = frSub(A[r][c], frMul(factor, A[row][c]));
+      }
+    }
+
+    pivots.push(col);
+    row++;
+  }
+
+  const pivotSet = new Set(pivots);
+  let free=-1;
+  for(let c=n-1;c>=0;c--){ if(!pivotSet.has(c)){ free=c; break; } }
+  if(free===-1) free=n-1;
+
+  let x = Array.from({length:n}, ()=>Fr(0n,1n));
+  x[free]=Fr(1n,1n);
+
+  for(let r=pivots.length-1;r>=0;r--){
+    const pc = pivots[r];
+    let sum = Fr(0n,1n);
+    for(let c=pc+1;c<n;c++){
+      if(frIsZero(A[r][c])) continue;
+      sum = frAdd(sum, frMul(A[r][c], x[c]));
+    }
+    x[pc]=frNeg(sum);
+  }
+
+  let lcm=1n;
+  x.forEach(v=>{ lcm = bigLcm(lcm, v.d); });
+  let ints = x.map(v => v.n*(lcm/v.d));
+
+  let negCount = ints.filter(v=>v<0n).length;
+  if(negCount>0 && (ints[0]<0n || negCount > n/2)) ints = ints.map(v=>-v);
+
+  let g=0n;
+  ints.forEach(v=>{ const av=v<0n?-v:v; g = g===0n ? av : bigGcd(g,av); });
+  if(g>1n) ints=ints.map(v=>v/g);
+  if(ints.some(v=>v===0n)) return null;
+
+  return ints.map(v=>v.toString());
+}
+
+function fmtCoef(c){ return (c==="1") ? "" : c; }
+function joinEq(reactants, products, cr, cp){
+  const left = reactants.map((f,i)=> fmtCoef(cr[i]) + f).join(" + ");
+  const right = products.map((f,i)=> fmtCoef(cp[i]) + f).join(" + ");
+  return left + " → " + right;
+}
+
+// ---------- preset (cele mai frecvente exemple) ----------
+const preset = {
+  // precipitare / schimb (clasa a VIII-a)
+  "CuSO4|NaOH": ["Cu(OH)2","Na2SO4"],
+  "CuCl2|NaOH": ["Cu(OH)2","NaCl"],
+  "ZnSO4|NaOH": ["Zn(OH)2","Na2SO4"],
+  "ZnCl2|NaOH": ["Zn(OH)2","NaCl"],
+  "MgSO4|NaOH": ["Mg(OH)2","Na2SO4"],
+  "MgCl2|NaOH": ["Mg(OH)2","NaCl"],
+  "FeCl2|NaOH": ["Fe(OH)2","NaCl"],
+  "FeSO4|NaOH": ["Fe(OH)2","Na2SO4"],
+  "FeCl3|NaOH": ["Fe(OH)3","NaCl"],
+  "AlCl3|NaOH": ["Al(OH)3","NaCl"],
+  "AgNO3|NaCl": ["AgCl↓","NaNO3"],
+  "AgNO3|KCl": ["AgCl↓","KNO3"],
+  "AgNO3|NaBr": ["AgBr↓","NaNO3"],
+  "AgNO3|KI": ["AgI↓","KNO3"],
+  "BaCl2|Na2SO4": ["BaSO4↓","NaCl"],
+  "Ba(NO3)2|Na2SO4": ["BaSO4↓","NaNO3"],
+  "Pb(NO3)2|KI": ["PbI2↓","KNO3"],
+  "Pb(NO3)2|NaCl": ["PbCl2↓","NaNO3"],
+  "Pb(NO3)2|Na2SO4": ["PbSO4↓","NaNO3"],
+  "CaCl2|Na2CO3": ["CaCO3↓","NaCl"],
+  "Ca(NO3)2|Na2CO3": ["CaCO3↓","NaNO3"],
+  "BaCl2|Na2CO3": ["BaCO3↓","NaCl"],
+  "CuSO4|Na2CO3": ["CuCO3↓","Na2SO4"],
+  "ZnSO4|Na2CO3": ["ZnCO3↓","Na2SO4"],
+  "FeSO4|Na2CO3": ["FeCO3↓","Na2SO4"],
+  "CaCl2|Na2SO4": ["CaSO4↓","NaCl"],
+  "AgNO3|Na2CO3": ["Ag2CO3↓","NaNO3"],
+  "AgNO3|Na2S": ["Ag2S↓","NaNO3"],
+  "Pb(NO3)2|Na2S": ["PbS↓","NaNO3"],
+  "CuSO4|Na2S": ["CuS↓","Na2SO4"],
+  "ZnSO4|Na2S": ["ZnS↓","Na2SO4"],
+  "FeCl2|Na2S": ["FeS↓","NaCl"],
+
+  // neutralizări / baze + acizi (sunt și în reguli, dar le ținem ca exemple clare)
+  "HCl|NaOH": ["NaCl","H2O"],
+  "H2SO4|NaOH": ["Na2SO4","H2O"],
+  "HNO3|KOH": ["KNO3","H2O"],
+  "H2SO4|KOH": ["K2SO4","H2O"],
+  "HCl|Ca(OH)2": ["CaCl2","H2O"],
+  "H2SO4|Ba(OH)2": ["BaSO4↓","H2O"],
+  "NH4Cl|NaOH": ["NH3↑","NaCl","H2O"],
+
+  // acizi + carbonați / degajare CO2
+  "CaCO3|HCl": ["CaCl2","CO2↑","H2O"],
+  "Na2CO3|HCl": ["NaCl","CO2↑","H2O"],
+  "NaHCO3|HCl": ["NaCl","CO2↑","H2O"],
+  "MgCO3|HCl": ["MgCl2","CO2↑","H2O"],
+  "ZnCO3|HCl": ["ZnCl2","CO2↑","H2O"],
+  "FeCO3|HCl": ["FeCl2","CO2↑","H2O"],
+  "CaCO3|H2SO4": ["CaSO4","CO2↑","H2O"],
+  "Na2CO3|H2SO4": ["Na2SO4","CO2↑","H2O"],
+  "NaHCO3|H2SO4": ["Na2SO4","CO2↑","H2O"],
+  "Ca(HCO3)2": ["CaCO3↓","CO2↑","H2O"],
+
+  // substituție (metal + acid / apă)
+  "HCl|Zn": ["ZnCl2","H2"],
+  "HCl|Fe": ["FeCl2","H2"],
+  "HCl|Mg": ["MgCl2","H2"],
+  "HCl|Al": ["AlCl3","H2"],
+  "HCl|Na": ["NaCl","H2"],
+  "HCl|K": ["KCl","H2"],
+  "HBr|Zn": ["ZnBr2","H2"],
+  "HBr|Mg": ["MgBr2","H2"],
+  "HBr|Fe": ["FeBr2","H2"],
+  "HI|Zn": ["ZnI2","H2"],
+  "HI|Mg": ["MgI2","H2"],
+  "HI|Fe": ["FeI2","H2"],
+  "H2O|Na": ["NaOH","H2"],
+  "H2O|K": ["KOH","H2"],
+  "H2O|Ca": ["Ca(OH)2","H2"],
+  "CuSO4|Fe": ["FeSO4","Cu"],
+  "CuSO4|Zn": ["ZnSO4","Cu"],
+  "CuSO4|Mg": ["MgSO4","Cu"],
+  "AgNO3|Cu": ["Cu(NO3)2","Ag"],
+  "AgNO3|Zn": ["Zn(NO3)2","Ag"],
+  "AgNO3|Fe": ["Fe(NO3)2","Ag"],
+  "CuCl2|Zn": ["ZnCl2","Cu"],
+
+  // halogeni (deplasare)
+  "Cl2|KBr": ["KCl","Br2"],
+  "Cl2|KI": ["KCl","I2"],
+  "Br2|KI": ["KBr","I2"],
+
+  // combinare (sinteză)
+  "H2|O2": ["H2O"],
+  "N2|H2": ["NH3"],
+  "H2|Cl2": ["HCl"],
+  "H2|Br2": ["HBr"],
+  "H2|I2": ["HI"],
+  "Na|Cl2": ["NaCl"],
+  "K|Cl2": ["KCl"],
+  "Mg|O2": ["MgO"],
+  "Al|O2": ["Al2O3"],
+  "Ca|O2": ["CaO"],
+  "Fe|O2": ["Fe2O3"],
+  "Zn|O2": ["ZnO"],
+  "Cu|O2": ["CuO"],
+  "S|O2": ["SO2"],
+  "SO2|O2": ["SO3"],
+  "C|O2": ["CO2"],
+  "CO|O2": ["CO2"],
+  "Na|S": ["Na2S"],
+  "Ca|S": ["CaS"],
+  "Fe|S": ["FeS"],
+  "Al|Cl2": ["AlCl3"],
+  "Fe|Cl2": ["FeCl3"],
+  "Cu|Cl2": ["CuCl2"],
+  "Na|O2": ["Na2O2"],       // peroxid (caz special)
+  "CaO|CO2": ["CaCO3"],
+  "Na2O|CO2": ["Na2CO3"],
+  "K2O|CO2": ["K2CO3"],
+  "SO3|H2O": ["H2SO4"],
+  "SO2|H2O": ["H2SO3"],
+  "CO2|H2O": ["H2CO3"],
+  "N2O5|H2O": ["HNO3"],
+  "P2O5|H2O": ["H3PO4"],
+  "NO|O2": ["NO2"],
+  "Na|H2": ["NaH"],
+  "Mg|CO2": ["MgO","C"],
+  "Cl2|H2O": ["HCl","HClO"],
+
+  // arderi / oxidări ușoare
+  "CH4|O2": ["CO2","H2O"],
+  "C2H6|O2": ["CO2","H2O"],
+  "C3H8|O2": ["CO2","H2O"],
+  "C4H10|O2": ["CO2","H2O"],
+  "H2S|O2": ["S","H2O"],
+
+  // descompuneri (un reactant)
+  "H2O2": ["H2O","O2"],
+  "H2O": ["H2","O2"],
+  "CaCO3": ["CaO","CO2"],
+  "NaHCO3": ["Na2CO3","CO2","H2O"],
+  "NH4HCO3": ["NH3","CO2","H2O"],
+  "(NH4)2CO3": ["NH3","CO2","H2O"],
+  "KClO3": ["KCl","O2"],
+  "HgO": ["Hg","O2"],
+  "Ag2O": ["Ag","O2"],
+  "Pb(NO3)2": ["PbO","NO2","O2"],
+  "Cu(OH)2": ["CuO","H2O"],
+  "Al(OH)3": ["Al2O3","H2O"],
+  "Ca(OH)2": ["CaO","H2O"],
+  "H2CO3": ["CO2","H2O"],
+  "H2SO3": ["SO2","H2O"],
+  "Na2O2": ["Na2O","O2"],
+  "KMnO4": ["K2MnO4","MnO2","O2"],
+  "NaNO3": ["NaNO2","O2"],
+  "KNO3": ["KNO2","O2"],
+  "AgNO3": ["Ag","NO2","O2"],
+  "FeCl3": ["FeCl2","Cl2"],
+  "HI": ["H2","I2"],
+  "HBr": ["H2","Br2"],
+  "HCl": ["H2","Cl2"],
+  "(NH4)2Cr2O7": ["Cr2O3","N2","H2O"],
+  "FeSO4": ["Fe2O3","SO2","SO3"],
+  "CaSO3": ["CaO","SO2"],
+  "MgCO3": ["MgO","CO2"],
+  "ZnCO3": ["ZnO","CO2"],
+  "PbCO3": ["PbO","CO2"],
+  "NaClO": ["NaCl","O2"],
+  "NH4NO3": ["N2O","H2O"],
+  "Cu(NO3)2": ["CuO","NO2","O2"],
+  "Zn(NO3)2": ["ZnO","NO2","O2"],
+  "Mg(NO3)2": ["MgO","NO2","O2"],
+  // --- adăugate (lista extinsă: acizi/baze/săruri etc.) ---
+  "(NH4)2CO3|Ca(OH)2": ["NH3↑","CaCO3↓","H2O"],
+  "(NH4)2CO3|KOH": ["NH3↑","K2CO3","H2O"],
+  "(NH4)2SO4|Ca(OH)2": ["NH3↑","CaSO4↓","H2O"],
+  "(NH4)2SO4|NaOH": ["NH3↑","Na2SO4","H2O"],
+  "(NH4)2S|NaOH": ["NH3↑","Na2S","H2O"],
+  "AgBr|Fe": ["FeBr2","Ag"],
+  "AgBr|Zn": ["ZnBr2","Ag"],
+  "AgCl|Cu": ["CuCl2","Ag"],
+  "AgCl|Fe": ["FeCl2","Ag"],
+  "AgNO2|Cu": ["Cu(NO2)2","Ag"],
+  "AgNO3|KBr": ["AgBr↓","KNO3"],
+  "AgNO3|Na3PO4": ["Ag3PO4↓","NaNO3"],
+  "AgNO3|NaI": ["AgI↓","NaNO3"],
+  "Al(NO3)3|NaOH": ["Al(OH)3↓","NaNO3"],
+  "Al(OH)3|H2SO4": ["Al2(SO4)3","H2O"],
+  "Al2O3|HBr": ["AlBr3","H2O"],
+  "Al2S3|H2O": ["Al(OH)3","H2S↑"],
+  "Al|I2": ["AlI3"],
+  "Ba(NO3)2|K2SO4": ["BaSO4↓","KNO3"],
+  "Ba(OH)2|HBr": ["BaBr2","H2O"],
+  "BaCl2|K2CO3": ["BaCO3↓","KCl"],
+  "BaCl2|K2SO4": ["BaSO4↓","KCl"],
+  "BaO|H2O": ["Ba(OH)2"],
+  "Br2|K": ["KBr"],
+  "Br2|NaI": ["NaBr","I2"],
+  "CH3COOH|Ca": ["(CH3COO)2Ca","H2↑"],
+  "CO2|KOH": ["K2CO3","H2O"],
+  "CO2|NaOH": ["NaHCO3"],
+  "Ca(HCO3)2|HBr": ["CaBr2","CO2","H2O"],
+  "Ca(NO3)2": ["CaO","NO2↑","O2↑"],
+  "Ca(NO3)2|Na2SO4": ["CaSO4↓","NaNO3"],
+  "Ca(NO3)2|Na3PO4": ["Ca3(PO4)2↓","NaNO3"],
+  "Ca(NO3)2|NaOH": ["Ca(OH)2↓","NaNO3"],
+  "Ca(OH)2|H2SO3": ["CaSO3↓","H2O"],
+  "Ca(OH)2|HNO3": ["Ca(NO3)2","H2O"],
+  "Ca(OH)2|NH4Br": ["NH3↑","CaBr2","H2O"],
+  "Ca(OH)2|NH4Cl": ["NH3↑","CaCl2","H2O"],
+  "Ca(OH)2|NH4I": ["NH3↑","CaI2","H2O"],
+  "CaCO3|HBr": ["CaBr2","CO2","H2O"],
+  "CaCl2|K2CO3": ["CaCO3↓","KCl"],
+  "CaCl2|Na3PO4": ["Ca3(PO4)2↓","NaCl"],
+  "CaO|H2O": ["Ca(OH)2"],
+  "CaO|HI": ["CaI2","H2O"],
+  "CaO|HNO3": ["Ca(NO3)2","H2O"],
+  "CaS|HBr": ["CaBr2","H2S↑"],
+  "Cl2|FeCl2": ["FeCl3"],
+  "Cl2|Na": ["NaCl"],
+  "Cl2|NaI": ["NaCl","I2"],
+  "Co|H2SO4": ["CoSO4","H2↑"],
+  "Co|HCl": ["CoCl2","H2↑"],
+  "Co|HI": ["CoI2","H2↑"],
+  "Cu(OH)2|HNO3": ["Cu(NO3)2","H2O"],
+  "CuCO3": ["CuO","CO2↑"],
+  "CuCl2|Na2S": ["CuS↓","NaCl"],
+  "CuO|HNO3": ["Cu(NO3)2","H2O"],
+  "CuSO4|KOH": ["Cu(OH)2↓","K2SO4"],
+  "Fe(OH)2|HI": ["FeI2","H2O"],
+  "Fe(OH)3|H2SO4": ["Fe2(SO4)3","H2O"],
+  "Fe2O3|HBr": ["FeBr3","H2O"],
+  "FeCO3|HI": ["FeI2","CO2","H2O"],
+  "FeCl2|KOH": ["Fe(OH)2↓","KCl"],
+  "FeCl2|Na2CO3": ["FeCO3↓","NaCl"],
+  "FeCl2|Na3PO4": ["Fe3(PO4)2↓","NaCl"],
+  "FeCl2|Zn": ["ZnCl2","Fe"],
+  "FeCl3|KOH": ["Fe(OH)3↓","KCl"],
+  "FeO|HNO3": ["Fe(NO3)2","H2O"],
+  "FeSO4|K2CO3": ["FeCO3↓","K2SO4"],
+  "FeSO4|Na2S": ["FeS↓","Na2SO4"],
+  "FeS|HBr": ["FeBr2","H2S↑"],
+  "Fe|HBr": ["FeBr2","H2↑"],
+  "Fe|PbCl2": ["FeCl2","Pb"],
+  "Fe|SnCl2": ["FeCl2","Sn"],
+  "H2CO3|KOH": ["K2CO3","H2O"],
+  "H2O|K2O": ["KOH"],
+  "H2O|Na2O": ["NaOH"],
+  "H2SO4|Ni": ["NiSO4","H2↑"],
+  "H2SO4|Pb": ["PbSO4↓","H2↑"],
+  "H2SO4|Sn": ["SnSO4","H2↑"],
+  "H2S|NaOH": ["Na2S","H2O"],
+  "H3PO4|NaOH": ["Na2HPO4","H2O"],
+  "HBr|K2O": ["KBr","H2O"],
+  "HBr|MgO": ["MgBr2","H2O"],
+  "HBr|Na2CO3": ["NaBr","CO2","H2O"],
+  "HBr|Na2S": ["NaBr","H2S↑"],
+  "HBr|Na2SO3": ["NaBr","SO2↑","H2O"],
+  "HBr|NaHCO3": ["NaBr","CO2","H2O"],
+  "HBr|NaOH": ["NaBr","H2O"],
+  "HBr|Ni": ["NiBr2","H2↑"],
+  "HBr|Sn": ["SnBr2","H2↑"],
+  "HBr|Zn(OH)2": ["ZnBr2","H2O"],
+  "HBr|ZnCO3": ["ZnBr2","CO2","H2O"],
+  "HBr|ZnO": ["ZnBr2","H2O"],
+  "HCl|LiOH": ["LiCl","H2O"],
+  "HCl|Ni": ["NiCl2","H2↑"],
+  "HCl|Pb": ["PbCl2↓","H2↑"],
+  "HCl|Sn": ["SnCl2","H2↑"],
+  "HI|K2CO3": ["KI","CO2","H2O"],
+  "HI|K2S": ["KI","H2S↑"],
+  "HI|K2SO3": ["KI","SO2↑","H2O"],
+  "HI|KHCO3": ["KI","CO2","H2O"],
+  "HI|KOH": ["KI","H2O"],
+  "HI|Mg(HCO3)2": ["MgI2","CO2","H2O"],
+  "HI|Mg(OH)2": ["MgI2","H2O"],
+  "HI|MgCO3": ["MgI2","CO2","H2O"],
+  "HI|Na2O": ["NaI","H2O"],
+  "HI|Ni": ["NiI2","H2↑"],
+  "HI|Sn": ["SnI2","H2↑"],
+  "HI|ZnS": ["ZnI2","H2S↑"],
+  "HNO3|Pb(OH)2": ["Pb(NO3)2","H2O"],
+  "I2|Na2S2O3": ["NaI","Na2S4O6"],
+  "K2CO3|ZnSO4": ["ZnCO3↓","K2SO4"],
+  "K2SO4|SrCl2": ["SrSO4↓","KCl"],
+  "KNO2|O2": ["KNO3"],
+  "KOH|MgSO4": ["Mg(OH)2↓","K2SO4"],
+  "KOH|NH4Br": ["NH3↑","KBr","H2O"],
+  "KOH|NH4HCO3": ["NH3↑","KHCO3","H2O"],
+  "KOH|NH4NO3": ["NH3↑","KNO3","H2O"],
+  "KOH|Pb(NO3)2": ["Pb(OH)2↓","KNO3"],
+  "KOH|SO2": ["K2SO3","H2O"],
+  "Mg(OH)2": ["MgO","H2O"],
+  "MgCl2|Na2CO3": ["MgCO3↓","NaCl"],
+  "MgSO4|Na3PO4": ["Mg3(PO4)2↓","Na2SO4"],
+  "NH4HCO3|NaOH": ["NH3↑","NaHCO3","H2O"],
+  "NH4I|NaOH": ["NH3↑","NaI","H2O"],
+  "Na2CO3|Pb(NO3)2": ["PbCO3↓","NaNO3"],
+  "Na2SO4|Pb(NO3)2": ["PbSO4↓","NaNO3"],
+  "Na2SO4|SrCl2": ["SrSO4↓","NaCl"],
+  "Na2S|Pb(NO3)2": ["PbS↓","NaNO3"],
+  "Na2S|ZnCl2": ["ZnS↓","NaCl"],
+  "Na3PO4|ZnCl2": ["Zn3(PO4)2↓","NaCl"],
+  "NaClO3": ["NaCl","O2↑"],
+  "NaCl|Pb(NO3)2": ["PbCl2↓","NaNO3"],
+  "NaNO2|O2": ["NaNO3"],
+  "NaOH|P2O5": ["Na3PO4","H2O"],
+  "NaOH|SO2": ["NaHSO3"],
+  "NaOH|SO3": ["Na2SO4","H2O"],
+  "NaOH|ZnSO4": ["Zn(OH)2↓","Na2SO4"],
+  "PbCl2|Zn": ["ZnCl2","Pb"],
+  "SnCl2|Zn": ["ZnCl2","Sn"],
+
+  // ---- adăugate (set nou) ----
+  "(NH4)3PO4|AgNO3": ["Ag3PO4\u2193","NH4NO3"],
+  "Al|Br2": ["AlBr3"],
+  "BaCO3|HNO3": ["Ba(NO3)2","CO2\u2191","H2O"],
+  "BaCl2|AgNO3": ["AgCl\u2193","Ba(NO3)2"],
+  "BaO2": ["BaO","O2\u2191"],
+  "BaO|H2SO4": ["BaSO4\u2193","H2O"],
+  "CO2|BaO": ["BaCO3"],
+  "CO2|MgO": ["MgCO3"],
+  "CO2|SrO": ["SrCO3"],
+  "CaCO3|HNO3": ["Ca(NO3)2","CO2\u2191","H2O"],
+  "CaCl2|AgNO3": ["AgCl\u2193","Ca(NO3)2"],
+  "CaO2": ["CaO","O2\u2191"],
+  "CaO|H2SO4": ["CaSO4","H2O"],
+  "CaO|HCl": ["CaCl2","H2O"],
+  "Ca|Br2": ["CaBr2"],
+  "CuO|HBr": ["CuBr2","H2O"],
+  "FeS|HCl": ["FeCl2","H2S\u2191"],
+  "Fe|Br2": ["FeBr3"],
+  "H2SO4|Ca(OH)2": ["CaSO4\u2193","H2O"],
+  "H2SO4|Mg(OH)2": ["MgSO4","H2O"],
+  "H2SO4|Zn(OH)2": ["ZnSO4","H2O"],
+  "H3PO4|Ca(OH)2": ["Ca3(PO4)2\u2193","H2O"],
+  "K2CO3|Ba(NO3)2": ["BaCO3\u2193","KNO3"],
+  "K2CO3|H2SO4": ["K2SO4","CO2\u2191","H2O"],
+  "K2CO3|HNO3": ["KNO3","CO2\u2191","H2O"],
+  "K2CO3|Pb(NO3)2": ["PbCO3\u2193","KNO3"],
+  "K2CrO4|AgNO3": ["Ag2CrO4\u2193","KNO3"],
+  "K2CrO4|Pb(NO3)2": ["PbCrO4\u2193","KNO3"],
+  "K2O|H2SO4": ["K2SO4","H2O"],
+  "K2S2O3|HCl": ["KCl","SO2\u2191","S\u2193","H2O"],
+  "K2SO3|HCl": ["KCl","SO2\u2191","H2O"],
+  "K2SO4|Pb(NO3)2": ["PbSO4\u2193","KNO3"],
+  "K2S|FeSO4": ["FeS\u2193","K2SO4"],
+  "K2S|HCl": ["KCl","H2S\u2191"],
+  "K2S|Zn(NO3)2": ["ZnS\u2193","KNO3"],
+  "KClO": ["KCl","O2\u2191"],
+  "KHCO3|H2SO4": ["K2SO4","CO2\u2191","H2O"],
+  "KHCO3|HNO3": ["KNO3","CO2\u2191","H2O"],
+  "KHSO3|HCl": ["KCl","SO2\u2191","H2O"],
+  "MgCl2|AgNO3": ["AgCl\u2193","Mg(NO3)2"],
+  "MgO|HBr": ["MgBr2","H2O"],
+  "Mg|Cl2": ["MgCl2"],
+  "MnCO3|HNO3": ["Mn(NO3)2","CO2\u2191","H2O"],
+  "Na2CO3|HNO3": ["NaNO3","CO2\u2191","H2O"],
+  "Na2CO3|Mg(NO3)2": ["MgCO3\u2193","NaNO3"],
+  "Na2CO3|SrCl2": ["SrCO3\u2193","NaCl"],
+  "Na2CrO4|AgNO3": ["Ag2CrO4\u2193","NaNO3"],
+  "Na2CrO4|BaCl2": ["BaCrO4\u2193","NaCl"],
+  "Na2O|H2SO4": ["Na2SO4","H2O"],
+  "Na2S2O3|HCl": ["NaCl","SO2\u2191","S\u2193","H2O"],
+  "Na2SO3|HCl": ["NaCl","SO2\u2191","H2O"],
+  "Na2SO4|Ba(NO3)2": ["BaSO4\u2193","NaNO3"],
+  "Na2S|Cd(NO3)2": ["CdS\u2193","NaNO3"],
+  "Na2S|CuSO4": ["CuS\u2193","Na2SO4"],
+  "Na2S|HCl": ["NaCl","H2S\u2191"],
+  "NaHCO3|HNO3": ["NaNO3","CO2\u2191","H2O"],
+  "NaHSO3|HCl": ["NaCl","SO2\u2191","H2O"],
+  "Na|Br2": ["NaBr"],
+  "SO2|BaO": ["BaSO3"],
+  "SO2|CaO": ["CaSO3"],
+  "SO2|MgO": ["MgSO3"],
+  "SO3|CaO": ["CaSO4"],
+  "SO3|MgO": ["MgSO4"],
+  "SrCO3|HNO3": ["Sr(NO3)2","CO2\u2191","H2O"],
+  "SrCl2|AgNO3": ["AgCl\u2193","Sr(NO3)2"],
+  "ZnO|HI": ["ZnI2","H2O"],
+  "ZnS|HCl": ["ZnCl2","H2S\u2191"],
+  "Zn|I2": ["ZnI2"],
+
+  "B2O3|H2O": ["H3BO3"],
+  "BaO|B2O3": ["Ba3(BO3)2"],
+  "BaO|P2O5": ["Ba3(PO4)2"],
+  "Ba|Br2": ["BaBr2"],
+  "Ba|I2": ["BaI2"],
+  "Ba|O2": ["BaO"],
+  "B|H2": ["BH3"],
+  "B|O2": ["B2O3"],
+  "Ca|I2": ["CaI2"],
+  "Cu|Br2": ["CuBr2"],
+  "Cu|I2": ["CuI2"],
+  "Fe|I2": ["FeI3"],
+  "I2O5|H2O": ["HIO3"],
+  "I2|O2": ["I2O5"],
+  "K|Br2": ["KBr"],
+  "K|I2": ["KI"],
+  "Na|I2": ["NaI"],
+  "SO3|BaO": ["BaSO4"],
+  // metal + oxizi (lista adăugată din imagini: Al / Mg / Ca)
+  "Al|Ag2O": ["Al2O3", "Ag"],
+  "Al|Bi2O3": ["Al2O3", "Bi"],
+  "Al|CdO": ["Al2O3", "Cd"],
+  "Al|Cu2O": ["Al2O3", "Cu"],
+  "Al|Ga2O3": ["Al2O3", "Ga"],
+  "Al|GeO2": ["Al2O3", "Ge"],
+  "Al|HgO": ["Al2O3", "Hg"],
+  "Al|In2O3": ["Al2O3", "In"],
+  "Al|PbO": ["Al2O3", "Pb"],
+  "Al|PbO2": ["Al2O3", "Pb"],
+  "Al|Sb2O3": ["Al2O3", "Sb"],
+  "Al|Sb2O5": ["Al2O3", "Sb"],
+  "Al|SeO2": ["Al2O3", "Se"],
+  "Al|SiO2": ["Al2O3", "Si"],
+  "Al|SnO": ["Al2O3", "Sn"],
+  "Al|SnO2": ["Al2O3", "Sn"],
+  "Al|TeO2": ["Al2O3", "Te"],
+  "Al|WO3": ["Al2O3", "W"],
+  "Al|ZnO": ["Al2O3", "Zn"],
+  "Ca|Ag2O": ["CaO", "Ag"],
+  "Ca|Al2O3": ["CaO", "Al"],
+  "Ca|B2O3": ["CaO", "B"],
+  "Ca|Bi2O3": ["CaO", "Bi", "O2"],
+  "Ca|CO2": ["CaO", "C"],
+  "Ca|CdO": ["CaO", "Cd"],
+  "Ca|CoO": ["CaO", "Co"],
+  "Ca|Cr2O3": ["CaO", "Cr"],
+  "Ca|Cu2O": ["CaO", "Cu"],
+  "Ca|CuO": ["CaO", "Cu"],
+  "Ca|Fe2O3": ["CaO", "Fe", "O2"],
+  "Ca|FeO": ["CaO", "Fe"],
+  "Ca|GeO2": ["CaO", "Ge"],
+  "Ca|HgO": ["CaO", "Hg"],
+  "Ca|MgO": ["CaO", "Mg"],
+  "Ca|MnO": ["CaO", "Mn"],
+  "Ca|MoO3": ["CaO", "Mo"],
+  "Ca|NiO": ["CaO", "Ni"],
+  "Ca|PbO": ["CaO", "Pb"],
+  "Ca|PbO2": ["CaO", "Pb"],
+  "Ca|SO2": ["CaO", "S"],
+  "Ca|SO3": ["CaO", "S"],
+  "Ca|Sb2O3": ["CaO", "Sb"],
+  "Ca|SiO2": ["CaO", "Si"],
+  "Ca|SnO": ["CaO", "Sn"],
+  "Ca|SnO2": ["CaO", "Sn"],
+  "Ca|Ti2O3": ["CaO", "Ti"],
+  "Ca|TiO2": ["CaO", "Ti"],
+  "Ca|V2O3": ["CaO", "V"],
+  "Ca|V2O5": ["CaO", "V"],
+  "Ca|WO3": ["CaO", "W"],
+  "Ca|ZnO": ["CaO", "Zn"],
+  "Mg|Ag2O": ["MgO", "Ag"],
+  "Mg|Al2O3": ["MgO", "Al"],
+  "Mg|B2O3": ["MgO", "B"],
+  "Mg|Bi2O3": ["MgO", "Bi", "O2"],
+  "Mg|CdO": ["MgO", "Cd"],
+  "Mg|CeO2": ["MgO", "Ce"],
+  "Mg|CoO": ["MgO", "Co"],
+  "Mg|Cr2O3": ["MgO", "Cr"],
+  "Mg|Cu2O": ["MgO", "Cu"],
+  "Mg|CuO": ["MgO", "Cu"],
+  "Mg|Fe2O3": ["MgO", "Fe"],
+  "Mg|Fe3O4": ["MgO", "Fe", "O2"],
+  "Mg|FeO": ["MgO", "Fe"],
+  "Mg|GeO2": ["MgO", "Ge"],
+  "Mg|HgO": ["MgO", "Hg"],
+  "Mg|MnO": ["MgO", "Mn"],
+  "Mg|MnO2": ["MgO", "Mn"],
+  "Mg|MoO3": ["MgO", "Mo"],
+  "Mg|NiO": ["MgO", "Ni"],
+  "Mg|PbO": ["MgO", "Pb"],
+  "Mg|PbO2": ["MgO", "Pb"],
+  "Mg|SO2": ["MgO", "S"],
+  "Mg|SO3": ["MgO", "S"],
+  "Mg|Sb2O3": ["MgO", "Sb"],
+  "Mg|SiO2": ["MgO", "Si"],
+  "Mg|SnO": ["MgO", "Sn"],
+  "Mg|SnO2": ["MgO", "Sn"],
+  "Mg|Ti2O3": ["MgO", "Ti"],
+  "Mg|TiO2": ["MgO", "Ti"],
+  "Mg|V2O3": ["MgO", "V"],
+  "Mg|V2O5": ["MgO", "V"],
+  "Mg|WO3": ["MgO", "W"],
+  "Mg|ZnO": ["MgO", "Zn"],
+
+};
+
+function normalizeKey(a,b){ return [a,b].sort().join("|"); }
+function tryPreset(r1,r2){
+  const hasMarks = (arr)=> arr && arr.some(x=>/[↓↑]/.test(x));
+  if(!r2){
+    if(preset[r1]){
+      const pr = preset[r1];
+      return {reactants:[r1], products:pr, stripMarks: hasMarks(pr)};
+    }
+    return null;
+  }
+  const k = normalizeKey(r1,r2);
+  if(preset[k]){
+    const pr = preset[k];
+    return {reactants:[r1,r2], products:pr, stripMarks: hasMarks(pr)};
+  }
+  // also try exact orders (just in case)
+  const k1 = r1+"|"+r2;
+  const k2 = r2+"|"+r1;
+  if(preset[k1]){
+    const pr = preset[k1];
+    return {reactants:[r1,r2], products:pr, stripMarks: hasMarks(pr)};
+  }
+  if(preset[k2]){
+    const pr = preset[k2];
+    return {reactants:[r1,r2], products:pr, stripMarks: hasMarks(pr)};
+  }
+  return null;
+}
+
+// ---------- reguli + date uzuale ----------
+const charge = {
+  "H": 1, "Li":1, "Na":1, "K":1, "Ag":1, "NH4":1,
+  "Mg":2, "Ca":2, "Sr":2, "Ba":2, "Zn":2, "Cu":2, "Fe":2, "Pb":2,
+  "Al":3, "Fe3":3
+};
+const anCharge = {
+  "F":-1, "Cl":-1, "Br":-1, "I":-1, "NO3":-1, "OH":-1,
+  "O":-2, "SO4":-2, "CO3":-2, "SO3":-2, "S":-2, "PO4":-3
+};
+const poly = new Set(["NO3","OH","SO4","CO3","SO3","PO4","NH4"]);
+
+function gcd(a,b){ while(b){ const t=a%b; a=b; b=t; } return a; }
+
+function saltFormula(cat, an){
+  const cc = charge[cat] ?? (cat==="Fe"?2:undefined);
+  const ac = anCharge[an];
+  if(cc==null || ac==null) return null;
+  let a=Math.abs(cc), b=Math.abs(ac);
+  const g=gcd(a,b); a/=g; b/=g;
+  let left = cat + (b>1?b:"");
+  let right = (poly.has(an) && a>1) ? `(${an})${a}` : an + (a>1?a:"");
+  return left + right;
+}
+
+function isSoluble(cat, an){
+  if(an==="NO3") return true;
+  if(["Li","Na","K","NH4"].includes(cat)) return true;
+  if(["Cl","Br","I"].includes(an)){
+    if(["Ag","Pb"].includes(cat)) return false;
+    return true;
+  }
+  if(an==="SO4"){
+    if(["Ba","Pb","Ca"].includes(cat)) return false;
+    return true;
+  }
+  if(["CO3","SO3","PO4"].includes(an)){
+    if(["Li","Na","K","NH4"].includes(cat)) return true;
+    return false;
+  }
+  if(an==="OH"){
+    if(["Li","Na","K","Ba"].includes(cat)) return true;
+    return false;
+  }
+  return true;
+}
+
+function acidInfo(f){
+  const m = {
+    "HCl": {anion:"Cl", H:1},
+    "HBr": {anion:"Br", H:1},
+    "HI":  {anion:"I", H:1},
+    "HNO3":{anion:"NO3",H:1},
+    "H2SO4":{anion:"SO4",H:2},
+    "H2CO3":{anion:"CO3",H:2},
+    "H2SO3":{anion:"SO3",H:2},
+    "H2S":{anion:"S",H:2},
+    "H3PO4":{anion:"PO4",H:3}
+  };
+  return m[f]||null;
+}
+function baseInfo(f){
+  const m = {
+    "NaOH": {cat:"Na", OH:1},
+    "KOH":  {cat:"K", OH:1},
+    "LiOH": {cat:"Li", OH:1},
+    "Ca(OH)2": {cat:"Ca", OH:2},
+    "Ba(OH)2": {cat:"Ba", OH:2},
+    "Mg(OH)2": {cat:"Mg", OH:2},
+    "Al(OH)3": {cat:"Al", OH:3},
+    "Fe(OH)2": {cat:"Fe", OH:2},
+    "Fe(OH)3": {cat:"Fe3", OH:3},
+    "Cu(OH)2": {cat:"Cu", OH:2},
+    "NH4OH": {cat:"NH4", OH:1}
+  };
+  return m[f]||null;
+}
+function oxideInfo(f){
+  const basic = { "Na2O":"Na","K2O":"K","CaO":"Ca","MgO":"Mg","BaO":"Ba","CuO":"Cu","FeO":"Fe","Fe2O3":"Fe3","Al2O3":"Al" };
+  const acidic = { "CO2":"CO3","SO2":"SO3","SO3":"SO4","P2O5":"PO4","N2O5":"NO3" };
+  if(basic[f]) return {type:"basic", cat: basic[f]};
+  if(acidic[f]) return {type:"acidic", an: acidic[f]};
+  return null;
+}
+
+function cleanMarks(formula){ return formula.replace(/↓|↑/g,""); }
+
+// Normalize user input: remove spaces, convert unicode subscripts, drop leading coefficients (e.g., "2H2" -> "H2")
+function normalizeFormula(raw){
+  if(!raw) return "";
+  let s = String(raw).trim();
+
+  // remove spaces
+  s = s.replace(/\s+/g,"");
+
+  // unicode subscripts -> digits
+  const subMap = {"₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9"};
+  s = s.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, ch => subMap[ch] || ch);
+
+  // drop leading coefficient like 2, 3, (1/2), 7/2
+  // examples: "2H2", "3O2", "(7/2)O2", "7/2O2"
+  s = s.replace(/^\(?\d+(?:\/\d+)?\)?/,"");
+
+  // common arrows or plus accidentally pasted
+  s = s.replace(/[→=]/g,"").replace(/^\++/,"").replace(/\++$/,"");
+
+  return s;
+}
+
+function ruleNeutralization(acidF, baseF){
+  const acid = acidInfo(acidF); const base = baseInfo(baseF);
+  if(!acid || !base) return null;
+  const salt = saltFormula(base.cat==="Fe3"?"Fe":base.cat, acid.anion);
+  if(!salt) return null;
+  return {reactants:[acidF, baseF], products:[salt,"H2O"], stripMarks:false};
+}
+
+function ruleAcidOxideBase(oxideF, baseF){
+  const ox=oxideInfo(oxideF); const base=baseInfo(baseF);
+  if(!ox || ox.type!=="acidic" || !base) return null;
+  const salt = saltFormula(base.cat==="Fe3"?"Fe":base.cat, ox.an);
+  if(!salt) return null;
+  return {reactants:[oxideF, baseF], products:[salt,"H2O"], stripMarks:false};
+}
+
+function ruleBasicOxideAcid(oxideF, acidF){
+  const ox=oxideInfo(oxideF); const acid=acidInfo(acidF);
+  if(!ox || ox.type!=="basic" || !acid) return null;
+  const catSym = (ox.cat==="Fe3") ? "Fe" : ox.cat;
+  const salt = saltFormula(catSym, acid.anion);
+  if(!salt) return null;
+  return {reactants:[oxideF, acidF], products:[salt,"H2O"], stripMarks:false};
+}
+
+function ruleBasicOxideWater(oxideF, waterF){
+  if(waterF!=="H2O") return null;
+  const map = {"CaO":"Ca(OH)2","BaO":"Ba(OH)2","MgO":"Mg(OH)2","Na2O":"NaOH","K2O":"KOH"};
+  if(!map[oxideF]) return null;
+  return {reactants:[oxideF,"H2O"], products:[map[oxideF]], stripMarks:false};
+}
+
+function ruleAcidOxideWater(oxideF, waterF){
+  if(waterF!=="H2O") return null;
+  const map = {"CO2":"H2CO3","SO2":"H2SO3","SO3":"H2SO4","N2O5":"HNO3","P2O5":"H3PO4","B2O3":"H3BO3","I2O5":"HIO3"};
+  if(!map[oxideF]) return null;
+  return {reactants:[oxideF,"H2O"], products:[map[oxideF]], stripMarks:false};
+}
+
+function ruleSaltSalt(s1,s2){
+  const cats = ["NH4","Na","K","Li","Ca","Mg","Ba","Sr","Al","Fe","Cu","Zn","Ag","Pb"];
+  const ans = ["Cl","Br","I","NO3","SO4","CO3","SO3","PO4","S"];
+  function infer(form){
+    let cat=null, an=null;
+    for(const c of cats){ if(form.startsWith(c)){ cat=c; break; } }
+    if(!cat && form.startsWith("Fe")) cat="Fe";
+    for(const a of ans){ if(form.includes(a)){ an=a; break; } }
+    if(!cat || !an) return null;
+    return {cat, an};
+  }
+  const A=infer(s1), B=infer(s2);
+  if(!A || !B) return null;
+
+  const p1 = saltFormula(A.cat, B.an);
+  const p2 = saltFormula(B.cat, A.an);
+  if(!p1 || !p2) return null;
+
+  const p1p = !isSoluble(A.cat, B.an);
+  const p2p = !isSoluble(B.cat, A.an);
+
+  return {reactants:[s1,s2], products:[p1+(p1p?"↓":""), p2+(p2p?"↓":"")], stripMarks:true};
+}
+
+function ruleAcidSaltGas(acidF, saltF){
+  const acid=acidInfo(acidF);
+  if(!acid) return null;
+  // identify cation
+  const cats = ["NH4","Na","K","Li","Ca","Mg","Ba","Sr","Zn","Cu","Fe","Al"];
+  let cat=null;
+  for(const c of cats){ if(saltF.startsWith(c)){ cat=c; break; } }
+  if(!cat) return null;
+
+  if(saltF.includes("CO3")){
+    const newSalt = saltFormula(cat, acid.anion);
+    if(!newSalt) return null;
+    return {reactants:[acidF,saltF], products:[newSalt,"CO2","H2O"], stripMarks:false};
+  }
+  if(saltF.includes("SO3")){
+    const newSalt = saltFormula(cat, acid.anion);
+    if(!newSalt) return null;
+    return {reactants:[acidF,saltF], products:[newSalt,"SO2","H2O"], stripMarks:false};
+  }
+  // sulfuri (Na2S, FeS, CuS etc. - de obicei se termină în S)
+  if(saltF.endsWith("S") && !saltF.includes("SO4") && !saltF.includes("SO3")){
+    const newSalt = saltFormula(cat, acid.anion);
+    if(!newSalt) return null;
+    return {reactants:[acidF,saltF], products:[newSalt,"H2S"], stripMarks:false};
+  }
+  return null;
+}
+
+function ruleMetalAcid(metalF, acidF){
+  const acid=acidInfo(acidF);
+  if(!acid) return null;
+  const metals = new Set(["Na","K","Li","Ca","Mg","Zn","Fe","Al"]);
+  if(!metals.has(metalF)) return null;
+  const salt = saltFormula(metalF, acid.anion);
+  if(!salt) return null;
+  return {reactants:[metalF, acidF], products:[salt,"H2"], stripMarks:false};
+}
+
+function ruleMetalWater(metalF, waterF){
+  if(waterF!=="H2O") return null;
+  const map = {"Na":"NaOH","K":"KOH","Ca":"Ca(OH)2"};
+  if(!map[metalF]) return null;
+  return {reactants:[metalF,"H2O"], products:[map[metalF],"H2"], stripMarks:false};
+}
+
+function ruleMetalOxygen(metalF, o2){
+  if(o2!=="O2") return null;
+  const oxMap = {"Na":"Na2O","K":"K2O","Mg":"MgO","Ca":"CaO","Al":"Al2O3","Zn":"ZnO","Fe":"Fe2O3","Cu":"CuO"};
+  if(!oxMap[metalF]) return null;
+  return {reactants:[metalF,"O2"], products:[oxMap[metalF]], stripMarks:false};
+}
+
+function ruleMetalChlorine(metalF, cl2){
+  if(cl2!=="Cl2") return null;
+  const clMap = {"Na":"NaCl","K":"KCl","Mg":"MgCl2","Ca":"CaCl2","Al":"AlCl3","Fe":"FeCl3","Cu":"CuCl2","Zn":"ZnCl2"};
+  if(!clMap[metalF]) return null;
+  return {reactants:[metalF,"Cl2"], products:[clMap[metalF]], stripMarks:false};
+}
+
+function ruleCombustion(fuel, o2){
+  if(o2!=="O2") return null;
+  const fuels = new Set(["H2","C","CH4","C2H6","C3H8","C4H10","C6H12O6"]);
+  if(!fuels.has(fuel)) return null;
+  if(fuel==="H2") return {reactants:["H2","O2"], products:["H2O"], stripMarks:false};
+  if(fuel==="C") return {reactants:["C","O2"], products:["CO2"], stripMarks:false};
+  return {reactants:[fuel,"O2"], products:["CO2","H2O"], stripMarks:false};
+}
+
+function ruleDecomposition(one){
+  const p = tryPreset(one, "");
+  if(p) return p;
+  return null;
+}
+
+// ----------- main -----------
+
+function isMetalElement(f){
+  return /^[A-Z][a-z]?$/.test(f); // ex: Mg, Ca, Al, Fe, Cu
+}
+function isBase(f){
+  return /OH/.test(f) && !/^H/.test(f); // NaOH, Ca(OH)2 etc.
+}
+function isAcidSimple(f){
+  // folosește acidInfo dacă există, altfel heuristica simplă: începe cu H
+  try{ return !!acidInfo(f); } catch(e){ return /^H/.test(f); }
+}
+function hasMarkDown(arr){ return arr.some(x=>/↓/.test(x)); }
+function hasMarkUp(arr){ return arr.some(x=>/↑/.test(x)); }
+
+function classifyReaction(reactants, productsRaw){
+  // Returnează DOAR una din: Combinare / Descompunere / Substituție / Dublă substituție
+  const pro = productsRaw.slice();
+  const r = reactants.slice();
+
+  // 1) descompunere: un singur reactant
+  if(r.length === 1) return "Descompunere";
+
+  // helpers
+  const clean = (x)=>x.replace(/[↓↑]/g,"");
+  const proClean = pro.map(clean);
+  const rHasAcid = r.some(isAcidSimple);
+  const rHasBase = r.some(isBase);
+  const hasH2O = proClean.includes("H2O");
+  const hasCO2 = proClean.includes("CO2");
+  const hasNH3 = proClean.includes("NH3");
+  const hasH2  = proClean.includes("H2");
+  const hasO2  = proClean.includes("O2");
+
+  // specie elementară = conține un singur element chimic (ex: Mg, H2, O2)
+  const isSingleElementSpecies = (f)=>{
+    try{
+      const els = Object.keys(parseFormula(clean(f)));
+      return els.length === 1;
+    } catch(e){
+      return false;
+    }
+  };
+
+  // 2) dubla substitutie: precipitat, neutralizare, acid + carbonat/sulfit/sulfură, sare NH4+ + bază etc.
+  if(hasMarkDown(pro)) return "Dublă substituție";
+  if(rHasAcid && rHasBase && hasH2O) return "Dublă substituție";
+  if(rHasAcid && (hasCO2 || proClean.includes("SO2") || proClean.includes("H2S"))) return "Dublă substituție";
+  if(hasNH3) return "Dublă substituție";
+
+  // regulă generală: dacă avem 2 reactanți și 2 produși și toate sunt compuși (nu specii elementare), e dubla substitutie
+  const allCompounds = r.concat(proClean).every(f => !isSingleElementSpecies(f));
+  if(r.length === 2 && proClean.length === 2 && allCompounds) return "Dublă substituție";
+
+  // 3) combinare: 2 reactanți → 1 produs (ex. metal + O2/Cl2, element + element etc.)
+  if(proClean.length === 1) return "Combinare";
+  // (și oxidare/combustie rămâne tot combinare în această schemă)
+  if(r.includes("O2") && !hasH2) return "Combinare";
+
+  // 4) substitutie: metal + acid (H2), metal + oxid → oxid + metal etc.
+  if(hasH2) return "Substituție";
+  if(hasO2) return "Substituție"; // unele reacții din preset au O2 ca produs (redox)
+
+  return "Substituție";
+}
+
+function renderWithType(eq, type){
+  return `${eq}<div class="reaction-type">Tip: ${type}</div>`;
+}
+
+function reaction(){
+  const r1raw = document.getElementById("react1").value;
+  const r2raw = document.getElementById("react2").value;
+  const r1 = normalizeFormula(r1raw);
+  const r2 = normalizeFormula(r2raw);
+  const result = document.getElementById("reactResult");
+  if(!r1){ result.innerHTML="Scrie cel puțin o substanță."; setCurrentReaction("",""); return; }
+
+  // un reactant -> descompunere
+  if(!r2){
+    const plan = ruleDecomposition(r1);
+    if(!plan){ result.innerHTML="Nu am găsit descompunerea pentru substanța asta."; setCurrentReaction("",""); pushHist(r1+" → ?"); return; }
+    const reactants = plan.reactants;
+    const products = plan.products.map(cleanMarks);
+    const coefs = balance(reactants, products);
+    if(!coefs){ result.innerHTML="Nu pot echilibra reacția."; setCurrentReaction("",""); pushHist(r1+" → ?"); return; }
+    const cr = coefs.slice(0, reactants.length);
+    const cp = coefs.slice(reactants.length);
+    const eq = joinEq(reactants, products, cr, cp);
+    const type = classifyReaction(reactants, plan.products);
+    result.innerHTML = renderWithType(eq, type);
+    setCurrentReaction(eq, type);
+    pushHist(eq);
+    return;
+  }
+
+  // 1) preset
+  let plan = tryPreset(r1,r2);
+
+  // 2) rules
+  if(!plan) plan = ruleNeutralization(r1,r2) || ruleNeutralization(r2,r1);
+  if(!plan) plan = ruleAcidOxideBase(r1,r2) || ruleAcidOxideBase(r2,r1);
+  if(!plan) plan = ruleBasicOxideAcid(r1,r2) || ruleBasicOxideAcid(r2,r1);
+  if(!plan) plan = ruleBasicOxideWater(r1,r2) || ruleBasicOxideWater(r2,r1) || ruleAcidOxideWater(r1,r2) || ruleAcidOxideWater(r2,r1);
+  if(!plan) plan = ruleSaltSalt(r1,r2);
+  if(!plan) plan = ruleAcidSaltGas(r1,r2) || ruleAcidSaltGas(r2,r1);
+  if(!plan) plan = ruleMetalAcid(r1,r2) || ruleMetalAcid(r2,r1);
+  if(!plan) plan = ruleMetalWater(r1,r2) || ruleMetalWater(r2,r1);
+  if(!plan) plan = ruleMetalOxygen(r1,r2) || ruleMetalOxygen(r2,r1);
+  if(!plan) plan = ruleMetalChlorine(r1,r2) || ruleMetalChlorine(r2,r1);
+  if(!plan) plan = ruleCombustion(r1,r2) || ruleCombustion(r2,r1);
+
+  if(!plan){
+    result.innerHTML="Reacție necunoscută (încearcă: acizi, baze, săruri, oxizi, O2, Cl2).";
+    setCurrentReaction("","");
+    pushHist(r1 + " + " + r2 + " → ?");
+    return;
+  }
+
+  const reactants = plan.reactants || [r1,r2];
+  const productsRaw = plan.products || [];
+  const products = productsRaw.map(cleanMarks);
+
+  const coefs = balance(reactants, products);
+  if(!coefs){
+    const eq = reactants.join(" + ") + " → " + products.join(" + ");
+    const type = classifyReaction(reactants, plan.products);
+    result.innerHTML = renderWithType(eq, type);
+    setCurrentReaction(eq, type);
+    pushHist(eq);
+    return;
+  }
+
+  const cr = coefs.slice(0, reactants.length);
+  const cp = coefs.slice(reactants.length);
+
+  let eq;
+  if(plan.stripMarks){
+    const left = reactants.map((f,i)=> fmtCoef(cr[i]) + f).join(" + ");
+    const right = productsRaw.map((f,i)=> fmtCoef(cp[i]) + f).join(" + ");
+    eq = left + " → " + right;
+  } else {
+    eq = joinEq(reactants, products, cr, cp);
+  }
+
+  const type = classifyReaction(reactants, productsRaw);
+  result.innerHTML = renderWithType(eq, type);
+  pushHist(eq);
+  setCurrentReaction(eq, type);
+}
+
+
+    // === Calculator de masă molară (mase atomice aproximative, rotunjite) ===
+// === Calculator de masă molară (mase atomice aproximative, rotunjite) ===
+    const __approxMass = (() => {
+      const map = {};
+      for (const name in elemente) {
+        const el = elemente[name];
+        if (!el || !el.simbol || !el.masa) continue;
+        const m = parseFloat(String(el.masa).replace(",", "."));
+        if (!isNaN(m)) map[el.simbol] = Math.round(m);
+      }
+      return map;
+    })();
+
+    function __normFormula(raw){
+      if(!raw) return "";
+      let s = String(raw).trim();
+
+      // acceptă cifre indice (₀-₉)
+      const subs = {"₀":"0","₁":"1","₂":"2","₃":"3","₄":"4","₅":"5","₆":"6","₇":"7","₈":"8","₉":"9"};
+      s = s.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, ch => subs[ch] || ch);
+
+      // scoate spații și stări (s),(l),(g),(aq) dacă apar
+      s = s.replace(/\s+/g, "");
+      s = s.replace(/\((aq|s|l|g)\)/gi, "");
+      return s;
+    }
+
+    function __parseFormula(formula){
+      // suport pentru hidrati: CuSO4·5H2O
+      const parts = formula.split(/[·⋅]/);
+      let total = {};
+      for(const p0 of parts){
+        const p = p0.trim();
+        if(!p) continue;
+        const res = __parseOne(p);
+        for(const k in res){
+          total[k] = (total[k]||0) + res[k];
+        }
+      }
+      return total;
+
+      function __parseOne(str){
+        let i = 0;
+        function parseNumber(){
+          let start = i;
+          while(i < str.length && /[0-9]/.test(str[i])) i++;
+          if(start === i) return 1;
+          return parseInt(str.slice(start, i), 10);
+        }
+        function parseGroup(){
+          let counts = {};
+          while(i < str.length){
+            const ch = str[i];
+            if(ch === "("){
+              i++;
+              const inner = parseGroup();
+              if(str[i] !== ")") throw new Error("Paranteză lipsă ')'");
+              i++;
+              const mul = parseNumber();
+              for(const el in inner){
+                counts[el] = (counts[el]||0) + inner[el]*mul;
+              }
+              continue;
+            }
+            if(ch === ")") break;
+
+            // element: literă mare + opțional literă mică
+            if(!/[A-Z]/.test(ch)) throw new Error("Caracter invalid: " + ch);
+            let sym = ch; i++;
+            if(i < str.length && /[a-z]/.test(str[i])) { sym += str[i]; i++; }
+            const num = parseNumber();
+            counts[sym] = (counts[sym]||0) + num;
+          }
+          return counts;
+        }
+        const out = parseGroup();
+        if(i !== str.length) throw new Error("Format invalid.");
+        return out;
+      }
+    }
+
+    function calcMolarMass(){
+      const out = document.getElementById("molarOut");
+      const raw = document.getElementById("molarInput").value;
+      const s0 = __normFormula(raw);
+
+      if(!s0){
+        out.style.display = "block";
+        out.innerHTML = "Scrie o formulă chimică (ex: <code>H2SO4</code>, <code>Ca(OH)2</code>, <code>2Al2(SO4)3</code>).";
+        return;
+      }
+
+      // coeficient în față, ex: 2H2O
+      let coef = 1;
+      let s = s0;
+      const m = s.match(/^(\d+)([A-Za-z(].*)$/);
+      if(m){
+        coef = parseInt(m[1], 10);
+        s = m[2];
+      }
+
+      try{
+        const atoms = __parseFormula(s);
+
+        // verifică elemente necunoscute
+        const missing = Object.keys(atoms).filter(sym => __approxMass[sym] == null);
+        if(missing.length){
+          out.style.display = "block";
+          out.innerHTML = `Nu am masă atomică pentru: <b>${missing.join(", ")}</b>. (Verifică formula.)`;
+          return;
+        }
+
+        // calculează
+        let base = 0;
+        const items = Object.keys(atoms).sort((a,b)=>a.localeCompare(b));
+        const lines = [];
+        const exprParts = [];
+        for(const sym of items){
+          const n = atoms[sym];
+          const A = __approxMass[sym];
+          const contrib = n * A;
+          base += contrib;
+          lines.push(`<div class="calc-step">• ${sym}: <strong>${n}</strong> × <strong>${A}</strong> = <strong>${contrib}</strong></div>`);
+          exprParts.push(`${n}·${A}`);
+        }
+
+        const total = base * coef;
+
+        let html = "";
+        html += `<div><b>Formula:</b> <code>${coef !== 1 ? coef : ""}${s}</code></div>`;
+        html += `<div class="calc-step"><b>1)</b> Număr atomi (după coeficienți și paranteze): <code>${items.map(sym=>`${sym}${atoms[sym]!==1?atoms[sym]:""}`).join(" ")}</code></div>`;
+        html += `<div class="calc-step"><b>2)</b> Mase atomice aproximative (rotunjite):</div>`;
+        html += lines.join("");
+        html += `<div class="calc-step"><b>3)</b> Masă molară (fără coeficient): <code>M = ${exprParts.join(" + ")} = ${base} g/mol</code></div>`;
+        if(coef !== 1){
+          html += `<div class="calc-step"><b>4)</b> Aplicăm coeficientul <b>${coef}</b>: <code>${coef} × ${base} = ${total} g/mol</code></div>`;
+        }
+        html += `<div style="margin-top:10px; font-size:1.08em;"><b>Rezultat:</b> <code>M = ${total} g/mol</code></div>`;
+
+        out.style.display = "block";
+        out.innerHTML = html;
+      }catch(err){
+        out.style.display = "block";
+        out.innerHTML = `Formula pare scrisă greșit. Exemplu corect: <code>Ca(OH)2</code>, <code>Al2(SO4)3</code>, <code>2H2O</code>.`;
+      }
+    }
+
+    function clearMolarCalc(){
+      document.getElementById("molarInput").value = "";
+      const out = document.getElementById("molarOut");
+      out.style.display = "none";
+      out.innerHTML = "";
+    }
+
+</script>
+
+  </div>
+
+  <script src="assets/lab-enhancements.js"></script>
+  <script src="assets/pwa.js"></script>
+</body>
+</html>
