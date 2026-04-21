@@ -9,11 +9,17 @@ import random
 import secrets
 import sqlite3
 import string
+import sys
 from contextlib import closing
 from datetime import date, datetime, timedelta, timezone
 from functools import wraps
 from pathlib import Path
 from typing import Any
+
+BOOT_DIR = Path(__file__).resolve().parent
+VENDOR_DIR = BOOT_DIR / "_vendor"
+if VENDOR_DIR.exists() and str(VENDOR_DIR) not in sys.path:
+    sys.path.insert(0, str(VENDOR_DIR))
 
 from flask import (
     Flask,
@@ -113,6 +119,7 @@ CREATE TABLE IF NOT EXISTS lessons (
     content TEXT NOT NULL,
     xp INTEGER NOT NULL DEFAULT 40,
     difficulty TEXT NOT NULL DEFAULT 'Mediu',
+    questions_json TEXT NOT NULL DEFAULT '[]',
     created_at TEXT NOT NULL,
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 );
@@ -123,6 +130,19 @@ CREATE TABLE IF NOT EXISTS completions (
     user_id INTEGER NOT NULL,
     completed_at TEXT NOT NULL,
     UNIQUE(lesson_id, user_id),
+    FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS lesson_attempts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lesson_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    score_percent REAL NOT NULL,
+    correct_count INTEGER NOT NULL,
+    total_count INTEGER NOT NULL,
+    answers_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
     FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -221,6 +241,273 @@ def init_db() -> None:
         conn.commit()
 
 
+MISSION_PASS_MARK = 60
+LESSON_DIFFICULTY_LEVELS = ("Start", "Mediu", "Avansat", "Elite")
+GENERIC_LESSON_SUMMARY_DISTRACTORS = [
+    "Recapitulare generală fără un obiectiv clar.",
+    "Doar exerciții de calcul fără explicații suplimentare.",
+    "Un experiment liber, fără pași de verificare.",
+]
+
+
+def ensure_schema_updates() -> None:
+    with closing(sqlite3.connect(DB_PATH)) as conn:
+        conn.execute("PRAGMA foreign_keys = ON")
+        lesson_columns = {row[1] for row in conn.execute("PRAGMA table_info(lessons)").fetchall()}
+        if "questions_json" not in lesson_columns:
+            conn.execute("ALTER TABLE lessons ADD COLUMN questions_json TEXT NOT NULL DEFAULT '[]'")
+        conn.executescript(
+            """
+            CREATE TABLE IF NOT EXISTS lesson_attempts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                lesson_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                score_percent REAL NOT NULL,
+                correct_count INTEGER NOT NULL,
+                total_count INTEGER NOT NULL,
+                answers_json TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (lesson_id) REFERENCES lessons(id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+            """
+        )
+        conn.commit()
+
+
+def normalize_questions_payload(raw_json: str | None) -> list[dict[str, Any]]:
+    if not raw_json:
+        return []
+    try:
+        payload = json.loads(raw_json)
+    except json.JSONDecodeError:
+        return []
+    if not isinstance(payload, list) or not payload:
+        return []
+    cleaned: list[dict[str, Any]] = []
+    for item in payload:
+        if not isinstance(item, dict):
+            return []
+        text = str(item.get("text", "")).strip()
+        options = item.get("options", [])
+        correct = item.get("correct")
+        explanation = str(item.get("explanation", "")).strip()
+        if not text or not isinstance(options, list) or len(options) != 4:
+            return []
+        normalized_options = [str(opt).strip() for opt in options]
+        if any(not opt for opt in normalized_options):
+            return []
+        if not isinstance(correct, int) or correct not in {0, 1, 2, 3}:
+            return []
+        cleaned.append(
+            {
+                "text": text,
+                "options": normalized_options,
+                "correct": correct,
+                "explanation": explanation or "Explicația nu a fost completată.",
+            }
+        )
+    return cleaned
+
+
+def record_value(record: sqlite3.Row | dict[str, Any], key: str, default: Any = "") -> Any:
+    if isinstance(record, dict):
+        return record.get(key, default)
+    try:
+        return record[key]
+    except (KeyError, IndexError, TypeError):
+        return default
+
+
+def build_multiple_choice_question(text: str, correct_option: str, distractors: list[str], explanation: str) -> dict[str, Any]:
+    options: list[str] = []
+    for raw_option in [correct_option, *distractors]:
+        option = str(raw_option).strip()
+        if option and option not in options:
+            options.append(option)
+    fallback_index = 1
+    while len(options) < 4:
+        filler = f"Variantă alternativă {fallback_index}"
+        fallback_index += 1
+        if filler not in options:
+            options.append(filler)
+    options = options[:4]
+    random.shuffle(options)
+    return {
+        "text": text.strip(),
+        "options": options,
+        "correct": options.index(str(correct_option).strip()),
+        "explanation": explanation.strip() or "Verifică încă o dată informația din misiune.",
+    }
+
+
+def build_default_lesson_questions(lesson: sqlite3.Row | dict[str, Any]) -> list[dict[str, Any]]:
+    lesson_id = record_value(lesson, "id", 0)
+    title = str(record_value(lesson, "title", "Misiune")).strip()
+    summary = str(record_value(lesson, "summary", "")).strip() or "Parcurge misiunea și notează ideile esențiale."
+    difficulty = str(record_value(lesson, "difficulty", "Mediu")).strip() or "Mediu"
+
+    if lesson_id:
+        other_title_rows = query_all("SELECT title FROM lessons WHERE id != ? ORDER BY created_at DESC LIMIT 4", (lesson_id,))
+        other_summary_rows = query_all("SELECT summary FROM lessons WHERE id != ? ORDER BY created_at DESC LIMIT 4", (lesson_id,))
+    else:
+        other_title_rows = query_all("SELECT title FROM lessons ORDER BY created_at DESC LIMIT 4")
+        other_summary_rows = query_all("SELECT summary FROM lessons ORDER BY created_at DESC LIMIT 4")
+
+    other_titles = [row["title"] for row in other_title_rows if row["title"] != title]
+    other_summaries = [row["summary"] for row in other_summary_rows if row["summary"] != summary]
+
+    return [
+        build_multiple_choice_question(
+            "Care este tema centrală a acestei misiuni?",
+            title,
+            other_titles[:3] or [
+                "Recapitulare rapidă fără temă clară",
+                "Laborator deschis fără obiectiv",
+                "Doar evaluare finală",
+            ],
+            "Titlul misiunii indică tema principală pe care trebuie să o parcurgi.",
+        ),
+        build_multiple_choice_question(
+            "Care descriere se potrivește acestei misiuni?",
+            summary,
+            other_summaries[:3] + GENERIC_LESSON_SUMMARY_DISTRACTORS,
+            "Rezumatul misiunii spune pe scurt ce trebuie urmărit.",
+        ),
+        build_multiple_choice_question(
+            "Cu ce nivel de dificultate este marcată misiunea?",
+            difficulty,
+            [level for level in LESSON_DIFFICULTY_LEVELS if level != difficulty],
+            "Nivelul de dificultate este afișat pe cardul misiunii și în pagina acesteia.",
+        ),
+    ]
+
+
+def lesson_questions_for_record(lesson: sqlite3.Row | dict[str, Any]) -> list[dict[str, Any]]:
+    return normalize_questions_payload(str(record_value(lesson, "questions_json", ""))) or build_default_lesson_questions(lesson)
+
+
+def evaluate_question_set(questions: list[dict[str, Any]], form_data) -> dict[str, Any]:
+    answers: dict[str, int | None] = {}
+    missing: list[int] = []
+    correct_count = 0
+    for idx, question in enumerate(questions):
+        raw = form_data.get(f"q_{idx}")
+        choice = int(raw) if raw is not None and str(raw).isdigit() else None
+        answers[str(idx)] = choice
+        if choice is None:
+            missing.append(idx + 1)
+        elif choice == question["correct"]:
+            correct_count += 1
+    total_count = len(questions)
+    score_percent = round((correct_count / total_count) * 100, 2) if total_count else 0
+    return {
+        "answers": answers,
+        "missing": missing,
+        "correct_count": correct_count,
+        "total_count": total_count,
+        "score_percent": score_percent,
+    }
+
+
+def ensure_lesson_question_sets() -> None:
+    lesson_question_bank = {
+        "Misiunea 1 · Atomul și identitatea elementelor": [
+            {
+                "text": "Ce particulă are sarcină electrică pozitivă?",
+                "options": ["Protonul", "Electronul", "Neutronul", "Izotopul"],
+                "correct": 0,
+                "explanation": "Protonul este particula cu sarcină pozitivă din nucleu.",
+            },
+            {
+                "text": "Numărul atomic al unui element este egal cu numărul de...",
+                "options": ["molecule", "protoni", "orbitali", "izotopi"],
+                "correct": 1,
+                "explanation": "Numărul atomic indică numărul de protoni din nucleu.",
+            },
+            {
+                "text": "Unde se găsesc electronii într-un atom?",
+                "options": ["În nucleu", "În învelișul electronic", "Doar în protoni", "Într-un singur orbital fix"],
+                "correct": 1,
+                "explanation": "Electronii se află în învelișul electronic din jurul nucleului.",
+            },
+        ],
+        "Misiunea 2 · Molecule și formule": [
+            {
+                "text": "Ce formulă are apa?",
+                "options": ["CO2", "NaCl", "H2O", "O2"],
+                "correct": 2,
+                "explanation": "Apa are formula H2O.",
+            },
+            {
+                "text": "Formula CO2 arată că molecula conține...",
+                "options": ["2 atomi de carbon și 1 de oxigen", "1 atom de carbon și 2 de oxigen", "2 atomi de calciu și 1 de oxigen", "1 atom de clor și 2 de oxigen"],
+                "correct": 1,
+                "explanation": "CO2 înseamnă 1 atom de carbon și 2 atomi de oxigen.",
+            },
+            {
+                "text": "NaCl este formula pentru...",
+                "options": ["sare de bucătărie", "apă oxigenată", "dioxid de carbon", "acid sulfuric"],
+                "correct": 0,
+                "explanation": "NaCl este clorura de sodiu, adică sarea de bucătărie.",
+            },
+        ],
+        "Boss Prep · Acizi, baze și săruri": [
+            {
+                "text": "Care dintre următoarele este un acid?",
+                "options": ["NaOH", "CaO", "HCl", "NaCl"],
+                "correct": 2,
+                "explanation": "HCl este acid clorhidric.",
+            },
+            {
+                "text": "Care compus conține grupa hidroxil specifică bazelor?",
+                "options": ["NaOH", "CO2", "SO2", "HNO3"],
+                "correct": 0,
+                "explanation": "NaOH este o bază pentru că are grupa OH.",
+            },
+            {
+                "text": "În neutralizare se obțin, de regulă...",
+                "options": ["metal și gaz", "sare și apă", "numai apă", "acid și oxid"],
+                "correct": 1,
+                "explanation": "Reacția acid + bază produce de obicei sare și apă.",
+            },
+        ],
+        "Mission Lab · Neutralizare și aplicații": [
+            {
+                "text": "Ce se formează când un acid reacționează complet cu o bază?",
+                "options": ["Sare și apă", "Numai hidrogen", "Doar un oxid", "Metal și apă"],
+                "correct": 0,
+                "explanation": "Neutralizarea completă produce sare și apă.",
+            },
+            {
+                "text": "Ce indicator devine roz în mediu bazic?",
+                "options": ["Fenolftaleina", "Lacul de iod", "Apa distilată", "Clorura de sodiu"],
+                "correct": 0,
+                "explanation": "Fenolftaleina se colorează roz în mediu bazic.",
+            },
+            {
+                "text": "După o neutralizare completă între un acid tare și o bază tare, pH-ul tinde spre...",
+                "options": ["0", "3", "7", "14"],
+                "correct": 2,
+                "explanation": "Într-o neutralizare completă ideală, soluția tinde spre pH 7.",
+            },
+        ],
+    }
+
+    for title, questions in lesson_question_bank.items():
+        execute_db(
+            "UPDATE lessons SET questions_json = ? WHERE title = ? AND (questions_json IS NULL OR TRIM(questions_json) = '' OR questions_json = '[]')",
+            (json.dumps(questions, ensure_ascii=False), title),
+        )
+
+    for lesson in query_all("SELECT id, title, summary, difficulty, questions_json FROM lessons ORDER BY id"):
+        if not normalize_questions_payload(str(record_value(lesson, "questions_json", ""))):
+            execute_db(
+                "UPDATE lessons SET questions_json = ? WHERE id = ?",
+                (json.dumps(build_default_lesson_questions(lesson), ensure_ascii=False), lesson["id"]),
+            )
+
+
 def make_class_code(name: str, section: str) -> str:
     base = "".join(ch for ch in (name + section).upper() if ch.isalnum())[:6] or "CLASA"
     while True:
@@ -245,7 +532,7 @@ def seed_demo_data() -> None:
             "profesor_demo",
             teacher_password,
             "profesor",
-            "Coordonatorul clasei demonstrative și al modului ONCS.",
+            "Coordonatorul clasei demonstrative și al laboratorului digital.",
             now,
         ),
     ).lastrowid
@@ -310,8 +597,8 @@ def seed_demo_data() -> None:
         (
             class_two,
             teacher_id,
-            "ONCS Mode activ",
-            "Am inclus secțiuni, criterii de jurizare și checklist pentru poster, stand și etică.",
+            "Mod laborator activ",
+            "Am inclus experimente, explicații vizuale și exerciții rapide pentru recapitulare.",
             now,
         ),
     )
@@ -344,7 +631,7 @@ def seed_demo_data() -> None:
         (
             class_two,
             "Mission Lab · Neutralizare și aplicații",
-            "Cum transformi teoria în experiment și prezentare ONCS.",
+            "Cum transformi teoria în experiment și explicație clară.",
             "Neutralizarea este una dintre reacțiile-cheie. Urmărește transformarea acid + bază în sare + apă și pregătește modul de explicare orală a rezultatului.",
             75,
             "Avansat",
@@ -352,8 +639,8 @@ def seed_demo_data() -> None:
     ]
     for lesson in lessons:
         execute_db(
-            "INSERT INTO lessons(class_id, title, summary, content, xp, difficulty, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (*lesson, now),
+            "INSERT INTO lessons(class_id, title, summary, content, xp, difficulty, questions_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (*lesson, json.dumps([], ensure_ascii=False), now),
         )
 
     quiz_one_questions = [
@@ -391,10 +678,10 @@ def seed_demo_data() -> None:
             "explanation": "NaOH este hidroxid de sodiu, deci o bază.",
         },
         {
-            "text": "Ce tip de prezentare cere ONCS pentru susținerea standului?",
-            "options": ["Poster și/sau exponat", "Doar eseu", "Doar video", "Doar model 3D online"],
+            "text": "Ce indicator devine roz într-o soluție bazică?",
+            "options": ["Fenolftaleina", "Azotatul de argint", "Apa distilată", "Clorura de sodiu"],
             "correct": 0,
-            "explanation": "Conform regulamentului, proiectul poate fi prezentat prin poster și/sau exponat.",
+            "explanation": "Fenolftaleina capătă culoare roz în mediu bazic.",
         },
     ]
 
@@ -415,7 +702,7 @@ def seed_demo_data() -> None:
         (
             class_two,
             "Arena 2 · Acizi și baze",
-            "Testează reacțiile esențiale și legătura cu modul ONCS.",
+            "Testează reacțiile esențiale și recunoașterea acizilor și bazelor.",
             150,
             "Boss fight",
             json.dumps(quiz_two_questions, ensure_ascii=False),
@@ -443,40 +730,74 @@ def seed_demo_data() -> None:
         ),
     )
 
+
+
+def cleanup_retired_project_module() -> None:
+    demo_teacher = query_one("SELECT id FROM users WHERE username = ?", ("profesor_demo",))
+    if demo_teacher:
+        execute_db(
+            "UPDATE users SET bio = ? WHERE id = ? AND bio = ?",
+            (
+                "Coordonatorul clasei demonstrative și al laboratorului digital.",
+                demo_teacher["id"],
+                "Coordonatorul clasei demonstrative și al modului ONCS.",
+            ),
+        )
+        execute_db(
+            "DELETE FROM projects WHERE owner_id = ? AND title = ? AND acronym = ?",
+            (demo_teacher["id"], "Reactor EcoLab", "ECO-ION"),
+        )
+
     execute_db(
-        """INSERT INTO projects(
-            owner_id, class_id, title, acronym, team_category, section, mentor_name, school_name,
-            member_one, member_one_role, member_two, member_two_role, problem, objectives,
-            methods, novelty, results, next_steps, started_on, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        "UPDATE announcements SET title = ?, content = ? WHERE title = ?",
         (
-            teacher_id,
-            class_two,
-            "Reactor EcoLab",
-            "ECO-ION",
-            "Seniori",
-            "C",
-            "Profesor Demo Reactor",
-            "Colegiul Virtual de Științe",
-            "Elev Demo Catalyst",
-            "Algoritm și design de produs",
-            "Coleg de echipă Demo",
-            "Analiză și validare experimentală",
-            "Lipsa unor instrumente atractive pentru exersarea rapidă a chimiei și pregătirea proiectelor ONCS.",
-            "Construirea unei platforme de învățare gamificată, cu laborator și modul de prezentare ONCS.",
-            "Dezvoltare software, testare cu utilizatori, structurare pe misiuni, rubrică de autoevaluare și laborator vizual.",
-            "Platforma combină în același loc învățare, joc, instrumente de laborator și pregătire pentru jurizare.",
-            "Versiunea demonstrativă include misiuni, quiz-uri, laborator, timer de pitch și checklist de conformitate.",
-            "Adăugarea de analize statistice, portofoliu de proiecte și export automat al fișei de înscriere.",
-            (date.today() - timedelta(days=90)).isoformat(),
-            now,
+            "Mod laborator activ",
+            "Am inclus experimente, explicații vizuale și exerciții rapide pentru recapitulare.",
+            "ONCS Mode activ",
+        ),
+    )
+    execute_db(
+        "UPDATE lessons SET summary = ?, content = ? WHERE title = ?",
+        (
+            "Cum transformi teoria în experiment și explicație clară.",
+            "Neutralizarea este una dintre reacțiile-cheie. Urmărește transformarea acid + bază în sare + apă și pregătește o explicație clară a rezultatului.",
+            "Mission Lab · Neutralizare și aplicații",
+        ),
+    )
+    execute_db(
+        "UPDATE quizzes SET description = ? WHERE title = ?",
+        (
+            "Testează reacțiile esențiale și recunoașterea acizilor și bazelor.",
+            "Arena 2 · Acizi și baze",
         ),
     )
 
+    quiz = query_one("SELECT id, questions_json FROM quizzes WHERE title = ?", ("Arena 2 · Acizi și baze",))
+    if quiz and "Ce tip de prezentare cere ONCS pentru susținerea standului?" in quiz["questions_json"]:
+        questions = json.loads(quiz["questions_json"])
+        updated = False
+        for idx, item in enumerate(questions):
+            if item.get("text") == "Ce tip de prezentare cere ONCS pentru susținerea standului?":
+                questions[idx] = {
+                    "text": "Ce indicator devine roz într-o soluție bazică?",
+                    "options": ["Fenolftaleina", "Azotatul de argint", "Apa distilată", "Clorura de sodiu"],
+                    "correct": 0,
+                    "explanation": "Fenolftaleina capătă culoare roz în mediu bazic.",
+                }
+                updated = True
+        if updated:
+            execute_db(
+                "UPDATE quizzes SET questions_json = ? WHERE id = ?",
+                (json.dumps(questions, ensure_ascii=False), quiz["id"]),
+            )
+
 
 init_db()
+ensure_schema_updates()
 with app.app_context():
     seed_demo_data()
+    cleanup_retired_project_module()
+    ensure_lesson_question_sets()
 
 
 # ---------------------------- auth / permissions ---------------------------- #
@@ -559,9 +880,9 @@ def classes_for_user(user: sqlite3.Row) -> list[sqlite3.Row]:
     )
 
 
-def lessons_for_user(user: sqlite3.Row) -> list[sqlite3.Row]:
+def lessons_for_user(user: sqlite3.Row) -> list[dict[str, Any]]:
     if user["role"] == "profesor":
-        return query_all(
+        rows = query_all(
             """SELECT l.*, c.name AS class_name, c.section AS class_section,
                       COUNT(DISTINCT cp.user_id) AS completion_count
                FROM lessons l
@@ -572,18 +893,33 @@ def lessons_for_user(user: sqlite3.Row) -> list[sqlite3.Row]:
                ORDER BY l.created_at DESC""",
             (user["id"],),
         )
-    return query_all(
-        """SELECT l.*, c.name AS class_name, c.section AS class_section,
-                  cp.id AS completion_id, cp.completed_at,
-                  CASE WHEN cp.id IS NULL THEN 0 ELSE 1 END AS is_completed
-           FROM lessons l
-           JOIN classes c ON c.id = l.class_id
-           JOIN enrollments e ON e.class_id = c.id
-           LEFT JOIN completions cp ON cp.lesson_id = l.id AND cp.user_id = ?
-           WHERE e.user_id = ?
-           ORDER BY l.created_at DESC""",
-        (user["id"], user["id"]),
-    )
+    else:
+        rows = query_all(
+            """SELECT l.*, c.name AS class_name, c.section AS class_section,
+                      cp.id AS completion_id, cp.completed_at,
+                      CASE WHEN cp.id IS NULL THEN 0 ELSE 1 END AS is_completed,
+                      COALESCE(MAX(la.score_percent), 0) AS best_score,
+                      COUNT(DISTINCT la.id) AS attempt_count
+               FROM lessons l
+               JOIN classes c ON c.id = l.class_id
+               JOIN enrollments e ON e.class_id = c.id
+               LEFT JOIN completions cp ON cp.lesson_id = l.id AND cp.user_id = ?
+               LEFT JOIN lesson_attempts la ON la.lesson_id = l.id AND la.user_id = ?
+               WHERE e.user_id = ?
+               GROUP BY l.id
+               ORDER BY l.created_at DESC""",
+            (user["id"], user["id"], user["id"]),
+        )
+
+    lessons: list[dict[str, Any]] = []
+    for row in rows:
+        item = dict(row)
+        item["questions"] = lesson_questions_for_record(item)
+        item["question_count"] = len(item["questions"])
+        item["best_score"] = float(item.get("best_score") or 0)
+        item["attempt_count"] = int(item.get("attempt_count") or 0)
+        lessons.append(item)
+    return lessons
 
 
 def quizzes_for_user(user: sqlite3.Row) -> list[sqlite3.Row]:
@@ -700,7 +1036,6 @@ def badge_list_for_user(user: sqlite3.Row) -> list[dict[str, str]]:
     user_id = user["id"]
     lesson_count = query_one("SELECT COUNT(*) AS c FROM completions WHERE user_id = ?", (user_id,))["c"]
     quiz_best = query_one("SELECT COALESCE(MAX(score_percent), 0) AS best FROM attempts WHERE user_id = ?", (user_id,))["best"]
-    project_count = len(projects_for_user(user))
     xp = compute_total_xp(user_id)
     badges: list[dict[str, str]] = []
     if lesson_count >= 1:
@@ -709,10 +1044,10 @@ def badge_list_for_user(user: sqlite3.Row) -> list[dict[str, str]]:
         badges.append({"icon": "🧬", "title": "Molecule Builder", "desc": "Trei lecții încheiate."})
     if quiz_best >= 80:
         badges.append({"icon": "🏆", "title": "Arena Winner", "desc": "Ai trecut de 80% într-un boss fight."})
-    if project_count >= 1:
-        badges.append({"icon": "🧠", "title": "ONCS Architect", "desc": "Ai un proiect în ONCS Studio."})
     if xp >= 250:
         badges.append({"icon": "🚀", "title": "Reactor Ready", "desc": "Ai depășit 250 XP."})
+    if quiz_best >= 50:
+        badges.append({"icon": "🧪", "title": "Mix Master", "desc": "Ai trecut de 50% într-un quiz."})
     if not badges:
         badges.append({"icon": "✨", "title": "Starter Core", "desc": "Primele insigne apar după prima misiune."})
     return badges[:4]
@@ -775,7 +1110,6 @@ def dashboard_stats(user: sqlite3.Row) -> dict[str, Any]:
     cls = classes_for_user(user)
     lessons = lessons_for_user(user)
     quizzes = quizzes_for_user(user)
-    projects = projects_for_user(user)
     announcements = announcements_for_user(user, 4)
 
     if user["role"] == "elev":
@@ -796,14 +1130,12 @@ def dashboard_stats(user: sqlite3.Row) -> dict[str, Any]:
         )
         avg_score = round(sum(float(row["score_percent"]) for row in attempt_rows) / len(attempt_rows), 1) if attempt_rows else 0
 
-    project_focus = project_compliance(projects[0]) if projects else {"percent": 0, "warnings": ["Creează primul proiect ONCS."]}
     return {
         "class_count": len(cls),
         "lesson_count": len(lessons),
         "quiz_count": len(quizzes),
         "completed_count": completed,
         "avg_score": avg_score,
-        "project_focus": project_focus,
         "announcements": announcements,
     }
 
@@ -813,13 +1145,12 @@ def leaderboard(limit: int = 20) -> list[dict[str, Any]]:
     rows = []
     for user in users:
         level = compute_level(user["id"])
-        project_bonus = 10 if projects_for_user(user) else 0
         rows.append(
             {
                 "id": user["id"],
                 "full_name": user["full_name"],
                 "role": user["role"],
-                "xp": level["xp"] + project_bonus,
+                "xp": level["xp"],
                 "title": level["title"],
                 "icon": level["icon"],
             }
@@ -869,6 +1200,7 @@ def export_snapshot() -> dict[str, Any]:
     lessons = []
     for row in query_all("SELECT * FROM lessons ORDER BY id"):
         item = dict(row)
+        item["questions"] = lesson_questions_for_record(item)
         lessons.append(item)
     quizzes = []
     for row in query_all("SELECT * FROM quizzes ORDER BY id"):
@@ -876,7 +1208,7 @@ def export_snapshot() -> dict[str, Any]:
         item["questions"] = json.loads(item.pop("questions_json"))
         quizzes.append(item)
     attempts = [dict(row) for row in query_all("SELECT * FROM attempts ORDER BY id")]
-    projects = [dict(row) for row in query_all("SELECT * FROM projects ORDER BY id")]
+    lesson_attempts = [dict(row) for row in query_all("SELECT * FROM lesson_attempts ORDER BY id")]
     announcements = [dict(row) for row in query_all("SELECT * FROM announcements ORDER BY id")]
     return {
         "meta": {
@@ -889,7 +1221,7 @@ def export_snapshot() -> dict[str, Any]:
         "lessons": lessons,
         "quizzes": quizzes,
         "attempts": attempts,
-        "projects": projects,
+        "lesson_attempts": lesson_attempts,
         "announcements": announcements,
     }
 
@@ -1004,7 +1336,6 @@ def dashboard():
     quests = lessons_for_user(user)[:4]
     arenas = quizzes_for_user(user)[:4]
     boards = leaderboard(8)
-    projects = projects_for_user(user)
     badges = badge_list_for_user(user)
     return render_template(
         "dashboard.html",
@@ -1012,7 +1343,6 @@ def dashboard():
         quests=quests,
         arenas=arenas,
         board=boards,
-        projects=projects,
         badges=badges,
     )
 
@@ -1043,7 +1373,6 @@ def arena_page():
 
 
 @app.route("/leaderboard")
-@login_required
 def leaderboard_page():
     board = leaderboard(30)
     return render_template("leaderboard.html", board=board)
@@ -1051,32 +1380,17 @@ def leaderboard_page():
 
 @app.route("/oncs")
 @login_required
-def oncs_page():
-    user = current_user()
-    projects = projects_for_user(user)
-    selected = None
-    selected_id = request.args.get("project")
-    if selected_id and selected_id.isdigit():
-        candidate = query_one("SELECT * FROM projects WHERE id = ?", (int(selected_id),))
-        if candidate:
-            if user["role"] == "profesor" and candidate["owner_id"] == user["id"]:
-                selected = candidate
-            elif user["role"] == "elev" and (candidate["owner_id"] == user["id"] or candidate["member_one"] == user["full_name"] or candidate["member_two"] == user["full_name"]):
-                selected = candidate
-    if selected is None:
-        selected = projects[0] if projects else None
-    compliance = project_compliance(selected) if selected else None
-    return render_template("oncs.html", projects=projects, selected_project=selected, compliance=compliance, classes=classes_for_user(user))
+def legacy_projects_redirect():
+    flash("Modulul de proiecte a fost scos din interfață.", "warning")
+    return redirect(url_for("dashboard"))
 
 
 @app.route("/lab")
-@login_required
 def lab_page():
     return render_template("lab.html")
 
 
 @app.route("/pitch-timer")
-@login_required
 def pitch_timer():
     return render_template("pitch_timer.html")
 
@@ -1164,6 +1478,7 @@ def create_lesson():
     content = request.form.get("content", "").strip()
     xp = request.form.get("xp", "40").strip()
     difficulty = request.form.get("difficulty", "Mediu").strip()
+    questions_payload = request.form.get("questions_payload", "").strip()
     if not class_id.isdigit():
         flash("Alege o clasă validă.", "warning")
         return redirect(url_for("quests_page"))
@@ -1178,37 +1493,121 @@ def create_lesson():
     if len(title) < 4 or len(summary) < 8 or len(content) < 20:
         flash("Lecția este prea scurtă. Detaliază conținutul.", "warning")
         return redirect(url_for("quests_page"))
+    lesson_seed = {"title": title, "summary": summary, "difficulty": difficulty}
+    try:
+        questions = parse_questions_payload(questions_payload) if questions_payload else build_default_lesson_questions(lesson_seed)
+    except (ValueError, TypeError) as exc:
+        flash(str(exc), "danger")
+        return redirect(url_for("quests_page"))
     execute_db(
-        "INSERT INTO lessons(class_id, title, summary, content, xp, difficulty, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        (int(class_id), title, summary, content, xp_value, difficulty, utcnow_iso()),
+        "INSERT INTO lessons(class_id, title, summary, content, xp, difficulty, questions_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (int(class_id), title, summary, content, xp_value, difficulty, json.dumps(questions, ensure_ascii=False), utcnow_iso()),
     )
-    flash("Misiunea a fost adăugată.", "success")
+    flash("Misiunea a fost adăugată cu checkpoint.", "success")
     return redirect(url_for("quests_page"))
 
 
-@app.post("/lessons/<int:lesson_id>/complete")
+@app.route("/lessons/<int:lesson_id>/play", methods=["GET", "POST"])
 @login_required
-def complete_lesson(lesson_id: int):
+def play_lesson(lesson_id: int):
     user = current_user()
-    lesson = query_one(
-        """SELECT l.*, c.id AS class_id
+    lesson_row = query_one(
+        """SELECT l.*, c.name AS class_name, c.section AS class_section
            FROM lessons l
            JOIN classes c ON c.id = l.class_id
            WHERE l.id = ?""",
         (lesson_id,),
     )
-    if lesson is None or lesson["class_id"] not in allowed_class_ids_for_user(user):
+    if lesson_row is None or lesson_row["class_id"] not in allowed_class_ids_for_user(user):
         flash("Lecția nu este disponibilă pentru contul tău.", "danger")
         return redirect(url_for("quests_page"))
-    try:
-        execute_db(
-            "INSERT INTO completions(lesson_id, user_id, completed_at) VALUES (?, ?, ?)",
-            (lesson_id, user["id"], utcnow_iso()),
+
+    lesson = dict(lesson_row)
+    questions = lesson_questions_for_record(lesson)
+    lesson["question_count"] = len(questions)
+    result = None
+    selected_answers: dict[str, int | None] = {}
+    already_completed = False
+    if user["role"] == "elev":
+        already_completed = (
+            query_one("SELECT id FROM completions WHERE lesson_id = ? AND user_id = ?", (lesson_id, user["id"]))
+            is not None
         )
-        flash(f"Misiune finalizată. +{lesson['xp']} XP", "success")
-    except sqlite3.IntegrityError:
-        flash("Această misiune era deja marcată ca finalizată.", "warning")
-    return redirect(url_for("quests_page"))
+
+    if request.method == "POST":
+        evaluation = evaluate_question_set(questions, request.form)
+        selected_answers = evaluation["answers"]
+        if evaluation["missing"]:
+            flash("Răspunde la toate întrebările înainte să trimiți checkpoint-ul.", "warning")
+        else:
+            passed = evaluation["score_percent"] >= MISSION_PASS_MARK
+            completion_awarded = False
+            if user["role"] == "elev":
+                execute_db(
+                    "INSERT INTO lesson_attempts(lesson_id, user_id, score_percent, correct_count, total_count, answers_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (
+                        lesson_id,
+                        user["id"],
+                        evaluation["score_percent"],
+                        evaluation["correct_count"],
+                        evaluation["total_count"],
+                        json.dumps(evaluation["answers"], ensure_ascii=False),
+                        utcnow_iso(),
+                    ),
+                )
+                if passed:
+                    try:
+                        execute_db(
+                            "INSERT INTO completions(lesson_id, user_id, completed_at) VALUES (?, ?, ?)",
+                            (lesson_id, user["id"], utcnow_iso()),
+                        )
+                        completion_awarded = True
+                    except sqlite3.IntegrityError:
+                        completion_awarded = False
+                    already_completed = True
+            result = {
+                **evaluation,
+                "passed": passed,
+                "completion_awarded": completion_awarded,
+                "xp_reward": int(lesson["xp"]) if passed and completion_awarded else 0,
+            }
+            if user["role"] == "elev":
+                if passed and completion_awarded:
+                    flash(f"Misiune finalizată. +{lesson['xp']} XP", "success")
+                elif passed:
+                    flash("Checkpoint trecut din nou. Misiunea era deja finalizată.", "success")
+                else:
+                    flash(f"Checkpoint netrecut. Ai nevoie de minim {MISSION_PASS_MARK}% pentru a finaliza misiunea.", "warning")
+            else:
+                if passed:
+                    flash("Checkpoint trecut în previzualizare. Scorul profesorului nu se salvează.", "success")
+                else:
+                    flash("Checkpoint netrecut în previzualizare. Scorul profesorului nu se salvează.", "warning")
+
+    attempts = []
+    if user["role"] == "elev":
+        attempts = query_all(
+            "SELECT * FROM lesson_attempts WHERE lesson_id = ? AND user_id = ? ORDER BY created_at DESC LIMIT 5",
+            (lesson_id, user["id"]),
+        )
+
+    return render_template(
+        "lesson_take.html",
+        lesson=lesson,
+        questions=questions,
+        result=result,
+        attempts=attempts,
+        selected_answers=selected_answers,
+        pass_mark=MISSION_PASS_MARK,
+        already_completed=already_completed,
+    )
+
+
+@app.post("/lessons/<int:lesson_id>/complete")
+@login_required
+def complete_lesson(lesson_id: int):
+    flash("Misiunile se finalizează acum prin checkpoint. Deschide misiunea și rezolvă testul.", "warning")
+    return redirect(url_for("play_lesson", lesson_id=lesson_id))
 
 
 @app.post("/quizzes/create")
@@ -1265,209 +1664,73 @@ def play_quiz(quiz_id: int):
         flash("Quiz-ul nu este disponibil pentru contul tău.", "danger")
         return redirect(url_for("arena_page"))
 
-    questions = json.loads(quiz["questions_json"])
+    questions = normalize_questions_payload(quiz["questions_json"]) or json.loads(quiz["questions_json"])
     result = None
+    selected_answers: dict[str, int | None] = {}
 
     if request.method == "POST":
-        answers: dict[str, int | None] = {}
-        correct_count = 0
-        for idx, question in enumerate(questions):
-            raw = request.form.get(f"q_{idx}")
-            choice = int(raw) if raw is not None and raw.isdigit() else None
-            answers[str(idx)] = choice
-            if choice == question["correct"]:
-                correct_count += 1
-        total_count = len(questions)
-        score_percent = round((correct_count / total_count) * 100, 2) if total_count else 0
-        execute_db(
-            "INSERT INTO attempts(quiz_id, user_id, score_percent, correct_count, total_count, answers_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (
-                quiz_id,
-                user["id"],
-                score_percent,
-                correct_count,
-                total_count,
-                json.dumps(answers, ensure_ascii=False),
-                utcnow_iso(),
-            ),
-        )
-        result = {
-            "answers": answers,
-            "correct_count": correct_count,
-            "total_count": total_count,
-            "score_percent": score_percent,
-            "xp_reward": round(float(quiz["xp"]) * (score_percent / 100.0)),
-        }
-        flash(f"Arena încheiată: {score_percent}% și +{result['xp_reward']} XP potențial.", "success")
+        evaluation = evaluate_question_set(questions, request.form)
+        selected_answers = evaluation["answers"]
+        if evaluation["missing"]:
+            flash("Răspunde la toate întrebările înainte să trimiți arena.", "warning")
+        else:
+            if user["role"] == "elev":
+                execute_db(
+                    "INSERT INTO attempts(quiz_id, user_id, score_percent, correct_count, total_count, answers_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    (
+                        quiz_id,
+                        user["id"],
+                        evaluation["score_percent"],
+                        evaluation["correct_count"],
+                        evaluation["total_count"],
+                        json.dumps(evaluation["answers"], ensure_ascii=False),
+                        utcnow_iso(),
+                    ),
+                )
+            result = {
+                **evaluation,
+                "xp_reward": round(float(quiz["xp"]) * (evaluation["score_percent"] / 100.0)),
+            }
+            if user["role"] == "elev":
+                flash(f"Arena încheiată: {evaluation['score_percent']}% și +{result['xp_reward']} XP potențial.", "success")
+            else:
+                flash("Previzualizare arena finalizată. Scorul profesorului nu se salvează.", "success")
 
-    attempts = query_all(
-        "SELECT * FROM attempts WHERE quiz_id = ? AND user_id = ? ORDER BY created_at DESC LIMIT 5",
-        (quiz_id, user["id"]),
+    attempts = []
+    if user["role"] == "elev":
+        attempts = query_all(
+            "SELECT * FROM attempts WHERE quiz_id = ? AND user_id = ? ORDER BY created_at DESC LIMIT 5",
+            (quiz_id, user["id"]),
+        )
+    return render_template(
+        "quiz_take.html",
+        quiz=quiz,
+        questions=questions,
+        result=result,
+        attempts=attempts,
+        selected_answers=selected_answers,
     )
-    return render_template("quiz_take.html", quiz=quiz, questions=questions, result=result, attempts=attempts)
 
 
 @app.post("/projects/create")
 @login_required
 def create_project():
-    user = current_user()
-    title = request.form.get("title", "").strip()
-    acronym = request.form.get("acronym", "").strip().upper()
-    team_category = request.form.get("team_category", "").strip()
-    section = request.form.get("section", "").strip()
-    mentor_name = request.form.get("mentor_name", "").strip()
-    school_name = request.form.get("school_name", "").strip()
-    member_one = request.form.get("member_one", "").strip()
-    member_one_role = request.form.get("member_one_role", "").strip()
-    member_two = request.form.get("member_two", "").strip()
-    member_two_role = request.form.get("member_two_role", "").strip()
-    problem = request.form.get("problem", "").strip()
-    objectives = request.form.get("objectives", "").strip()
-    methods = request.form.get("methods", "").strip()
-    novelty = request.form.get("novelty", "").strip()
-    results = request.form.get("results", "").strip()
-    next_steps = request.form.get("next_steps", "").strip()
-    started_on = request.form.get("started_on", "").strip() or date.today().isoformat()
-    class_id = request.form.get("class_id", "").strip()
-    class_value = int(class_id) if class_id.isdigit() else None
-
-    if len(title) < 4 or len(acronym) < 2:
-        flash("Titlul și acronimul proiectului sunt obligatorii.", "danger")
-        return redirect(url_for("oncs_page"))
-    if team_category not in {"Juniori", "Seniori"} or section not in {"A", "B", "C"}:
-        flash("Alege categorie și secțiune valide.", "danger")
-        return redirect(url_for("oncs_page"))
-
-    execute_db(
-        """INSERT INTO projects(
-            owner_id, class_id, title, acronym, team_category, section, mentor_name, school_name,
-            member_one, member_one_role, member_two, member_two_role, problem, objectives,
-            methods, novelty, results, next_steps, started_on, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (
-            user["id"],
-            class_value,
-            title,
-            acronym,
-            team_category,
-            section,
-            mentor_name,
-            school_name,
-            member_one,
-            member_one_role,
-            member_two,
-            member_two_role,
-            problem,
-            objectives,
-            methods,
-            novelty,
-            results,
-            next_steps,
-            started_on,
-            utcnow_iso(),
-        ),
-    )
-    flash("Proiectul ONCS a fost creat.", "success")
-    return redirect(url_for("oncs_page"))
+    flash("Modulul de proiecte a fost scos din interfață.", "warning")
+    return redirect(url_for("dashboard"))
 
 
 @app.post("/projects/<int:project_id>/update")
 @login_required
 def update_project(project_id: int):
-    user = current_user()
-    project = query_one("SELECT * FROM projects WHERE id = ?", (project_id,))
-    if project is None:
-        flash("Proiectul nu există.", "danger")
-        return redirect(url_for("oncs_page"))
-    if user["role"] == "profesor":
-        allowed = project["owner_id"] == user["id"]
-    else:
-        allowed = project["owner_id"] == user["id"] or project["member_one"] == user["full_name"] or project["member_two"] == user["full_name"]
-    if not allowed:
-        flash("Nu poți modifica acest proiect.", "danger")
-        return redirect(url_for("oncs_page"))
-
-    payload = {
-        "title": request.form.get("title", "").strip(),
-        "acronym": request.form.get("acronym", "").strip().upper(),
-        "team_category": request.form.get("team_category", "").strip(),
-        "section": request.form.get("section", "").strip(),
-        "mentor_name": request.form.get("mentor_name", "").strip(),
-        "school_name": request.form.get("school_name", "").strip(),
-        "member_one": request.form.get("member_one", "").strip(),
-        "member_one_role": request.form.get("member_one_role", "").strip(),
-        "member_two": request.form.get("member_two", "").strip(),
-        "member_two_role": request.form.get("member_two_role", "").strip(),
-        "problem": request.form.get("problem", "").strip(),
-        "objectives": request.form.get("objectives", "").strip(),
-        "methods": request.form.get("methods", "").strip(),
-        "novelty": request.form.get("novelty", "").strip(),
-        "results": request.form.get("results", "").strip(),
-        "next_steps": request.form.get("next_steps", "").strip(),
-        "started_on": request.form.get("started_on", "").strip() or project["started_on"],
-    }
-    if len(payload["title"]) < 4 or len(payload["acronym"]) < 2:
-        flash("Titlul și acronimul trebuie completate.", "danger")
-        return redirect(url_for("oncs_page", project=project_id))
-    class_id = request.form.get("class_id", "").strip()
-    class_value = int(class_id) if class_id.isdigit() else None
-    execute_db(
-        """UPDATE projects SET
-            class_id = ?, title = ?, acronym = ?, team_category = ?, section = ?, mentor_name = ?,
-            school_name = ?, member_one = ?, member_one_role = ?, member_two = ?, member_two_role = ?,
-            problem = ?, objectives = ?, methods = ?, novelty = ?, results = ?, next_steps = ?,
-            started_on = ?, updated_at = ?
-           WHERE id = ?""",
-        (
-            class_value,
-            payload["title"],
-            payload["acronym"],
-            payload["team_category"],
-            payload["section"],
-            payload["mentor_name"],
-            payload["school_name"],
-            payload["member_one"],
-            payload["member_one_role"],
-            payload["member_two"],
-            payload["member_two_role"],
-            payload["problem"],
-            payload["objectives"],
-            payload["methods"],
-            payload["novelty"],
-            payload["results"],
-            payload["next_steps"],
-            payload["started_on"],
-            utcnow_iso(),
-            project_id,
-        ),
-    )
-    flash("Proiectul a fost actualizat.", "success")
-    return redirect(url_for("oncs_page", project=project_id))
+    flash("Modulul de proiecte a fost scos din interfață.", "warning")
+    return redirect(url_for("dashboard"))
 
 
 @app.route("/projects/<int:project_id>/export")
 @login_required
 def export_project(project_id: int):
-    user = current_user()
-    project = query_one(
-        """SELECT p.*, c.name AS class_name, c.section AS class_section
-           FROM projects p
-           LEFT JOIN classes c ON c.id = p.class_id
-           WHERE p.id = ?""",
-        (project_id,),
-    )
-    if project is None:
-        flash("Proiectul nu a fost găsit.", "danger")
-        return redirect(url_for("oncs_page"))
-    if user["role"] == "profesor":
-        allowed = project["owner_id"] == user["id"]
-    else:
-        allowed = project["owner_id"] == user["id"] or project["member_one"] == user["full_name"] or project["member_two"] == user["full_name"]
-    if not allowed:
-        flash("Nu poți exporta acest proiect.", "danger")
-        return redirect(url_for("oncs_page"))
-    compliance = project_compliance(project)
-    return render_template("project_export.html", project=project, compliance=compliance)
+    flash("Modulul de proiecte a fost scos din interfață.", "warning")
+    return redirect(url_for("dashboard"))
 
 
 # ---------------------------- exports / API ---------------------------- #
@@ -1579,6 +1842,6 @@ def healthz():
 
 
 if __name__ == "__main__":
-    host = os.environ.get("HOST", "0.0.0.0")
+    host = os.environ.get("HOST", "127.0.0.1")
     port = int(os.environ.get("PORT", "8000"))
     app.run(host=host, port=port, debug=False)

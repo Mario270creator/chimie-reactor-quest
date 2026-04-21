@@ -1,3 +1,2 @@
 @echo off
-python app.py
-pause
+call "%~dp0PORNESTE_PE_CALCULATOR.bat"
