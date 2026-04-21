@@ -21,7 +21,7 @@
         <form method="post" action="{% if selected_project %}{{ url_for('update_project', project_id=selected_project.id) }}{% else %}{{ url_for('create_project') }}{% endif %}" class="grid-form two">
           <label class="full">
             <span>Titlu proiect</span>
-            <input type="text" name="title" value="{{ selected_project.title if selected_project else '' }}" placeholder="Ex: Reactor EcoLab" required>
+            <input type="text" name="title" value="{{ selected_project.title if selected_project else '' }}" placeholder="Ex: EcoLab" required>
           </label>
           <label>
             <span>Acronim</span>

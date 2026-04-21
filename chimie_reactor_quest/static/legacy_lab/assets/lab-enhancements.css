@@ -1361,12 +1361,25 @@ body.dark .simulator-wrap{
   box-shadow: 0 8px 18px rgba(15,23,42,.08);
 }
 
+.container,
+.topbar{
+  max-width: 1480px;
+}
+
 .lab-practice-grid{
   display:grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(280px, .9fr);
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
   gap: 24px;
   align-items:start;
   margin-top: 22px;
+}
+
+.lab-practice-grid > .panel,
+.lab-practice-grid > .calc-wrap{
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
 }
 
 .lab-side-card{
@@ -1603,6 +1616,12 @@ body.neon .simulator-wrap{
 }
 
 
+
+@media (max-width: 1300px){
+  .lab-practice-grid{
+    grid-template-columns: 1fr;
+  }
+}
 
 @media (max-width: 960px){
   .lab-practice-grid{

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Arena · {{ site_name }}{% endblock %}
+{% block title %}Teste · {{ site_name }}{% endblock %}
 {% block content %}
 <section class="section page-top">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow">Arena de quiz-uri</div>
-      <h1>Boss fights cu scor, istoric și XP.</h1>
+      <div class="eyebrow">Teste și verificare</div>
+      <h1>Teste cu scor, istoric și puncte.</h1>
     </div>
 
     {% if current_user.role == 'profesor' %}
     <section class="panel">
       <div class="panel-head">
-        <h2>Creează boss fight nou</h2>
-        <span class="tiny-muted">Builder cu întrebări dinamice</span>
+        <h2>Creează un test nou</h2>
+        <span class="tiny-muted">Constructor cu întrebări dinamice</span>
       </div>
       <form method="post" action="{{ url_for('create_quiz') }}" class="stack-form" id="quizBuilderForm">
         <div class="grid-form two">
@@ -25,12 +25,12 @@
             </select>
           </label>
           <label>
-            <span>XP</span>
+            <span>Puncte</span>
             <input type="number" name="xp" min="20" max="300" value="120">
           </label>
           <label class="full">
             <span>Titlu</span>
-            <input type="text" name="title" placeholder="Arena · ..." required>
+            <input type="text" name="title" placeholder="Test · ..." required>
           </label>
           <label class="full">
             <span>Descriere</span>
@@ -39,9 +39,9 @@
           <label>
             <span>Dificultate</span>
             <select name="difficulty">
-              <option>Boss fight</option>
-              <option>Elite</option>
-              <option>Final boss</option>
+              <option>Standard</option>
+              <option>Avansat</option>
+              <option>Recapitulare finală</option>
             </select>
           </label>
         </div>
@@ -55,7 +55,7 @@
         <div id="questionBuilder" class="builder-list"></div>
 
         <div class="form-actions">
-          <button class="btn primary" type="submit">Publică boss fight-ul</button>
+          <button class="btn primary" type="submit">Publică testul</button>
         </div>
       </form>
     </section>
@@ -66,23 +66,23 @@
       <article class="arena-card big">
         <div class="arena-topline">
           <span class="pill">{{ quiz.class_name }} {{ quiz.class_section }}</span>
-          <span class="pill accent">{{ quiz.xp }} XP</span>
+          <span class="pill accent">{{ quiz.xp }} puncte</span>
         </div>
         <h3>{{ quiz.title }}</h3>
         <p>{{ quiz.description }}</p>
         <div class="arena-meta">
           <span>{{ quiz.difficulty }}</span>
           {% if current_user.role == 'elev' %}
-            <span>Best score: {{ "%.0f"|format(quiz.best_score) }}%</span>
+            <span>Scor maxim: {{ "%.0f"|format(quiz.best_score) }}%</span>
             <span>Încercări: {{ quiz.attempt_count }}</span>
           {% else %}
             <span>Participanți: {{ quiz.participant_count }}</span>
           {% endif %}
         </div>
-        <a class="btn primary" href="{{ url_for('play_quiz', quiz_id=quiz.id) }}">Intră în arenă</a>
+        <a class="btn primary" href="{{ url_for('play_quiz', quiz_id=quiz.id) }}">Deschide testul</a>
       </article>
       {% else %}
-      <div class="empty-state">Niciun quiz activ.</div>
+      <div class="empty-state">Niciun test activ.</div>
       {% endfor %}
     </section>
   </div>

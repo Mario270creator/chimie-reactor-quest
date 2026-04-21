@@ -1080,11 +1080,11 @@
 
   function renderLeaderboardHtml(scoreboard, teacherView){
     if(!scoreboard.length){
-      return `<div class="empty">Leaderboard-ul va apărea după ce elevii rezolvă teste.</div>`;
+      return `<div class="empty">Clasamentul va apărea după ce elevii rezolvă teste.</div>`;
     }
     return `
       <div class="section-title">
-        <h2>${teacherView ? 'Clasament elevi' : 'Leaderboard clasă'}</h2>
+        <h2>${teacherView ? 'Clasament elevi' : 'Clasament clasă'}</h2>
         <span class="pill">${scoreboard.length} elevi</span>
       </div>
       <div class="cards-list">

@@ -1,25 +1,25 @@
 {% extends "base.html" %}
-{% block title %}HQ · {{ site_name }}{% endblock %}
+{% block title %}Panou principal · {{ site_name }}{% endblock %}
 {% block content %}
 <section class="section page-top">
   <div class="container">
     <div class="page-hero">
       <div>
-        <div class="eyebrow">Mission Control</div>
+        <div class="eyebrow">Panou principal</div>
         <h1>Bine ai venit, {{ current_user.full_name }}.</h1>
         <p class="lead">
-          Ai rangul <strong>{{ user_level.title }}</strong>, {{ user_level.xp }} XP și
+          Ai nivelul de progres <strong>{{ user_level.title }}</strong>, {{ user_level.xp }} puncte și
           {% if user_level.remaining > 0 %}
-            mai ai {{ user_level.remaining }} XP până la <strong>{{ user_level.next_title }}</strong>.
+            mai ai {{ user_level.remaining }} puncte până la <strong>{{ user_level.next_title }}</strong>.
           {% else %}
             ai atins nivelul maxim disponibil.
           {% endif %}
         </p>
       </div>
       <div class="hero-chip-stack">
-        <a class="btn primary" href="{{ url_for('lab_page') }}">Intră în lab</a>
-        <a class="btn ghost" href="{{ url_for('oncs_page') }}">Deschide ONCS Studio</a>
-        <a class="btn ghost" href="{{ url_for('arena_page') }}">Joacă Arena</a>
+        <a class="btn primary" href="{{ url_for('lab_page') }}">Intră în laborator</a>
+        <a class="btn ghost" href="{{ url_for('arena_page') }}">Rezolvă teste</a>
+        <a class="btn ghost" href="{{ url_for('pitch_timer') }}">Timer</a>
       </div>
     </div>
 
@@ -33,11 +33,11 @@
         <strong>{{ stats.class_count }}</strong>
       </article>
       <article class="stat-card">
-        <span>Misiuni</span>
+        <span>Lecții</span>
         <strong>{{ stats.lesson_count }}</strong>
       </article>
       <article class="stat-card">
-        <span>Arene</span>
+        <span>Teste</span>
         <strong>{{ stats.quiz_count }}</strong>
       </article>
       <article class="stat-card">
@@ -49,7 +49,7 @@
     <div class="dashboard-grid">
       <section class="panel">
         <div class="panel-head">
-          <h2>Misiuni active</h2>
+          <h2>Lecții active</h2>
           <a href="{{ url_for('quests_page') }}">Vezi toate</a>
         </div>
         <div class="card-list">
@@ -57,7 +57,7 @@
           <article class="quest-card">
             <div class="quest-top">
               <span class="pill">{{ lesson.class_name }} {{ lesson.class_section }}</span>
-              <span class="pill accent">{{ lesson.xp }} XP</span>
+              <span class="pill accent">{{ lesson.xp }} puncte</span>
             </div>
             <h3>{{ lesson.title }}</h3>
             <p>{{ lesson.summary }}</p>
@@ -77,14 +77,14 @@
             </div>
           </article>
           {% else %}
-          <div class="empty-state">Nu există încă misiuni. Creează sau înscrie-te într-o clasă.</div>
+          <div class="empty-state">Nu există încă lecții. Creează sau înscrie-te într-o clasă.</div>
           {% endfor %}
         </div>
       </section>
 
       <section class="panel">
         <div class="panel-head">
-          <h2>Boss fights</h2>
+          <h2>Teste de verificare</h2>
           <a href="{{ url_for('arena_page') }}">Vezi toate</a>
         </div>
         <div class="card-list">
@@ -92,22 +92,22 @@
           <article class="arena-card">
             <div class="quest-top">
               <span class="pill">{{ quiz.class_name }} {{ quiz.class_section }}</span>
-              <span class="pill accent">{{ quiz.xp }} XP max</span>
+              <span class="pill accent">{{ quiz.xp }} puncte max</span>
             </div>
             <h3>{{ quiz.title }}</h3>
             <p>{{ quiz.description }}</p>
             <div class="quest-meta">
               <span>{{ quiz.difficulty }}</span>
               {% if current_user.role == 'elev' %}
-                <span>Best: {{ "%.0f"|format(quiz.best_score) }}%</span>
+                <span>Scor maxim: {{ "%.0f"|format(quiz.best_score) }}%</span>
               {% else %}
                 <span>{{ quiz.participant_count }} participanți</span>
               {% endif %}
             </div>
-            <a class="btn primary small" href="{{ url_for('play_quiz', quiz_id=quiz.id) }}">Intră în arenă</a>
+            <a class="btn primary small" href="{{ url_for('play_quiz', quiz_id=quiz.id) }}">Deschide testul</a>
           </article>
           {% else %}
-          <div class="empty-state">Nicio arenă activă momentan.</div>
+          <div class="empty-state">Niciun test activ momentan.</div>
           {% endfor %}
         </div>
       </section>
@@ -116,8 +116,8 @@
     <div class="dashboard-grid lower">
       <section class="panel">
         <div class="panel-head">
-          <h2>Badges</h2>
-          <span class="tiny-muted">Gamificare vizibilă</span>
+          <h2>Realizări</h2>
+          <span class="tiny-muted">Progres vizibil</span>
         </div>
         <div class="badge-grid">
           {% for badge in badges %}
@@ -132,28 +132,28 @@
 
       <section class="panel">
         <div class="panel-head">
-          <h2>Focus ONCS</h2>
-          <a href="{{ url_for('oncs_page') }}">Deschide studio</a>
+          <h2>Scurtături utile</h2>
+          <span class="tiny-muted">Acces rapid</span>
         </div>
         <div class="compliance-box">
           <div class="compliance-line">
-            <strong>{{ stats.project_focus.percent }}%</strong>
-            <span>completare proiect</span>
+            <strong>{{ stats.completed_count }}</strong>
+            <span>lecții parcurse</span>
           </div>
           <div class="level-track slim">
-            <div class="level-track-fill" style="width: {{ stats.project_focus.percent }}%"></div>
+            <div class="level-track-fill" style="width: {{ user_level.progress }}%"></div>
           </div>
           <ul class="warning-list">
-            {% for warning in stats.project_focus.warnings %}
-            <li>{{ warning }}</li>
-            {% endfor %}
+            <li>Deschide laboratorul separat când vrei spațiu maxim pentru simulator.</li>
+            <li>Folosește testele pentru recapitulare rapidă înainte de verificare.</li>
+            <li>Timerul te ajută să îți ții prezentarea într-un ritm clar.</li>
           </ul>
         </div>
         <div class="quick-rule-grid">
-          <div class="tiny-card">2 elevi / echipă</div>
-          <div class="tiny-card">1 proiect / echipă</div>
-          <div class="tiny-card">Poster 80×120</div>
-          <div class="tiny-card">Pitch 10 + 5 min</div>
+          <a class="tiny-card" href="{{ url_for('lab_page') }}">🔬 Intră în laborator</a>
+          <a class="tiny-card" href="{{ url_for('arena_page') }}">📝 Vezi testele</a>
+          <a class="tiny-card" href="{{ url_for('quests_page') }}">📘 Deschide lecțiile</a>
+          <a class="tiny-card" href="{{ url_for('pitch_timer') }}">⏱️ Pornește timerul</a>
         </div>
       </section>
 
@@ -178,7 +178,7 @@
 
     <section class="panel leaderboard-panel">
       <div class="panel-head">
-        <h2>Top leaderboard</h2>
+        <h2>Top clasament</h2>
         <a href="{{ url_for('leaderboard_page') }}">Clasament complet</a>
       </div>
       <div class="leaderboard-table">
@@ -187,7 +187,7 @@
           <div class="leader-row-rank">#{{ loop.index }}</div>
           <div class="leader-row-name">{{ item.icon }} {{ item.full_name }}</div>
           <div class="leader-row-role">{{ item.role|capitalize }}</div>
-          <div class="leader-row-score">{{ item.xp }} XP</div>
+          <div class="leader-row-score">{{ item.xp }} puncte</div>
         </div>
         {% endfor %}
       </div>

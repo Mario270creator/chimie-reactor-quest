@@ -38,6 +38,23 @@
     });
   });
 
+  // -------- quiz play --------
+  document.querySelectorAll('[data-quiz-question]').forEach((question) => {
+    const cards = question.querySelectorAll('[data-option-card]');
+    const radios = question.querySelectorAll('[data-quiz-option]');
+    const syncQuizSelection = () => {
+      cards.forEach((card) => {
+        const input = card.querySelector('[data-quiz-option]');
+        card.classList.toggle('is-selected', Boolean(input && input.checked));
+      });
+    };
+    radios.forEach((radio) => {
+      radio.addEventListener('change', syncQuizSelection);
+      radio.addEventListener('click', syncQuizSelection);
+    });
+    syncQuizSelection();
+  });
+
   const announceForm = document.querySelector('[data-announce-form]');
   const announceSelect = document.querySelector('[data-announce-select]');
   if (announceForm && announceSelect) {
@@ -215,7 +232,7 @@
     timerDisplay.textContent = formatTime(remainingSeconds);
     if (timerLabel) {
       const labels = {
-        presentation: 'Mod: Prezentare ONCS',
+        presentation: 'Mod: Prezentare',
         qa: 'Mod: Întrebări și răspunsuri',
         custom: 'Mod: Timp personalizat',
       };

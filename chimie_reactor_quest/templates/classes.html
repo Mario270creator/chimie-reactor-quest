@@ -13,13 +13,13 @@
         {% if current_user.role == 'profesor' %}
         <div class="panel-head">
           <h2>Creează o clasă nouă</h2>
-          <span class="tiny-muted">Mentor control</span>
+          <span class="tiny-muted">Administrare clasă</span>
         </div>
         <form method="post" action="{{ url_for('create_class') }}" class="stack-form">
           <label><span>Nume clasă</span><input type="text" name="name" placeholder="Clasa IX" required></label>
           <label><span>Secțiune</span><input type="text" name="section" placeholder="A" required></label>
           <label><span>Descriere</span><textarea name="description" rows="4" placeholder="Ce învață elevii în această clasă?" required></textarea></label>
-          <button class="btn primary" type="submit">Generează clasa</button>
+          <button class="btn primary" type="submit">Creează clasa</button>
         </form>
         {% else %}
         <div class="panel-head">
@@ -27,7 +27,7 @@
           <span class="tiny-muted">Cod primit de la profesor</span>
         </div>
         <form method="post" action="{{ url_for('join_class') }}" class="stack-form">
-          <label><span>Cod de acces</span><input type="text" name="code" placeholder="REACT7A" required></label>
+          <label><span>Cod de acces</span><input type="text" name="code" placeholder="CHIM7A" required></label>
           <button class="btn primary" type="submit">Intră în clasă</button>
         </form>
         {% endif %}
@@ -72,8 +72,8 @@
             <span class="pill accent">{{ cls.code }}</span>
           </div>
           <div class="class-stats">
-            <span>📘 {{ cls.lesson_count }} misiuni</span>
-            <span>🏆 {{ cls.quiz_count }} arene</span>
+            <span>📘 {{ cls.lesson_count }} lecții</span>
+            <span>📝 {{ cls.quiz_count }} teste</span>
             {% if current_user.role == 'profesor' %}
             <span>👥 {{ cls.student_count }} elevi</span>
             {% endif %}

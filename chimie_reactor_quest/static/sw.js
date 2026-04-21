@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reactor-quest-v1';
+const CACHE_NAME = 'chimie-academy-v2';
 const PRECACHE = [
   '/',
   '/static/css/style.css',

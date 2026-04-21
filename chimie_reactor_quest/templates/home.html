@@ -1,20 +1,22 @@
 {% extends "base.html" %}
-{% block title %}{{ site_name }} · joc de chimie + ONCS{% endblock %}
+{% block title %}{{ site_name }} · platformă de chimie + laborator{% endblock %}
 {% block content %}
 <section class="hero">
   <div class="container hero-grid">
     <div class="hero-copy">
-      <div class="eyebrow">Joc educațional + laborator + pregătire ONCS</div>
-      <h1>Transformă site-ul de chimie într-o experiență care se joacă, se învață și se prezintă impecabil.</h1>
+      <div class="eyebrow">Platformă educațională + laborator interactiv</div>
+      <h1>Un site de chimie care se deschide repede, arată premium și poate fi folosit imediat.</h1>
       <p class="hero-text">
-        Reactor Quest păstrează backend-ul, clasele, lecțiile, quiz-urile, rezultatele și laboratorul,
-        dar le rearanjează într-un produs modern, gamificat și pregătit să impresioneze la concurs.
+        Platforma păstrează backend-ul, clasele, lecțiile, testele, rezultatele și laboratorul,
+        dar le organizează într-un format modern, clar și ușor de pornit. Poți intra direct în demo,
+        poți folosi laboratorul fără cont, iar local îl pornești fără instalare de librării suplimentare.
       </p>
       <div class="hero-actions">
-        <a class="btn primary large" href="{{ url_for('register') }}">Pornește proiectul</a>
-        <a class="btn ghost large" href="{{ url_for('demo_login', role='elev') }}">Testează ca elev</a>
-        <a class="btn ghost large" href="{{ url_for('demo_login', role='profesor') }}">Testează ca profesor</a>
+        <a class="btn primary large" href="{{ url_for('demo_login', role='elev') }}">Intră instant în demo</a>
+        <a class="btn ghost large" href="{{ url_for('lab_page') }}">Deschide laboratorul</a>
+        <a class="btn ghost large" href="{{ url_for('pitch_timer') }}">Timer prezentare</a>
       </div>
+      <p class="small-note">Vrei contul tău? <a href="{{ url_for('register') }}">Creează cont</a> sau <a href="{{ url_for('login') }}">intră în cont</a>.</p>
 
       <div class="kpi-row">
         <div class="kpi">
@@ -23,15 +25,15 @@
         </div>
         <div class="kpi">
           <strong>{{ counts.lessons }}</strong>
-          <span>misiuni disponibile</span>
+          <span>lecții disponibile</span>
         </div>
         <div class="kpi">
           <strong>{{ counts.quizzes }}</strong>
-          <span>boss fights</span>
+          <span>teste disponibile</span>
         </div>
         <div class="kpi">
-          <strong>{{ counts.projects }}</strong>
-          <span>proiecte ONCS</span>
+          <strong>{{ counts.users }}</strong>
+          <span>utilizatori</span>
         </div>
       </div>
     </div>
@@ -42,27 +44,61 @@
           <span class="dot red"></span>
           <span class="dot yellow"></span>
           <span class="dot green"></span>
-          <span class="monitor-label">Mission Control</span>
+          <span class="monitor-label">Panou principal</span>
         </div>
         <div class="monitor-body">
           <div class="glass-panel">
-            <div class="mini-title">Campanie elev</div>
+            <div class="mini-title">Parcurs elev</div>
             <div class="progress-line"><span style="width:72%"></span></div>
             <div class="quest-list-mini">
               <div>⚛️ Atomul și identitatea elementelor</div>
               <div>🧪 Acizi, baze și săruri</div>
-              <div>🏆 Boss fight: Arena periodică</div>
+              <div>📝 Test: Tabelul periodic</div>
             </div>
           </div>
           <div class="glass-panel">
-            <div class="mini-title">ONCS Studio</div>
+            <div class="mini-title">Laborator rapid</div>
             <div class="mini-badges">
-              <span>2 elevi</span>
-              <span>Secțiuni A/B/C</span>
-              <span>Timer 10+5</span>
+              <span>Tabel periodic</span>
+              <span>Simulator</span>
+              <span>Masă molară</span>
             </div>
-            <div class="mini-note">Checklist pentru poster, stand, etică și rubrică de autoevaluare.</div>
+            <div class="mini-note">Instrumente publice, gata de folosit fără autentificare și potrivite pentru lucru pe calculator sau pe telefon.</div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section soft">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Acces instant</div>
+      <h2>Poți intra imediat, chiar înainte să îți faci cont.</h2>
+    </div>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <strong>Laborator public</strong>
+        <p>Deschizi tabelul periodic, reacțiile și calculatorul de masă molară fără autentificare.</p>
+        <div class="card-actions">
+          <a class="btn primary small" href="{{ url_for('lab_page') }}">Intră în laborator</a>
+        </div>
+      </div>
+      <div class="rule-card">
+        <strong>Timer prezentare</strong>
+        <p>Formatul de 10 + 5 este disponibil public, perfect pentru repetiții rapide.</p>
+        <div class="card-actions">
+          <a class="btn ghost small" href="{{ url_for('pitch_timer') }}">Pornește timerul</a>
+        </div>
+      </div>
+      <div class="rule-card">
+        <strong>Demo instant</strong>
+        <p>Fără formulare. Un click și intri direct în experiența completă de elev sau profesor.</p>
+        <div class="card-actions">
+          <a class="btn ghost small" href="{{ url_for('demo_login', role='elev') }}">Demo elev</a>
+          <a class="btn ghost small" href="{{ url_for('demo_login', role='profesor') }}">Demo profesor</a>
         </div>
       </div>
     </div>
@@ -78,14 +114,14 @@
 
     <div class="feature-grid">
       <article class="feature-card">
-        <div class="feature-icon">🎮</div>
-        <h3>Gamificare reală</h3>
-        <p>XP, niveluri, badges, misiuni, boss fights și leaderboard ca să motiveze elevii să revină.</p>
+        <div class="feature-icon">📈</div>
+        <h3>Progres clar</h3>
+        <p>Puncte, niveluri de progres, realizări, lecții, teste și clasament pentru o urmărire clară a evoluției.</p>
       </article>
       <article class="feature-card">
         <div class="feature-icon">👨‍🏫</div>
-        <h3>Profesorul controlează jocul</h3>
-        <p>Creează clase, lecții, quiz-uri și anunțuri fără să se piardă în interfață.</p>
+        <h3>Profesorul administrează platforma</h3>
+        <p>Creează clase, lecții, teste și anunțuri fără să se piardă în interfață.</p>
       </article>
       <article class="feature-card">
         <div class="feature-icon">📱</div>
@@ -95,46 +131,18 @@
       <article class="feature-card">
         <div class="feature-icon">🔬</div>
         <h3>Laborator inclus</h3>
-        <p>Tabel periodic interactiv, reacții, quiz rapid și calculator de masă molară.</p>
+        <p>Tabel periodic interactiv, reacții, simulator vizual și calculator de masă molară.</p>
       </article>
       <article class="feature-card">
-        <div class="feature-icon">🧠</div>
-        <h3>ONCS Studio</h3>
-        <p>Secțiuni A/B/C, categorie Juniori/Seniori, export de proiect și ghid de conformitate.</p>
+        <div class="feature-icon">⏱️</div>
+        <h3>Timer de prezentare</h3>
+        <p>Ai un cronometru simplu pentru repetiții în format 10 minute + 5 minute.</p>
       </article>
       <article class="feature-card">
         <div class="feature-icon">💾</div>
         <h3>Backend + backup</h3>
-        <p>Flask, SQLite, export JSON și CSV, plus bridge pentru endpoint-ul vechi.</p>
+        <p>SQLite local, export JSON și CSV, plus bridge pentru endpoint-ul vechi.</p>
       </article>
-    </div>
-  </div>
-</section>
-
-<section id="oncs" class="section soft">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">Pregătit pentru ONCS</div>
-      <h2>Regulile importante sunt deja traduse în interfață, ca să nu uiți exact ce contează.</h2>
-    </div>
-
-    <div class="rules-grid">
-      <div class="rule-card">
-        <strong>Structură echipă</strong>
-        <p>Proiectele sunt gândite pentru echipe de 2 elevi, cu roluri separate și un singur proiect pe echipă.</p>
-      </div>
-      <div class="rule-card">
-        <strong>Încadrare corectă</strong>
-        <p>Navigatorul de secțiune te ajută să alegi între Științe fundamentale, Științe aplicate și IT.</p>
-      </div>
-      <div class="rule-card">
-        <strong>Pitch control</strong>
-        <p>Timer de 10 minute pentru prezentare și 5 minute pentru întrebări, ca la susținerea proiectului.</p>
-      </div>
-      <div class="rule-card">
-        <strong>Poster & stand</strong>
-        <p>Checklist clar pentru poster 80 × 120 cm, dimensiuni de exponat și reguli de siguranță.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -142,8 +150,8 @@
 <section class="section">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow">Primele locuri în joc</div>
-      <h2>Leaderboard demonstrativ</h2>
+      <div class="eyebrow">Primele locuri în clasament</div>
+      <h2>Clasament demonstrativ</h2>
     </div>
 
     <div class="leaderboard-shell">
@@ -154,7 +162,7 @@
           <strong>{{ item.full_name }}</strong>
           <span>{{ item.role|capitalize }} · {{ item.title }}</span>
         </div>
-        <div class="leader-score">{{ item.xp }} XP</div>
+        <div class="leader-score">{{ item.xp }} puncte</div>
       </div>
       {% endfor %}
     </div>
@@ -165,18 +173,23 @@
   <div class="container publish-grid">
     <div>
       <div class="eyebrow">Publicare ușoară</div>
-      <h2>Gândit să fie rulat local, dar și publicat pe net.</h2>
+      <h2>Gândit să fie rulat local cu un click, dar și publicat pe net.</h2>
       <p>
-        Aplicația este structurată pe Flask + SQLite, cu fișiere clare și start rapid.
-        Ai scripturi de pornire, health check și manifest PWA. Pentru publicare, poți merge pe un host Python standard.
+        Local nu mai ai nevoie să instalezi Flask sau alte librării separat, fiindcă sunt incluse în proiect.
+        Pentru publicare, ai fișiere pregătite pentru hosting Python standard și pentru deployment cu Gunicorn.
       </p>
     </div>
     <div class="code-card">
-<pre><code>pip install -r requirements.txt
-python app.py
+<pre><code># local, pe calculator
+PORNESTE_PE_CALCULATOR.bat
+# sau
+python launch_local.py
 
-# apoi:
-http://127.0.0.1:8000</code></pre>
+# telefon + calculator, pe același Wi‑Fi
+python launch_network.py
+
+# publicare pe hosting Python
+gunicorn --bind 0.0.0.0:$PORT wsgi:app</code></pre>
     </div>
   </div>
 </section>

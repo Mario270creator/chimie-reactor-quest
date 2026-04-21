@@ -1,4 +1,4 @@
 # Local nu ai nevoie de pip install; librariile Flask sunt incluse in folderul _vendor.
 # Acest fisier este folosit in principal pentru deploy pe hosting.
-flask
-gunicorn
+Flask>=3.0,<4
+Gunicorn>=22,<24

@@ -74,7 +74,7 @@ button,input,textarea,select{
   background:var(--surface-soft);
   color:var(--text);
 }
-input,textarea,select{
+input:not([type="radio"]):not([type="checkbox"]),textarea,select{
   width:100%;
   border:1px solid var(--line);
   border-radius:16px;
@@ -82,11 +82,25 @@ input,textarea,select{
   transition:border-color var(--transition), box-shadow var(--transition), transform var(--transition);
   appearance:none;
 }
+input[type="radio"],input[type="checkbox"]{
+  width:auto;
+  margin:2px 0 0;
+  padding:0;
+  border:none;
+  background:transparent;
+  appearance:auto;
+  accent-color:var(--primary);
+  flex:0 0 auto;
+}
 textarea{resize:vertical;min-height:120px}
-input:focus,textarea:focus,select:focus,button:focus{
+input:not([type="radio"]):not([type="checkbox"]):focus,textarea:focus,select:focus,button:focus{
   outline:none;
   box-shadow:var(--focus);
   border-color:var(--primary);
+}
+input[type="radio"]:focus,input[type="checkbox"]:focus{
+  outline:2px solid rgba(109, 40, 217, 0.25);
+  outline-offset:2px;
 }
 summary{cursor:pointer}
 .skip-link{
@@ -247,6 +261,7 @@ body[data-theme="light"] .topbar{
 .flash.success{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.3)}
 .flash.warning{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.28)}
 .flash.danger{background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.28)}
+.flash.info{background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.28)}
 
 .hero{padding:48px 0 20px}
 .hero-grid{
@@ -743,7 +758,8 @@ details{
   cursor:pointer;
 }
 body[data-theme="light"] .option-card{background:#fff}
-.option-card.selected{border-color:var(--line-strong)}
+.option-card.selected,.option-card.is-selected{border-color:var(--line-strong);box-shadow:0 0 0 1px rgba(255,255,255,.06) inset}
+.option-card input[type="radio"]{margin-top:4px}
 .result-banner{
   display:flex;
   flex-wrap:wrap;
@@ -869,4 +885,20 @@ body[data-theme="light"] .option-card{background:#fff}
   .topbar-inner{min-height:72px}
   .brand-badge{width:42px;height:42px}
   .timer-display{font-size:3.2rem}
+}
+
+
+.card-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+.public-callout{
+  margin-bottom:18px;
+  background:linear-gradient(180deg, rgba(34,211,238,.08), rgba(96,165,250,.04));
+  border:1px solid var(--line-strong);
+}
+.public-callout .panel-head{
+  margin-bottom:10px;
 }

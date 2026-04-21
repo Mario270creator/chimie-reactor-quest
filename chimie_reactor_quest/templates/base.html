@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#08111f">
   <meta name="color-scheme" content="light dark">
-  <meta name="description" content="Chimie Academy Reactor Quest - joc educațional de chimie, laborator interactiv și modul ONCS.">
+  <meta name="description" content="Chimie Academy pentru clasele VII-VIII - platformă educațională de chimie, laborator interactiv și instrumente de prezentare.">
   <link rel="manifest" href="{{ url_for('manifest') }}">
   <link rel="icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -21,7 +21,7 @@
           <div class="brand-badge">⚗️</div>
           <div>
             <strong>Chimie Academy</strong>
-            <small>Reactor Quest</small>
+            <small>Clasele VII-VIII</small>
           </div>
         </a>
 
@@ -29,18 +29,19 @@
 
         <nav class="topnav" data-nav-menu>
           {% if current_user %}
-            <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">HQ</a>
+            <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">Panou principal</a>
             <a class="{% if request.endpoint == 'classes_page' %}active{% endif %}" href="{{ url_for('classes_page') }}">Clase</a>
-            <a class="{% if request.endpoint == 'quests_page' %}active{% endif %}" href="{{ url_for('quests_page') }}">Misiuni</a>
-            <a class="{% if request.endpoint in ['arena_page', 'play_quiz'] %}active{% endif %}" href="{{ url_for('arena_page') }}">Arena</a>
-            <a class="{% if request.endpoint == 'oncs_page' or request.endpoint == 'export_project' %}active{% endif %}" href="{{ url_for('oncs_page') }}">ONCS Studio</a>
-            <a class="{% if request.endpoint == 'lab_page' or request.endpoint == 'pitch_timer' %}active{% endif %}" href="{{ url_for('lab_page') }}">Lab</a>
-            <a class="{% if request.endpoint == 'leaderboard_page' %}active{% endif %}" href="{{ url_for('leaderboard_page') }}">Leaderboard</a>
-            <a class="{% if request.endpoint == 'vault_page' %}active{% endif %}" href="{{ url_for('vault_page') }}">Vault</a>
+            <a class="{% if request.endpoint == 'quests_page' %}active{% endif %}" href="{{ url_for('quests_page') }}">Lecții</a>
+            <a class="{% if request.endpoint in ['arena_page', 'play_quiz'] %}active{% endif %}" href="{{ url_for('arena_page') }}">Teste</a>
+            <a class="{% if request.endpoint in ['lab_page', 'pitch_timer'] %}active{% endif %}" href="{{ url_for('lab_page') }}">Laborator</a>
+            <a class="{% if request.endpoint == 'leaderboard_page' %}active{% endif %}" href="{{ url_for('leaderboard_page') }}">Clasament</a>
+            <a class="{% if request.endpoint == 'vault_page' %}active{% endif %}" href="{{ url_for('vault_page') }}">Export</a>
           {% else %}
-            <a href="#features">Funcții</a>
-            <a href="#oncs">ONCS</a>
-            <a href="#publish">Publicare</a>
+            <a class="{% if request.endpoint == 'lab_page' %}active{% endif %}" href="{{ url_for('lab_page') }}">Laborator</a>
+            <a class="{% if request.endpoint == 'pitch_timer' %}active{% endif %}" href="{{ url_for('pitch_timer') }}">Cronometru</a>
+            <a class="{% if request.endpoint == 'leaderboard_page' %}active{% endif %}" href="{{ url_for('leaderboard_page') }}">Clasament</a>
+            <a href="{{ url_for('home') }}#features">Funcții</a>
+            <a href="{{ url_for('home') }}#publish">Publicare</a>
           {% endif %}
         </nav>
 
@@ -54,10 +55,11 @@
                 <small>{{ current_user.role|capitalize }} · {{ user_level.title }}</small>
               </div>
             </div>
-            <a class="btn ghost small" href="{{ url_for('logout') }}">Logout</a>
+            <a class="btn ghost small" href="{{ url_for('logout') }}">Ieșire</a>
           {% else %}
-            <a class="btn ghost small" href="{{ url_for('login') }}">Login</a>
-            <a class="btn primary small" href="{{ url_for('register') }}">Creează cont</a>
+            <a class="btn ghost small" href="{{ url_for('lab_page') }}">Laborator rapid</a>
+            <a class="btn ghost small" href="{{ url_for('login') }}">Autentificare</a>
+            <a class="btn primary small" href="{{ url_for('demo_login', role='elev') }}">Demo instant</a>
           {% endif %}
         </div>
       </div>
@@ -80,22 +82,24 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <div>
-          <div class="footer-title">Reactor Quest</div>
+          <div class="footer-title">Chimie Academy</div>
           <p>{{ footer_credits }}</p>
         </div>
         <div>
           <div class="footer-title">Compatibilitate</div>
-          <p>Telefon, laptop și desktop, din browser. Include backend Flask, export JSON/CSV și modul PWA.</p>
+          <p>Telefon, laptop și desktop, din browser. Local merge fără instalare de librării suplimentare, iar pentru publicare ai fișiere pregătite.</p>
         </div>
         <div>
           <div class="footer-title">Acces rapid</div>
           <p>
             {% if current_user %}
               <a href="{{ url_for('lab_page') }}">Intră în laborator</a> ·
-              <a href="{{ url_for('oncs_page') }}">Deschide ONCS Studio</a>
+              <a href="{{ url_for('arena_page') }}">Deschide testele</a> ·
+              <a href="{{ url_for('pitch_timer') }}">Cronometru</a>
             {% else %}
-              <a href="{{ url_for('demo_login', role='elev') }}">Demo elev</a> ·
-              <a href="{{ url_for('demo_login', role='profesor') }}">Demo profesor</a>
+              <a href="{{ url_for('lab_page') }}">Laborator public</a> ·
+              <a href="{{ url_for('pitch_timer') }}">Timer prezentare</a> ·
+              <a href="{{ url_for('demo_login', role='elev') }}">Demo elev</a>
             {% endif %}
           </p>
         </div>

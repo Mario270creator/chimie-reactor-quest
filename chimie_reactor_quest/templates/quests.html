@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Misiuni · {{ site_name }}{% endblock %}
+{% block title %}Lecții · {{ site_name }}{% endblock %}
 {% block content %}
 <section class="section page-top">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow">Quest board</div>
-      <h1>Lecțiile arată ca misiuni, dar rămân extrem de ușor de administrat.</h1>
+      <div class="eyebrow">Lecții și activități</div>
+      <h1>Lecțiile sunt ușor de administrat și de parcurs.</h1>
     </div>
 
     {% if current_user.role == 'profesor' %}
     <section class="panel">
       <div class="panel-head">
-        <h2>Adaugă o misiune nouă</h2>
-        <span class="tiny-muted">XP + dificultate</span>
+        <h2>Adaugă o lecție nouă</h2>
+        <span class="tiny-muted">Puncte + dificultate</span>
       </div>
       <form method="post" action="{{ url_for('create_lesson') }}" class="grid-form two">
         <label>
@@ -24,16 +24,16 @@
           </select>
         </label>
         <label>
-          <span>XP</span>
+          <span>Puncte</span>
           <input type="number" name="xp" value="50" min="10" max="200">
         </label>
         <label class="full">
           <span>Titlu</span>
-          <input type="text" name="title" placeholder="Misiunea 3 · ..." required>
+          <input type="text" name="title" placeholder="Lecția 3 · ..." required>
         </label>
         <label class="full">
           <span>Rezumat</span>
-          <textarea name="summary" rows="3" placeholder="Scurtă descriere a misiunii" required></textarea>
+          <textarea name="summary" rows="3" placeholder="Scurtă descriere a lecției" required></textarea>
         </label>
         <label class="full">
           <span>Conținut</span>
@@ -42,14 +42,14 @@
         <label>
           <span>Dificultate</span>
           <select name="difficulty">
-            <option>Start</option>
+            <option>Introductiv</option>
             <option selected>Mediu</option>
             <option>Avansat</option>
-            <option>Elite</option>
+            <option>Recapitulare</option>
           </select>
         </label>
         <div class="form-actions">
-          <button class="btn primary" type="submit">Adaugă misiunea</button>
+          <button class="btn primary" type="submit">Adaugă lecția</button>
         </div>
       </form>
     </section>
@@ -60,12 +60,12 @@
       <article class="mission-card">
         <div class="mission-card-head">
           <span class="pill">{{ lesson.class_name }} {{ lesson.class_section }}</span>
-          <span class="pill accent">{{ lesson.xp }} XP</span>
+          <span class="pill accent">{{ lesson.xp }} puncte</span>
         </div>
         <h3>{{ lesson.title }}</h3>
         <p class="mission-summary">{{ lesson.summary }}</p>
         <details>
-          <summary>Deschide conținutul misiunii</summary>
+          <summary>Deschide conținutul lecției</summary>
           <div class="details-body">{{ lesson.content }}</div>
         </details>
         <div class="mission-foot">
@@ -75,7 +75,7 @@
             <span class="status good">Finalizată</span>
             {% else %}
             <form method="post" action="{{ url_for('complete_lesson', lesson_id=lesson.id) }}">
-              <button class="btn primary small" type="submit">Completează</button>
+              <button class="btn primary small" type="submit">Marchează ca parcursă</button>
             </form>
             {% endif %}
           {% else %}
@@ -84,7 +84,7 @@
         </div>
       </article>
       {% else %}
-      <div class="empty-state">Nu există misiuni încă.</div>
+      <div class="empty-state">Nu există lecții încă.</div>
       {% endfor %}
     </section>
   </div>

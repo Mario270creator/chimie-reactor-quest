@@ -99,3 +99,20 @@ Dacă nu folosești Render, poți folosi orice hosting Python care acceptă Flas
 ## Observație
 
 Dacă vrei **zero instalare locală**, soluția reală este să îl publici online și apoi îl deschizi direct din browser. Varianta din folder este deja pregătită pentru pasul ăsta.
+
+
+## Render - setări recomandate
+
+Dacă repo-ul tău conține proiectul într-un subfolder, setează **Root Directory** la numele acelui subfolder.
+
+Setări recomandate pentru Web Service:
+
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `bash render_start.sh`
+- Health Check Path: `/healthz`
+
+Dacă vrei să păstrezi datele SQLite între deploy-uri pe Render, atașează un **Persistent Disk** și montează-l la:
+
+`/opt/render/project/src/render_disk`
+
+Aplicația va folosi automat acel spațiu pentru baza de date și cheia secretă. Fără disk, datele locale se pierd la redeploy/restart.

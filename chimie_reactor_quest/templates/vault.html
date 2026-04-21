@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Vault · {{ site_name }}{% endblock %}
+{% block title %}Export · {{ site_name }}{% endblock %}
 {% block content %}
 <section class="section page-top">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow">Data Vault</div>
+      <div class="eyebrow">Date și export</div>
       <h1>Backup, export și verificare backend.</h1>
     </div>
 
@@ -19,7 +19,7 @@
           <a class="btn ghost" href="{{ url_for('export_results_csv') }}">Descarcă CSV rezultate</a>
           <a class="btn ghost" href="{{ url_for('healthz') }}" target="_blank">Health check</a>
         </div>
-        <p class="small-note">JSON-ul salvează structura aplicației. CSV-ul extrage rezultatele quiz-urilor.</p>
+        <p class="small-note">JSON-ul salvează structura aplicației. CSV-ul extrage rezultatele testelor.</p>
       </section>
 
       <section class="panel">
@@ -32,8 +32,8 @@
           <div class="rule-card"><strong>{{ snapshot.classes|length }}</strong><p>clase</p></div>
           <div class="rule-card"><strong>{{ snapshot.lessons|length }}</strong><p>lecții</p></div>
           <div class="rule-card"><strong>{{ snapshot.quizzes|length }}</strong><p>quiz-uri</p></div>
-          <div class="rule-card"><strong>{{ snapshot.projects|length }}</strong><p>proiecte ONCS</p></div>
-          <div class="rule-card"><strong>{{ user_project_count }}</strong><p>ale tale</p></div>
+          <div class="rule-card"><strong>{{ snapshot.attempts|length }}</strong><p>încercări</p></div>
+          <div class="rule-card"><strong>{{ snapshot.announcements|length }}</strong><p>anunțuri</p></div>
         </div>
       </section>
     </div>

@@ -171,7 +171,7 @@
           id: quiz1,
           classId: classA,
           teacherId,
-          title: 'Quiz demonstrativ – Tabel periodic',
+          title: 'Test demonstrativ – Tabel periodic',
           instructions: 'Alege varianta corectă pentru fiecare întrebare.',
           createdAt: nowIso(),
           questions: [
@@ -202,7 +202,7 @@
           id: quiz2,
           classId: classB,
           teacherId,
-          title: 'Quiz demonstrativ – Acizi și baze',
+          title: 'Test demonstrativ – Acizi și baze',
           instructions: 'Rezolvă testul și verifică explicațiile la final.',
           createdAt: nowIso(),
           questions: [
