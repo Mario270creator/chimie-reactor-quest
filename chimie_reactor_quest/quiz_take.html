@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ quiz.title }} · Test{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container narrow">
+    <div class="section-head">
+      <div class="eyebrow">Test</div>
+      <h1>{{ quiz.title }}</h1>
+      <p class="lead">{{ quiz.description }}</p>
+    </div>
+
+    <section class="panel">
+      <div class="quest-top">
+        <span class="pill">{{ quiz.class_name }} {{ quiz.class_section }}</span>
+        <span class="pill accent">{{ quiz.xp }} puncte max</span>
+      </div>
+      <form method="post" class="quiz-play-form" autocomplete="off">
+        {% for q in questions %}
+        {% set q_idx = loop.index0 %}
+        <article class="quiz-question" data-quiz-question>
+          <h3>{{ loop.index }}. {{ q.text }}</h3>
+          <div class="quiz-options-list" role="radiogroup" aria-label="Întrebarea {{ loop.index }}">
+            {% for option in q.options %}
+            {% set option_idx = loop.index0 %}
+            {% set option_id = 'quiz-' ~ quiz.id ~ '-q-' ~ q_idx ~ '-opt-' ~ option_idx %}
+            <label for="{{ option_id }}" class="option-card {% if result and result.answers[q_idx|string] == option_idx %}selected{% endif %}" data-option-card>
+              <input id="{{ option_id }}" type="radio" name="q_{{ q_idx }}" value="{{ option_idx }}" data-quiz-option {% if result and result.answers[q_idx|string] == option_idx %}checked{% endif %}>
+              <span>{{ option }}</span>
+            </label>
+            {% endfor %}
+          </div>
+
+          {% if result %}
+          <div class="quiz-feedback {% if result.answers[loop.index0|string] == q.correct %}good{% else %}bad{% endif %}">
+            <strong>Răspuns corect:</strong> {{ q.options[q.correct] }}<br>
+            <span>{{ q.explanation }}</span>
+          </div>
+          {% endif %}
+        </article>
+        {% endfor %}
+
+        <div class="form-actions">
+          <button class="btn primary large" type="submit">Trimite răspunsurile</button>
+          <a class="btn ghost large" href="{{ url_for('arena_page') }}">Înapoi la teste</a>
+        </div>
+      </form>
+
+      {% if result %}
+      <div class="result-banner">
+        <strong>{{ result.score_percent }}%</strong>
+        <span>{{ result.correct_count }} / {{ result.total_count }} răspunsuri corecte</span>
+        <span>Puncte potențiale: {{ result.xp_reward }}</span>
+      </div>
+      {% endif %}
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Istoric încercări</h2>
+      </div>
+      <div class="leaderboard-table full">
+        {% for item in attempts %}
+        <div class="leader-row">
+          <div class="leader-row-rank">#{{ loop.index }}</div>
+          <div class="leader-row-name">{{ item.correct_count }} / {{ item.total_count }}</div>
+          <div class="leader-row-role">{{ item.created_at }}</div>
+          <div class="leader-row-score">{{ item.score_percent }}%</div>
+        </div>
+        {% else %}
+        <div class="empty-state">Nu ai încercări salvate încă.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

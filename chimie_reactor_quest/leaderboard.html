@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Clasament · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    {% if not current_user %}
+    <section class="panel public-callout">
+      <div class="panel-head">
+        <h2>Clasament public</h2>
+        <span class="tiny-muted">Preview</span>
+      </div>
+      <p class="small-note">Poți vedea progresul și fără cont. Pentru a parcurge lecțiile și testele, intră în demo sau creează un cont.</p>
+      <div class="inline-actions">
+        <a class="btn primary small" href="{{ url_for('demo_login', role='elev') }}">Intră în demo</a>
+        <a class="btn ghost small" href="{{ url_for('register') }}">Creează cont</a>
+      </div>
+    </section>
+    {% endif %}
+
+    <div class="section-head">
+      <div class="eyebrow">Clasament</div>
+      <h1>Toți participanții, într-un singur tablou.</h1>
+    </div>
+
+    <section class="panel">
+      <div class="leaderboard-table full">
+        {% for item in board %}
+        <div class="leader-row {% if loop.index == 1 %}top{% endif %}">
+          <div class="leader-row-rank">#{{ loop.index }}</div>
+          <div class="leader-row-name">{{ item.icon }} {{ item.full_name }}</div>
+          <div class="leader-row-role">{{ item.role|capitalize }}</div>
+          <div class="leader-row-score">{{ item.xp }} puncte</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Autentificare · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="container auth-grid">
+    <div class="auth-intro">
+      <div class="eyebrow">Autentificare</div>
+      <h1>Intră în platformă.</h1>
+      <p>Profesorul administrează clase, lecții și teste. Elevul parcurge lecțiile, intră în laborator și își urmărește progresul.</p>
+      <div class="auth-pills">
+        <span>Demo profesor: profesor_demo / 1234</span>
+        <span>Demo elev: elev_demo / 1234</span>
+      </div>
+    </div>
+
+    <div class="panel form-panel">
+      <form method="post" class="stack-form">
+        <label>
+          <span>Utilizator</span>
+          <input type="text" name="username" placeholder="utilizator" required>
+        </label>
+        <label>
+          <span>Parolă</span>
+          <input type="password" name="password" placeholder="parolă" required>
+        </label>
+        <label>
+          <span>Rol</span>
+          <select name="role">
+            <option value="">Alege automat din cont</option>
+            <option value="elev">Elev</option>
+            <option value="profesor">Profesor</option>
+          </select>
+        </label>
+        <button class="btn primary large" type="submit">Intră în cont</button>
+      </form>
+
+      <div class="inline-actions">
+        <a class="btn ghost" href="{{ url_for('demo_login', role='elev') }}">Demo elev</a>
+        <a class="btn ghost" href="{{ url_for('demo_login', role='profesor') }}">Demo profesor</a>
+      </div>
+      <p class="small-note">Nu ai cont? <a href="{{ url_for('register') }}">Creează unul aici</a>.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
