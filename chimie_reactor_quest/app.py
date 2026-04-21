@@ -18,8 +18,18 @@ from typing import Any
 
 BOOT_DIR = Path(__file__).resolve().parent
 VENDOR_DIR = BOOT_DIR / "_vendor"
-if VENDOR_DIR.exists() and str(VENDOR_DIR) not in sys.path:
-    sys.path.insert(0, str(VENDOR_DIR))
+
+
+def ensure_local_vendor_packages() -> None:
+    if VENDOR_DIR.exists() and str(VENDOR_DIR) not in sys.path:
+        sys.path.insert(0, str(VENDOR_DIR))
+
+
+try:
+    import flask  # noqa: F401
+    import werkzeug  # noqa: F401
+except Exception:
+    ensure_local_vendor_packages()
 
 from flask import (
     Flask,
@@ -38,11 +48,16 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parent
 INSTANCE_DIR = BASE_DIR / "instance"
-DB_PATH = Path(os.environ.get("APP_DB_PATH", INSTANCE_DIR / "chimie_reactor_quest.db"))
-SECRET_FILE = INSTANCE_DIR / ".secret_key"
-LEGACY_IMPORT_FILE = INSTANCE_DIR / "legacy_bridge_last_import.json"
+DEFAULT_RENDER_DISK_DIR = Path("/opt/render/project/src/render_disk")
+PERSISTENT_DATA_DIR = DEFAULT_RENDER_DISK_DIR if os.environ.get("RENDER") and DEFAULT_RENDER_DISK_DIR.exists() else INSTANCE_DIR
+DB_PATH = Path(os.environ.get("APP_DB_PATH", PERSISTENT_DATA_DIR / "chimie_reactor_quest.db"))
+SECRET_FILE = Path(os.environ.get("APP_SECRET_FILE", PERSISTENT_DATA_DIR / ".secret_key"))
+LEGACY_IMPORT_FILE = Path(os.environ.get("APP_LEGACY_IMPORT_FILE", PERSISTENT_DATA_DIR / "legacy_bridge_last_import.json"))
 
 INSTANCE_DIR.mkdir(parents=True, exist_ok=True)
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+SECRET_FILE.parent.mkdir(parents=True, exist_ok=True)
+LEGACY_IMPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 
 def load_secret_key() -> str:
@@ -1528,6 +1543,8 @@ def healthz():
 
 
 if __name__ == "__main__":
-    host = os.environ.get("HOST", "127.0.0.1")
-    port = int(os.environ.get("PORT", "8000"))
+    default_host = "0.0.0.0" if os.environ.get("RENDER") else "127.0.0.1"
+    default_port = "10000" if os.environ.get("RENDER") else "8000"
+    host = os.environ.get("HOST", default_host)
+    port = int(os.environ.get("PORT", default_port))
     app.run(host=host, port=port, debug=False)
