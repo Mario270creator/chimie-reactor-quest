@@ -55,7 +55,7 @@ def main(share: bool = False) -> None:
     threading.Thread(target=open_browser_later, daemon=True).start()
 
     print('\n' + '=' * 68)
-    print(' Chimie Academy · Reactor Quest')
+    print(' Chimie Academy · Clasele VII-VIII')
     print('=' * 68)
     print(f' Calculator: {local_url}')
     if share:

@@ -1,4 +1,4 @@
-# Chimie Academy · Reactor Quest · Easy Access
+# Chimie Academy · Clasele VII-VIII · Easy Access
 
 Versiune refăcută ca să fie cât mai ușor de deschis și de arătat bine pe calculator, telefon și la publicare online.
 
@@ -6,7 +6,7 @@ Versiune refăcută ca să fie cât mai ușor de deschis și de arătat bine pe 
 
 - **nu mai trebuie să instalezi separat Flask** sau alte librării pentru rularea locală; sunt incluse în folderul `_vendor`
 - **ai pornire cu un click** pentru calculator și variantă separată pentru telefon
-- **lab-ul, timerul și leaderboard-ul sunt publice**, fără login
+- **laboratorul, cronometrul și clasamentul sunt publice**, fără login
 - **demo instant** din homepage, fără formulare
 - **fișiere pregătite pentru publicare**: `Procfile`, `render.yaml`, `wsgi.py`
 - backend-ul rămâne pe **Flask + SQLite**
@@ -55,7 +55,7 @@ Nu mai trebuie să rulezi `pip install -r requirements.txt` pentru varianta loca
 
 - laboratorul
 - timerul de prezentare
-- leaderboard-ul
+- clasamentul
 - homepage-ul cu demo instant
 
 ## Conturi demo
