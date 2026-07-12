@@ -1,327 +1,202 @@
-"""
-Tagged JSON
-~~~~~~~~~~~
-
-A compact representation for lossless serialization of non-standard JSON
-types. :class:`~flask.sessions.SecureCookieSessionInterface` uses this
-to serialize the session data, but it may be useful in other places. It
-can be extended to support other types.
-
-.. autoclass:: TaggedJSONSerializer
-    :members:
-
-.. autoclass:: JSONTag
-    :members:
-
-Let's see an example that adds support for
-:class:`~collections.OrderedDict`. Dicts don't have an order in JSON, so
-to handle this we will dump the items as a list of ``[key, value]``
-pairs. Subclass :class:`JSONTag` and give it the new key ``' od'`` to
-identify the type. The session serializer processes dicts first, so
-insert the new tag at the front of the order since ``OrderedDict`` must
-be processed before ``dict``.
-
-.. code-block:: python
-
-    from flask.json.tag import JSONTag
-
-    class TagOrderedDict(JSONTag):
-        __slots__ = ('serializer',)
-        key = ' od'
-
-        def check(self, value):
-            return isinstance(value, OrderedDict)
-
-        def to_json(self, value):
-            return [[k, self.serializer.tag(v)] for k, v in iteritems(value)]
-
-        def to_python(self, value):
-            return OrderedDict(value)
-
-    app.session_interface.serializer.register(TagOrderedDict, index=0)
-"""
-
 from __future__ import annotations
 
+import re
 import typing as t
-from base64 import b64decode
-from base64 import b64encode
-from datetime import datetime
-from uuid import UUID
+from dataclasses import dataclass
+from dataclasses import field
 
-from markupsafe import Markup
-from werkzeug.http import http_date
-from werkzeug.http import parse_date
-
-from ..json import dumps
-from ..json import loads
+from .converters import ValidationError
+from .exceptions import NoMatch
+from .exceptions import RequestAliasRedirect
+from .exceptions import RequestPath
+from .rules import Rule
+from .rules import RulePart
 
 
-class JSONTag:
-    """Base class for defining type tags for :class:`TaggedJSONSerializer`."""
-
-    __slots__ = ("serializer",)
-
-    #: The tag to mark the serialized object with. If empty, this tag is
-    #: only used as an intermediate step during tagging.
-    key: str = ""
-
-    def __init__(self, serializer: TaggedJSONSerializer) -> None:
-        """Create a tagger for the given serializer."""
-        self.serializer = serializer
-
-    def check(self, value: t.Any) -> bool:
-        """Check if the given value should be tagged by this tag."""
-        raise NotImplementedError
-
-    def to_json(self, value: t.Any) -> t.Any:
-        """Convert the Python object to an object that is a valid JSON type.
-        The tag will be added later."""
-        raise NotImplementedError
-
-    def to_python(self, value: t.Any) -> t.Any:
-        """Convert the JSON representation back to the correct type. The tag
-        will already be removed."""
-        raise NotImplementedError
-
-    def tag(self, value: t.Any) -> dict[str, t.Any]:
-        """Convert the value to a valid JSON type and add the tag structure
-        around it."""
-        return {self.key: self.to_json(value)}
+class SlashRequired(Exception):
+    pass
 
 
-class TagDict(JSONTag):
-    """Tag for 1-item dicts whose only key matches a registered tag.
+@dataclass
+class State:
+    """A representation of a rule state.
 
-    Internally, the dict key is suffixed with `__`, and the suffix is removed
-    when deserializing.
+    This includes the *rules* that correspond to the state and the
+    possible *static* and *dynamic* transitions to the next state.
     """
 
-    __slots__ = ()
-    key = " di"
-
-    def check(self, value: t.Any) -> bool:
-        return (
-            isinstance(value, dict)
-            and len(value) == 1
-            and next(iter(value)) in self.serializer.tags
-        )
-
-    def to_json(self, value: t.Any) -> t.Any:
-        key = next(iter(value))
-        return {f"{key}__": self.serializer.tag(value[key])}
-
-    def to_python(self, value: t.Any) -> t.Any:
-        key = next(iter(value))
-        return {key[:-2]: value[key]}
+    dynamic: list[tuple[RulePart, State]] = field(default_factory=list)
+    rules: list[Rule] = field(default_factory=list)
+    static: dict[str, State] = field(default_factory=dict)
 
 
-class PassDict(JSONTag):
-    __slots__ = ()
+class StateMachineMatcher:
+    def __init__(self, merge_slashes: bool) -> None:
+        self._root = State()
+        self.merge_slashes = merge_slashes
 
-    def check(self, value: t.Any) -> bool:
-        return isinstance(value, dict)
+    def add(self, rule: Rule) -> None:
+        state = self._root
+        for part in rule._parts:
+            if part.static:
+                state.static.setdefault(part.content, State())
+                state = state.static[part.content]
+            else:
+                for test_part, new_state in state.dynamic:
+                    if test_part == part:
+                        state = new_state
+                        break
+                else:
+                    new_state = State()
+                    state.dynamic.append((part, new_state))
+                    state = new_state
+        state.rules.append(rule)
 
-    def to_json(self, value: t.Any) -> t.Any:
-        # JSON objects may only have string keys, so don't bother tagging the
-        # key here.
-        return {k: self.serializer.tag(v) for k, v in value.items()}
+    def update(self) -> None:
+        # For every state the dynamic transitions should be sorted by
+        # the weight of the transition
+        state = self._root
 
-    tag = to_json
+        def _update_state(state: State) -> None:
+            state.dynamic.sort(key=lambda entry: entry[0].weight)
+            for new_state in state.static.values():
+                _update_state(new_state)
+            for _, new_state in state.dynamic:
+                _update_state(new_state)
 
+        _update_state(state)
 
-class TagTuple(JSONTag):
-    __slots__ = ()
-    key = " t"
+    def match(
+        self, domain: str, path: str, method: str, websocket: bool
+    ) -> tuple[Rule, t.MutableMapping[str, t.Any]]:
+        # To match to a rule we need to start at the root state and
+        # try to follow the transitions until we find a match, or find
+        # there is no transition to follow.
 
-    def check(self, value: t.Any) -> bool:
-        return isinstance(value, tuple)
+        have_match_for = set()
+        websocket_mismatch = False
 
-    def to_json(self, value: t.Any) -> t.Any:
-        return [self.serializer.tag(item) for item in value]
+        def _match(
+            state: State, parts: list[str], values: list[str]
+        ) -> tuple[Rule, list[str]] | None:
+            # This function is meant to be called recursively, and will attempt
+            # to match the head part to the state's transitions.
+            nonlocal have_match_for, websocket_mismatch
 
-    def to_python(self, value: t.Any) -> t.Any:
-        return tuple(value)
+            # The base case is when all parts have been matched via
+            # transitions. Hence if there is a rule with methods &
+            # websocket that work return it and the dynamic values
+            # extracted.
+            if parts == []:
+                for rule in state.rules:
+                    if rule.methods is not None and method not in rule.methods:
+                        have_match_for.update(rule.methods)
+                    elif rule.websocket != websocket:
+                        websocket_mismatch = True
+                    else:
+                        return rule, values
 
+                # Test if there is a match with this path with a
+                # trailing slash, if so raise an exception to report
+                # that matching is possible with an additional slash
+                if "" in state.static:
+                    for rule in state.static[""].rules:
+                        if websocket == rule.websocket and (
+                            rule.methods is None or method in rule.methods
+                        ):
+                            if rule.strict_slashes:
+                                raise SlashRequired()
+                            else:
+                                return rule, values
+                return None
 
-class PassList(JSONTag):
-    __slots__ = ()
+            part = parts[0]
+            # To match this part try the static transitions first
+            if part in state.static:
+                rv = _match(state.static[part], parts[1:], values)
+                if rv is not None:
+                    return rv
+            # No match via the static transitions, so try the dynamic
+            # ones.
+            for test_part, new_state in state.dynamic:
+                target = part
+                remaining = parts[1:]
+                # A final part indicates a transition that always
+                # consumes the remaining parts i.e. transitions to a
+                # final state.
+                if test_part.final:
+                    target = "/".join(parts)
+                    remaining = []
+                match = re.compile(test_part.content).match(target)
+                if match is not None:
+                    if test_part.suffixed:
+                        # If a part_isolating=False part has a slash suffix, remove the
+                        # suffix from the match and check for the slash redirect next.
+                        suffix = match.groups()[-1]
+                        if suffix == "/":
+                            remaining = [""]
 
-    def check(self, value: t.Any) -> bool:
-        return isinstance(value, list)
+                    converter_groups = sorted(
+                        match.groupdict().items(), key=lambda entry: entry[0]
+                    )
+                    groups = [
+                        value
+                        for key, value in converter_groups
+                        if key[:11] == "__werkzeug_"
+                    ]
+                    rv = _match(new_state, remaining, values + groups)
+                    if rv is not None:
+                        return rv
 
-    def to_json(self, value: t.Any) -> t.Any:
-        return [self.serializer.tag(item) for item in value]
+            # If there is no match and the only part left is a
+            # trailing slash ("") consider rules that aren't
+            # strict-slashes as these should match if there is a final
+            # slash part.
+            if parts == [""]:
+                for rule in state.rules:
+                    if rule.strict_slashes:
+                        continue
+                    if rule.methods is not None and method not in rule.methods:
+                        have_match_for.update(rule.methods)
+                    elif rule.websocket != websocket:
+                        websocket_mismatch = True
+                    else:
+                        return rule, values
 
-    tag = to_json
+            return None
 
+        try:
+            rv = _match(self._root, [domain, *path.split("/")], [])
+        except SlashRequired:
+            raise RequestPath(f"{path}/") from None
 
-class TagBytes(JSONTag):
-    __slots__ = ()
-    key = " b"
+        if self.merge_slashes and rv is None:
+            # Try to match again, but with slashes merged
+            path = re.sub("/{2,}", "/", path)
+            try:
+                rv = _match(self._root, [domain, *path.split("/")], [])
+            except SlashRequired:
+                raise RequestPath(f"{path}/") from None
+            if rv is None or rv[0].merge_slashes is False:
+                raise NoMatch(have_match_for, websocket_mismatch)
+            else:
+                raise RequestPath(f"{path}")
+        elif rv is not None:
+            rule, values = rv
 
-    def check(self, value: t.Any) -> bool:
-        return isinstance(value, bytes)
+            result = {}
+            for name, value in zip(rule._converters.keys(), values):
+                try:
+                    value = rule._converters[name].to_python(value)
+                except ValidationError:
+                    raise NoMatch(have_match_for, websocket_mismatch) from None
+                result[str(name)] = value
+            if rule.defaults:
+                result.update(rule.defaults)
 
-    def to_json(self, value: t.Any) -> t.Any:
-        return b64encode(value).decode("ascii")
+            if rule.alias and rule.map.redirect_defaults:
+                raise RequestAliasRedirect(result, rule.endpoint)
 
-    def to_python(self, value: t.Any) -> t.Any:
-        return b64decode(value)
+            return rule, result
 
-
-class TagMarkup(JSONTag):
-    """Serialize anything matching the :class:`~markupsafe.Markup` API by
-    having a ``__html__`` method to the result of that method. Always
-    deserializes to an instance of :class:`~markupsafe.Markup`."""
-
-    __slots__ = ()
-    key = " m"
-
-    def check(self, value: t.Any) -> bool:
-        return callable(getattr(value, "__html__", None))
-
-    def to_json(self, value: t.Any) -> t.Any:
-        return str(value.__html__())
-
-    def to_python(self, value: t.Any) -> t.Any:
-        return Markup(value)
-
-
-class TagUUID(JSONTag):
-    __slots__ = ()
-    key = " u"
-
-    def check(self, value: t.Any) -> bool:
-        return isinstance(value, UUID)
-
-    def to_json(self, value: t.Any) -> t.Any:
-        return value.hex
-
-    def to_python(self, value: t.Any) -> t.Any:
-        return UUID(value)
-
-
-class TagDateTime(JSONTag):
-    __slots__ = ()
-    key = " d"
-
-    def check(self, value: t.Any) -> bool:
-        return isinstance(value, datetime)
-
-    def to_json(self, value: t.Any) -> t.Any:
-        return http_date(value)
-
-    def to_python(self, value: t.Any) -> t.Any:
-        return parse_date(value)
-
-
-class TaggedJSONSerializer:
-    """Serializer that uses a tag system to compactly represent objects that
-    are not JSON types. Passed as the intermediate serializer to
-    :class:`itsdangerous.Serializer`.
-
-    The following extra types are supported:
-
-    * :class:`dict`
-    * :class:`tuple`
-    * :class:`bytes`
-    * :class:`~markupsafe.Markup`
-    * :class:`~uuid.UUID`
-    * :class:`~datetime.datetime`
-    """
-
-    __slots__ = ("tags", "order")
-
-    #: Tag classes to bind when creating the serializer. Other tags can be
-    #: added later using :meth:`~register`.
-    default_tags = [
-        TagDict,
-        PassDict,
-        TagTuple,
-        PassList,
-        TagBytes,
-        TagMarkup,
-        TagUUID,
-        TagDateTime,
-    ]
-
-    def __init__(self) -> None:
-        self.tags: dict[str, JSONTag] = {}
-        self.order: list[JSONTag] = []
-
-        for cls in self.default_tags:
-            self.register(cls)
-
-    def register(
-        self,
-        tag_class: type[JSONTag],
-        force: bool = False,
-        index: int | None = None,
-    ) -> None:
-        """Register a new tag with this serializer.
-
-        :param tag_class: tag class to register. Will be instantiated with this
-            serializer instance.
-        :param force: overwrite an existing tag. If false (default), a
-            :exc:`KeyError` is raised.
-        :param index: index to insert the new tag in the tag order. Useful when
-            the new tag is a special case of an existing tag. If ``None``
-            (default), the tag is appended to the end of the order.
-
-        :raise KeyError: if the tag key is already registered and ``force`` is
-            not true.
-        """
-        tag = tag_class(self)
-        key = tag.key
-
-        if key:
-            if not force and key in self.tags:
-                raise KeyError(f"Tag '{key}' is already registered.")
-
-            self.tags[key] = tag
-
-        if index is None:
-            self.order.append(tag)
-        else:
-            self.order.insert(index, tag)
-
-    def tag(self, value: t.Any) -> t.Any:
-        """Convert a value to a tagged representation if necessary."""
-        for tag in self.order:
-            if tag.check(value):
-                return tag.tag(value)
-
-        return value
-
-    def untag(self, value: dict[str, t.Any]) -> t.Any:
-        """Convert a tagged representation back to the original type."""
-        if len(value) != 1:
-            return value
-
-        key = next(iter(value))
-
-        if key not in self.tags:
-            return value
-
-        return self.tags[key].to_python(value[key])
-
-    def _untag_scan(self, value: t.Any) -> t.Any:
-        if isinstance(value, dict):
-            # untag each item recursively
-            value = {k: self._untag_scan(v) for k, v in value.items()}
-            # untag the dict itself
-            value = self.untag(value)
-        elif isinstance(value, list):
-            # untag each item recursively
-            value = [self._untag_scan(item) for item in value]
-
-        return value
-
-    def dumps(self, value: t.Any) -> str:
-        """Tag the value and dump it to a compact JSON string."""
-        return dumps(self.tag(value), separators=(",", ":"))
-
-    def loads(self, value: str) -> t.Any:
-        """Load data from a JSON string and deserialized any tagged objects."""
-        return self._untag_scan(loads(value))
+        raise NoMatch(have_match_for, websocket_mismatch)
