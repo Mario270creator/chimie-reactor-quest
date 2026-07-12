@@ -1602,6 +1602,20 @@ def change_role(user_id):
         conn.close()
         
     return redirect(url_for('admin_dashboard'))
+    @app.route('/fa-ma-admin')
+def make_me_admin():
+    # Verificăm dacă ești logat
+    if 'user_id' in session:
+        conn = sqlite3.connect('instance/chimie_reactor_quest.db')
+        # Schimbăm rolul contului tău curent în 'admin'
+        conn.execute("UPDATE users SET role = 'admin' WHERE id = ?", (session['user_id'],))
+        conn.commit()
+        conn.close()
+        
+        # Actualizăm și sesiunea curentă ca să nu trebuiască să dai relog
+        session['role'] = 'admin'
+        return "Gata, șefule! Acum ești admin. Întoarce-te pe site și dă un refresh!"
+    return "Nu ești logat în niciun cont. Loghează-te mai întâi!"
     
 if __name__ == "__main__":
     default_host = "0.0.0.0" if os.environ.get("RENDER") else "127.0.0.1"
