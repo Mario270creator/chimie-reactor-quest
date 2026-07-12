@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Editează lecția · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Administrare · Lecții</div>
+      <h1>Editează: {{ lesson.title }}</h1>
+      <p class="tiny-muted">Folosește bara de instrumente chimice: selectezi cifrele și apeși X₂ pentru indici, sau apeși ✨ ca să transformi automat tot textul (H2O → H₂O, -&gt; → →, Ca^2+ → Ca²⁺).</p>
+    </div>
+
+    <section class="panel">
+      <form method="post" class="grid-form two">
+        <label>
+          <span>Clasa</span>
+          <select name="class_id" required>
+            {% for cls in classes %}
+            <option value="{{ cls.id }}" {% if cls.id == lesson.class_id %}selected{% endif %}>{{ cls.name }} {{ cls.section }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>
+          <span>Puncte</span>
+          <input type="number" name="xp" value="{{ lesson.xp }}" min="10" max="200">
+        </label>
+        <label class="full">
+          <span>Titlu</span>
+          <input type="text" name="title" value="{{ lesson.title }}" required minlength="4" data-chem-editor>
+        </label>
+        <label class="full">
+          <span>Rezumat</span>
+          <textarea name="summary" rows="3" required minlength="8" data-chem-editor>{{ lesson.summary }}</textarea>
+        </label>
+        <label class="full">
+          <span>Conținut</span>
+          <textarea name="content" rows="14" required minlength="20" data-chem-editor>{{ lesson.content }}</textarea>
+        </label>
+        <label>
+          <span>Dificultate</span>
+          <select name="difficulty">
+            {% for level in ['Introductiv', 'Mediu', 'Avansat', 'Recapitulare'] %}
+            <option {% if lesson.difficulty == level %}selected{% endif %}>{{ level }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="form-actions">
+          <button class="btn primary" type="submit">Salvează lecția</button>
+          <a class="btn ghost" href="{{ url_for('admin_panel') }}">Renunță</a>
+        </div>
+      </form>
+    </section>
+  </div>
+</section>
+{% endblock %}

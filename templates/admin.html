@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% block title %}Administrare · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Panou de administrare</div>
+      <h1>Control complet: conturi, parole, lecții, teste și clase.</h1>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-tile"><strong>{{ overview.users }}</strong><span>Conturi ({{ overview.teachers }} profesori · {{ overview.students }} elevi)</span></div>
+      <div class="stat-tile"><strong>{{ overview.classes }}</strong><span>Clase</span></div>
+      <div class="stat-tile"><strong>{{ overview.lessons }}</strong><span>Lecții</span></div>
+      <div class="stat-tile"><strong>{{ overview.quizzes }}</strong><span>Teste</span></div>
+      <div class="stat-tile"><strong>{{ overview.attempts }}</strong><span>Încercări la teste</span></div>
+      <div class="stat-tile"><strong>{{ overview.announcements }}</strong><span>Anunțuri</span></div>
+    </div>
+
+    <div class="admin-tabs" data-admin-tabs>
+      <button class="admin-tab active" type="button" data-tab-btn="users">👥 Conturi &amp; parole</button>
+      <button class="admin-tab" type="button" data-tab-btn="lessons">📘 Lecții</button>
+      <button class="admin-tab" type="button" data-tab-btn="quizzes">🧪 Teste</button>
+      <button class="admin-tab" type="button" data-tab-btn="classes">🏫 Clase</button>
+      <button class="admin-tab" type="button" data-tab-btn="announcements">📣 Anunțuri</button>
+      <button class="admin-tab" type="button" data-tab-btn="activity">📊 Activitate</button>
+    </div>
+
+    <!-- ============ CONTURI ============ -->
+    <div class="admin-section active" data-tab-panel="users">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Creează un cont nou</h2>
+          <span class="tiny-muted">Elev sau profesor</span>
+        </div>
+        <form method="post" action="{{ url_for('admin_create_user') }}" class="grid-form two">
+          <label><span>Nume complet</span><input type="text" name="full_name" required minlength="3"></label>
+          <label><span>Utilizator</span><input type="text" name="username" required minlength="3" autocomplete="off"></label>
+          <label><span>Parolă</span><input type="text" name="password" required minlength="4" autocomplete="off"></label>
+          <label>
+            <span>Rol</span>
+            <select name="role">
+              <option value="elev">Elev</option>
+              <option value="profesor">Profesor</option>
+            </select>
+          </label>
+          <label class="checkbox-inline"><input type="checkbox" name="is_admin"> Drepturi de administrator (doar profesori)</label>
+          <div class="form-actions"><button class="btn primary" type="submit">Creează contul</button></div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Toate conturile</h2>
+          <form method="get" action="{{ url_for('admin_panel') }}" class="admin-inline-form">
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Caută nume sau utilizator…" style="padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-strong);color:var(--text)">
+            <button class="btn ghost small" type="submit">Caută</button>
+            {% if search_query %}<a class="btn ghost small" href="{{ url_for('admin_panel') }}">Resetează</a>{% endif %}
+          </form>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Cont</th><th>Rol</th><th>Puncte</th><th>Parolă nouă</th><th style="text-align:right">Acțiuni</th></tr>
+            </thead>
+            <tbody>
+              {% for u in users %}
+              <tr>
+                <td>
+                  <form method="post" action="{{ url_for('admin_update_user', user_id=u.id) }}" id="userForm{{ u.id }}" class="admin-inline-form">
+                    <input type="text" name="full_name" value="{{ u.full_name }}" required minlength="3">
+                    <input type="text" name="username" value="{{ u.username }}" required minlength="3">
+                  </form>
+                </td>
+                <td>
+                  <select name="role" form="userForm{{ u.id }}">
+                    <option value="elev" {% if u.role == 'elev' %}selected{% endif %}>Elev</option>
+                    <option value="profesor" {% if u.role == 'profesor' %}selected{% endif %}>Profesor</option>
+                  </select>
+                  <label class="checkbox-inline" style="margin-top:6px">
+                    <input type="checkbox" name="is_admin" form="userForm{{ u.id }}" {% if u.is_admin %}checked{% endif %}> Admin
+                  </label>
+                  {% if u.is_admin %}<span class="badge-admin">ADMIN</span>{% endif %}
+                </td>
+                <td>{{ u.xp }} · {{ u.level_title }}</td>
+                <td>
+                  <form method="post" action="{{ url_for('admin_reset_password', user_id=u.id) }}" class="admin-inline-form">
+                    <input type="text" name="new_password" placeholder="Parolă nouă" minlength="4" required autocomplete="off">
+                    <button class="btn ghost small" type="submit">Resetează</button>
+                  </form>
+                </td>
+                <td>
+                  <div class="admin-row-actions">
+                    <button class="btn primary small" type="submit" form="userForm{{ u.id }}">Salvează</button>
+                    {% if u.id != current_user.id %}
+                    <form method="post" action="{{ url_for('admin_delete_user', user_id=u.id) }}" onsubmit="return confirm('Ștergi contul {{ u.username }} și toate datele lui?');">
+                      <button class="btn danger small" type="submit">Șterge</button>
+                    </form>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ LECȚII ============ -->
+    <div class="admin-section" data-tab-panel="lessons">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Toate lecțiile</h2>
+          <a class="btn ghost small" href="{{ url_for('quests_page') }}">+ Adaugă lecție nouă</a>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Titlu</th><th>Clasă</th><th>Puncte</th><th>Completări</th><th style="text-align:right">Acțiuni</th></tr></thead>
+            <tbody>
+              {% for l in lessons %}
+              <tr>
+                <td>{{ l.title }}</td>
+                <td>{{ l.class_name }} {{ l.class_section }}</td>
+                <td>{{ l.xp }}</td>
+                <td>{{ l.completion_count }}</td>
+                <td>
+                  <div class="admin-row-actions">
+                    <a class="btn primary small" href="{{ url_for('admin_edit_lesson', lesson_id=l.id) }}">Editează</a>
+                    <form method="post" action="{{ url_for('admin_delete_lesson', lesson_id=l.id) }}" onsubmit="return confirm('Ștergi lecția „{{ l.title }}”?');">
+                      <button class="btn danger small" type="submit">Șterge</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5">Nu există lecții.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ TESTE ============ -->
+    <div class="admin-section" data-tab-panel="quizzes">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Toate testele</h2>
+          <a class="btn ghost small" href="{{ url_for('arena_page') }}">+ Creează test nou</a>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Titlu</th><th>Clasă</th><th>Puncte</th><th>Încercări</th><th style="text-align:right">Acțiuni</th></tr></thead>
+            <tbody>
+              {% for q in quizzes %}
+              <tr>
+                <td>{{ q.title }}</td>
+                <td>{{ q.class_name }} {{ q.class_section }}</td>
+                <td>{{ q.xp }}</td>
+                <td>{{ q.attempt_count }}</td>
+                <td>
+                  <div class="admin-row-actions">
+                    <a class="btn primary small" href="{{ url_for('admin_edit_quiz', quiz_id=q.id) }}">Editează</a>
+                    <form method="post" action="{{ url_for('admin_delete_quiz', quiz_id=q.id) }}" onsubmit="return confirm('Ștergi testul „{{ q.title }}” și toate rezultatele lui?');">
+                      <button class="btn danger small" type="submit">Șterge</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5">Nu există teste.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ CLASE ============ -->
+    <div class="admin-section" data-tab-panel="classes">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Toate clasele</h2>
+          <a class="btn ghost small" href="{{ url_for('classes_page') }}">+ Creează clasă nouă</a>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Clasă</th><th>Cod acces</th><th>Profesor</th><th>Elevi</th><th style="text-align:right">Acțiuni</th></tr></thead>
+            <tbody>
+              {% for c in classes %}
+              <tr>
+                <td>{{ c.name }} {{ c.section }}</td>
+                <td><code>{{ c.code }}</code></td>
+                <td>{{ c.teacher_name }}</td>
+                <td>{{ c.student_count }}</td>
+                <td>
+                  <div class="admin-row-actions">
+                    <form method="post" action="{{ url_for('admin_delete_class', class_id=c.id) }}" onsubmit="return confirm('Ștergi clasa {{ c.name }} {{ c.section }} împreună cu lecțiile, testele și înscrierile ei?');">
+                      <button class="btn danger small" type="submit">Șterge</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5">Nu există clase.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ ANUNȚURI ============ -->
+    <div class="admin-section" data-tab-panel="announcements">
+      <section class="panel">
+        <div class="panel-head"><h2>Anunțuri recente</h2></div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Titlu</th><th>Clasă</th><th>Mesaj</th><th style="text-align:right">Acțiuni</th></tr></thead>
+            <tbody>
+              {% for a in announcements %}
+              <tr>
+                <td>{{ a.title }}</td>
+                <td>{{ a.class_name }} {{ a.class_section }}</td>
+                <td>{{ a.content[:90] }}{% if a.content|length > 90 %}…{% endif %}</td>
+                <td>
+                  <div class="admin-row-actions">
+                    <form method="post" action="{{ url_for('admin_delete_announcement', announcement_id=a.id) }}" onsubmit="return confirm('Ștergi anunțul?');">
+                      <button class="btn danger small" type="submit">Șterge</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr><td colspan="4">Nu există anunțuri.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ ACTIVITATE ============ -->
+    <div class="admin-section" data-tab-panel="activity">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Ultimele încercări la teste</h2>
+          <a class="btn ghost small" href="{{ url_for('export_results_csv') }}">Descarcă rezultate CSV</a>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Elev</th><th>Test</th><th>Scor</th><th>Corecte</th><th>Data</th></tr></thead>
+            <tbody>
+              {% for at in recent_attempts %}
+              <tr>
+                <td>{{ at.full_name }}</td>
+                <td>{{ at.quiz_title }}</td>
+                <td>{{ "%.0f"|format(at.score_percent) }}%</td>
+                <td>{{ at.correct_count }} / {{ at.total_count }}</td>
+                <td>{{ at.created_at[:16].replace('T', ' ') }}</td>
+              </tr>
+              {% else %}
+              <tr><td colspan="5">Nu există încercări încă.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  const buttons = document.querySelectorAll('[data-tab-btn]');
+  const panels = document.querySelectorAll('[data-tab-panel]');
+  function activate(name) {
+    buttons.forEach((b) => b.classList.toggle('active', b.dataset.tabBtn === name));
+    panels.forEach((p) => p.classList.toggle('active', p.dataset.tabPanel === name));
+    try { localStorage.setItem('chimie.adminTab', name); } catch (e) {}
+  }
+  buttons.forEach((b) => b.addEventListener('click', () => activate(b.dataset.tabBtn)));
+  try {
+    const saved = localStorage.getItem('chimie.adminTab');
+    if (saved && document.querySelector(`[data-tab-panel="${saved}"]`)) activate(saved);
+  } catch (e) {}
+})();
+</script>
+{% endblock %}

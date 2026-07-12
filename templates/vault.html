@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Export · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Date și export</div>
+      <h1>Backup, export și verificare backend.</h1>
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Exporturi</h2>
+          <span class="tiny-muted">gata de descărcat</span>
+        </div>
+        <div class="inline-actions">
+          <a class="btn primary" href="{{ url_for('export_json') }}">Descarcă JSON backup</a>
+          <a class="btn ghost" href="{{ url_for('export_results_csv') }}">Descarcă CSV rezultate</a>
+          <a class="btn ghost" href="{{ url_for('healthz') }}" target="_blank">Health check</a>
+        </div>
+        <p class="small-note">JSON-ul salvează structura aplicației. CSV-ul extrage rezultatele testelor.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Snapshot curent</h2>
+          <span class="tiny-muted">structură backend</span>
+        </div>
+        <div class="rules-grid">
+          <div class="rule-card"><strong>{{ snapshot.users|length }}</strong><p>utilizatori</p></div>
+          <div class="rule-card"><strong>{{ snapshot.classes|length }}</strong><p>clase</p></div>
+          <div class="rule-card"><strong>{{ snapshot.lessons|length }}</strong><p>lecții</p></div>
+          <div class="rule-card"><strong>{{ snapshot.quizzes|length }}</strong><p>quiz-uri</p></div>
+          <div class="rule-card"><strong>{{ snapshot.attempts|length }}</strong><p>încercări</p></div>
+          <div class="rule-card"><strong>{{ snapshot.announcements|length }}</strong><p>anunțuri</p></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Preview JSON</h2>
+      </div>
+<pre class="code-preview"><code>{{ snapshot.meta | tojson(indent=2) }}</code></pre>
+    </section>
+  </div>
+</section>
+{% endblock %}

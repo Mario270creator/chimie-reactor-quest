@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block title %}ONCS Studio · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">ONCS Studio</div>
+      <h1>Zona în care proiectul arată serios, clar și gata de jurizare.</h1>
+      <p class="lead">Am transformat regulamentul în instrumente practice: navigator de secțiune, timer, checklist, rubrică și export de proiect.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>{{ 'Editează proiectul' if selected_project else 'Creează proiect nou' }}</h2>
+          {% if selected_project %}
+            <a href="{{ url_for('export_project', project_id=selected_project.id) }}" target="_blank">Exportă proiectul</a>
+          {% endif %}
+        </div>
+
+        <form method="post" action="{% if selected_project %}{{ url_for('update_project', project_id=selected_project.id) }}{% else %}{{ url_for('create_project') }}{% endif %}" class="grid-form two">
+          <label class="full">
+            <span>Titlu proiect</span>
+            <input type="text" name="title" value="{{ selected_project.title if selected_project else '' }}" placeholder="Ex: EcoLab" required>
+          </label>
+          <label>
+            <span>Acronim</span>
+            <input type="text" name="acronym" value="{{ selected_project.acronym if selected_project else '' }}" placeholder="ECO-ION" required>
+          </label>
+          <label>
+            <span>Clasa asociată</span>
+            <select name="class_id">
+              <option value="">Fără clasă</option>
+              {% for cls in classes %}
+              <option value="{{ cls.id }}" {% if selected_project and selected_project.class_id == cls.id %}selected{% endif %}>{{ cls.name }} {{ cls.section }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>
+            <span>Categorie</span>
+            <select name="team_category" required>
+              <option value="Juniori" {% if selected_project and selected_project.team_category == 'Juniori' %}selected{% endif %}>Juniori</option>
+              <option value="Seniori" {% if selected_project and selected_project.team_category == 'Seniori' %}selected{% endif %}>Seniori</option>
+            </select>
+          </label>
+          <label>
+            <span>Secțiune</span>
+            <select name="section" required>
+              <option value="A" {% if selected_project and selected_project.section == 'A' %}selected{% endif %}>A · Științe fundamentale</option>
+              <option value="B" {% if selected_project and selected_project.section == 'B' %}selected{% endif %}>B · Științe aplicate</option>
+              <option value="C" {% if selected_project and selected_project.section == 'C' %}selected{% endif %}>C · Tehnologia informației</option>
+            </select>
+          </label>
+          <label>
+            <span>Mentor</span>
+            <input type="text" name="mentor_name" value="{{ selected_project.mentor_name if selected_project else current_user.full_name }}" placeholder="Nume mentor" required>
+          </label>
+          <label>
+            <span>Unitate școlară</span>
+            <input type="text" name="school_name" value="{{ selected_project.school_name if selected_project else '' }}" placeholder="Școala / colegiul" required>
+          </label>
+          <label>
+            <span>Membru 1</span>
+            <input type="text" name="member_one" value="{{ selected_project.member_one if selected_project else current_user.full_name }}" required>
+          </label>
+          <label>
+            <span>Rol membru 1</span>
+            <input type="text" name="member_one_role" value="{{ selected_project.member_one_role if selected_project else '' }}" placeholder="Experiment / cod / analiză" required>
+          </label>
+          <label>
+            <span>Membru 2</span>
+            <input type="text" name="member_two" value="{{ selected_project.member_two if selected_project else '' }}" required>
+          </label>
+          <label>
+            <span>Rol membru 2</span>
+            <input type="text" name="member_two_role" value="{{ selected_project.member_two_role if selected_project else '' }}" required>
+          </label>
+          <label class="full">
+            <span>Problema identificată</span>
+            <textarea name="problem" rows="4" required>{{ selected_project.problem if selected_project else '' }}</textarea>
+          </label>
+          <label class="full">
+            <span>Obiective</span>
+            <textarea name="objectives" rows="4" required>{{ selected_project.objectives if selected_project else '' }}</textarea>
+          </label>
+          <label class="full">
+            <span>Metode folosite</span>
+            <textarea name="methods" rows="5" required>{{ selected_project.methods if selected_project else '' }}</textarea>
+          </label>
+          <label class="full">
+            <span>Noutate / originalitate</span>
+            <textarea name="novelty" rows="4" required>{{ selected_project.novelty if selected_project else '' }}</textarea>
+          </label>
+          <label class="full">
+            <span>Rezultate</span>
+            <textarea name="results" rows="5" required>{{ selected_project.results if selected_project else '' }}</textarea>
+          </label>
+          <label class="full">
+            <span>Pași următori</span>
+            <textarea name="next_steps" rows="4" required>{{ selected_project.next_steps if selected_project else '' }}</textarea>
+          </label>
+          <label>
+            <span>Data de început a studiului</span>
+            <input type="date" name="started_on" value="{{ selected_project.started_on if selected_project else today_iso }}" required>
+          </label>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">{{ 'Salvează modificările' if selected_project else 'Creează proiectul' }}</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel aside-panel">
+        <div class="panel-head">
+          <h2>Checklist rapid</h2>
+          <a href="{{ url_for('pitch_timer') }}">Timer pitch</a>
+        </div>
+        {% if compliance %}
+        <div class="compliance-box">
+          <div class="compliance-line">
+            <strong>{{ compliance.percent }}%</strong>
+            <span>completare curentă</span>
+          </div>
+          <div class="level-track slim">
+            <div class="level-track-fill" style="width: {{ compliance.percent }}%"></div>
+          </div>
+          <ul class="check-list">
+            {% for label, ok in compliance.checks %}
+            <li class="{{ 'ok' if ok else 'missing' }}">{{ '✔' if ok else '✖' }} {{ label }}</li>
+            {% endfor %}
+          </ul>
+          <ul class="warning-list">
+            {% for warning in compliance.warnings %}
+            <li>{{ warning }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% else %}
+        <div class="empty-state">Creează primul proiect ca să vezi progresul de conformitate.</div>
+        {% endif %}
+
+        <div class="rules-stack">
+          <div class="tiny-card"><strong>2 elevi / echipă</strong><br>Fără echipă extinsă.</div>
+          <div class="tiny-card"><strong>1 proiect / echipă</strong><br>Clar și bine delimitat.</div>
+          <div class="tiny-card"><strong>Pitch 10 + 5</strong><br>10 minute prezentare, 5 minute întrebări.</div>
+          <div class="tiny-card"><strong>Poster 80 × 120</strong><br>Stand lizibil și aerisit.</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="dashboard-grid lower">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Navigator de secțiune</h2>
+          <span class="tiny-muted">Ghidează încadratea A / B / C</span>
+        </div>
+        <div class="grid-form two">
+          <label>
+            <span>Scopul principal</span>
+            <select data-nav-goal>
+              <option value="A">Avansare teoretică / cercetare fundamentală</option>
+              <option value="B">Rezolvare practică / prototip / aplicație</option>
+              <option value="C">Software / algoritm / tehnologie digitală</option>
+            </select>
+          </label>
+          <label>
+            <span>Metoda dominantă</span>
+            <select data-nav-method>
+              <option value="A">Modelare, analiză, demonstrație</option>
+              <option value="B">Experiment, testare, prototip</option>
+              <option value="C">Programare, analiză de date, AI</option>
+            </select>
+          </label>
+          <label class="full">
+            <span>Impactul dorit</span>
+            <select data-nav-impact>
+              <option value="A">Cunoaștere științifică și explicații</option>
+              <option value="B">Aplicații industriale, sociale sau medicale</option>
+              <option value="C">Progres tehnologic și produse digitale</option>
+            </select>
+          </label>
+        </div>
+        <div class="navigator-result" data-nav-result>
+          Recomandare: <strong>Secțiunea A</strong> · proiect orientat spre înțelegere teoretică și rigoare științifică.
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Rubrică de autoevaluare</h2>
+          <span class="tiny-muted">Punctaj maxim 100</span>
+        </div>
+        <div class="rubric-grid" data-rubric>
+          <label><span>Creativitate (0-25)</span><input type="range" min="0" max="25" value="18" data-rubric-input></label>
+          <label><span>Abordare științifică (0-15)</span><input type="range" min="0" max="15" value="10" data-rubric-input></label>
+          <label><span>Obiective clare (0-10)</span><input type="range" min="0" max="10" value="8" data-rubric-input></label>
+          <label><span>Complexitate (0-10)</span><input type="range" min="0" max="10" value="7" data-rubric-input></label>
+          <label><span>Prezentare vizuală/orală (0-15)</span><input type="range" min="0" max="15" value="11" data-rubric-input></label>
+          <label><span>Muncă în echipă (0-15)</span><input type="range" min="0" max="15" value="12" data-rubric-input></label>
+          <label><span>Din oficiu (0-10)</span><input type="range" min="0" max="10" value="10" data-rubric-input></label>
+        </div>
+        <div class="rubric-total">Scor estimat: <strong data-rubric-total>76</strong> / 100</div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Reguli de siguranță și stand</h2>
+          <span class="tiny-muted">Gata de verificare</span>
+        </div>
+        <div class="info-stack">
+          <div class="tiny-card">Exponat maxim: 50 cm adâncime × 80 cm lățime × 120 cm înălțime.</div>
+          <div class="tiny-card">Poster maxim: 80 cm lățime × 120 cm înălțime.</div>
+          <div class="tiny-card">Nu aduce materiale chimice periculoase, substanțe inflamabile sau dispozitive riscante pe stand.</div>
+          <div class="tiny-card">Nu folosi fotografii care identifică persoane fără acord și evită logo-urile nepermise pe stand.</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Proiectele tale</h2>
+      </div>
+      <div class="class-grid">
+        {% for project in projects %}
+        <article class="class-card">
+          <div class="class-card-top">
+            <div>
+              <h3>{{ project.acronym }} · {{ project.title }}</h3>
+              <p>{{ project.team_category }} · Secțiunea {{ project.section }}{% if project.class_name %} · {{ project.class_name }} {{ project.class_section }}{% endif %}</p>
+            </div>
+            <span class="pill accent">{{ project.updated_at[:10] }}</span>
+          </div>
+          <div class="class-stats">
+            <span>👥 {{ project.member_one }} + {{ project.member_two }}</span>
+            <span>🧭 Mentor: {{ project.mentor_name }}</span>
+          </div>
+          <div class="inline-actions">
+            <a class="btn ghost small" href="{{ url_for('oncs_page', project=project.id) }}">Editează</a>
+            <a class="btn primary small" href="{{ url_for('export_project', project_id=project.id) }}" target="_blank">Exportă</a>
+          </div>
+        </article>
+        {% else %}
+        <div class="empty-state">Nu ai proiecte create încă.</div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

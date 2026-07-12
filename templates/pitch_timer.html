@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Cronometru prezentare · {{ site_name }}{% endblock %}
+{% block content %}
+<section class="section page-top">
+  <div class="container narrow">
+    {% if not current_user %}
+    <section class="panel public-callout">
+      <div class="panel-head">
+        <h2>Timer public</h2>
+        <span class="tiny-muted">Acces rapid</span>
+      </div>
+      <p class="small-note">Cronometrul este disponibil fără autentificare, ca să poți repeta oricând o prezentare scurtă.</p>
+      <div class="inline-actions">
+        <a class="btn primary small" href="{{ url_for('lab_page') }}">Mergi în laborator</a>
+        <a class="btn ghost small" href="{{ url_for('demo_login', role='elev') }}">Demo instant</a>
+      </div>
+    </section>
+    {% endif %}
+
+    <div class="section-head">
+      <div class="eyebrow">Cronometru prezentare</div>
+      <h1>Exersează o prezentare în formatul 10 minute + 5 minute.</h1>
+    </div>
+
+    <section class="panel timer-panel">
+      <div class="timer-mode-tabs">
+        <button class="btn primary small" type="button" data-timer-mode="presentation">Prezentare 10 min</button>
+        <button class="btn ghost small" type="button" data-timer-mode="qa">Q&A 5 min</button>
+        <button class="btn ghost small" type="button" data-timer-mode="custom">Personalizat</button>
+      </div>
+
+      <div class="custom-time-grid">
+        <label><span>Minute</span><input type="number" min="0" max="59" value="10" data-timer-minutes></label>
+        <label><span>Secunde</span><input type="number" min="0" max="59" value="0" data-timer-seconds></label>
+      </div>
+
+      <div class="timer-display" data-timer-display>10:00</div>
+      <p class="timer-note" data-timer-label>Mod: Prezentare</p>
+
+      <div class="inline-actions centered">
+        <button class="btn primary" type="button" data-timer-start>Start</button>
+        <button class="btn ghost" type="button" data-timer-pause>Pauză</button>
+        <button class="btn ghost" type="button" data-timer-reset>Reset</button>
+      </div>
+
+      <div class="info-stack">
+        <div class="tiny-card">Folosește timerul înainte de o susținere, ca să îți disciplinezi structura și ritmul.</div>
+        <div class="tiny-card">Un model simplu: 1 minut problemă, 2 minute metodă, 3 minute rezultate, 2 minute noutate, 2 minute concluzii.</div>
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}
