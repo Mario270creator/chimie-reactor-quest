@@ -1541,26 +1541,17 @@ def service_worker():
 def healthz():
     return jsonify({"ok": True, "app": "Chimie Academy · Clasele VII-VIII", "db": str(DB_PATH)})
 
-# ==========================================
-# SECTIUNE PANEL ADMIN & MANAGEMENT CONTURI
-# ==========================================
-
 def is_admin():
-    """Verifică dacă utilizatorul curent are rolul de admin în sesiune."""
     return session.get('role') == 'admin'
 
 @app.route('/admin/dashboard')
 def admin_dashboard():
-    """Afișează panoul de management pentru administratori."""
     if not is_admin():
         flash('Acces interzis! Doar administratorii au acces la panoul de control.', 'danger')
         return redirect(url_for('home'))
         
-    conn = get_db_connection()
+    conn = sqlite3.connect('instance/chimie_reactor_quest.db')
     cursor = conn.cursor()
-    
-    # Preluăm toți utilizatorii din baza de date pentru management
-    # Excludem adminul curent din listă ca să nu se poată șterge singur din greșeală
     current_user_id = session.get('user_id')
     cursor.execute("SELECT id, username, email, role FROM users WHERE id != ?", (current_user_id,))
     users = cursor.fetchall()
@@ -1570,23 +1561,16 @@ def admin_dashboard():
 
 @app.route('/admin/delete_user/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
-    """Șterge definitiv un utilizator și progresul său asociat."""
     if not is_admin():
         flash('Acțiune neautorizată!', 'danger')
         return redirect(url_for('home'))
         
-    conn = get_db_connection()
+    conn = sqlite3.connect('instance/chimie_reactor_quest.db')
     cursor = conn.cursor()
-    
     try:
-        # Ștergem progresul sau alte înregistrări dependente pentru a evita erorile de Foreign Key
-        cursor.execute("DELETE FROM user_progress WHERE user_id = ?", (user_id,))
-        cursor.execute("DELETE FROM user_quests WHERE user_id = ?", (user_id,))
-        
-        # Ștergem utilizatorul propriu-zis
         cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
         conn.commit()
-        flash('Utilizatorul și toate datele sale asociate au fost șterse cu succes.', 'success')
+        flash('Utilizatorul a fost șters cu succes.', 'success')
     except Exception as e:
         conn.rollback()
         flash(f'Eroare la ștergerea utilizatorului: {str(e)}', 'danger')
@@ -1597,17 +1581,16 @@ def delete_user(user_id):
 
 @app.route('/admin/change_role/<int:user_id>', methods=['POST'])
 def change_role(user_id):
-    """Schimbă rolul unui utilizator (ex: promovează un student la profesor/admin)."""
     if not is_admin():
         flash('Acțiune neautorizată!', 'danger')
         return redirect(url_for('home'))
         
     noul_rol = request.form.get('new_role')
-    if noul_rol not in ['student', 'teacher', 'admin']:
+    if noul_rol not in ['elev', 'profesor', 'admin']:
         flash('Rol invalid!', 'danger')
         return redirect(url_for('admin_dashboard'))
         
-    conn = get_db_connection()
+    conn = sqlite3.connect('instance/chimie_reactor_quest.db')
     cursor = conn.cursor()
     try:
         cursor.execute("UPDATE users SET role = ? WHERE id = ?", (noul_rol, user_id))
@@ -1619,42 +1602,6 @@ def change_role(user_id):
         conn.close()
         
     return redirect(url_for('admin_dashboard'))
-    @app.route('/admin')
-def admin_panel():
-    if not current_user or current_user.role != 'admin':
-        return redirect(url_for('home'))
-    
-    conn = get_db_connection()
-    all_users = conn.execute("SELECT id, username, full_name, role FROM users").fetchall()
-    conn.close()
-    
-    return render_template('admin.html', all_users=all_users)
-
-@app.route('/admin/delete/<int:user_id>', methods=['POST'])
-def admin_delete_user(user_id):
-    if not current_user or current_user.role != 'admin':
-        return redirect(url_for('home'))
-        
-    conn = get_db_connection()
-    conn.execute("DELETE FROM user_progress WHERE user_id = ?", (user_id,))
-    conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
-    conn.commit()
-    conn.close()
-    
-    return redirect(url_for('admin_panel'))
-
-@app.route('/admin/role/<int:user_id>', methods=['POST'])
-def admin_change_role(user_id):
-    if not current_user or current_user.role != 'admin':
-        return redirect(url_for('home'))
-        
-    new_role = request.form.get('new_role')
-    conn = get_db_connection()
-    conn.execute("UPDATE users SET role = ? WHERE id = ?", (new_role, user_id))
-    conn.commit()
-    conn.close()
-    
-    return redirect(url_for('admin_panel'))
     
 if __name__ == "__main__":
     default_host = "0.0.0.0" if os.environ.get("RENDER") else "127.0.0.1"
