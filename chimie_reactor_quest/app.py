@@ -1619,6 +1619,42 @@ def change_role(user_id):
         conn.close()
         
     return redirect(url_for('admin_dashboard'))
+    @app.route('/admin')
+def admin_panel():
+    if not current_user or current_user.role != 'admin':
+        return redirect(url_for('home'))
+    
+    conn = get_db_connection()
+    all_users = conn.execute("SELECT id, username, full_name, role FROM users").fetchall()
+    conn.close()
+    
+    return render_template('admin.html', all_users=all_users)
+
+@app.route('/admin/delete/<int:user_id>', methods=['POST'])
+def admin_delete_user(user_id):
+    if not current_user or current_user.role != 'admin':
+        return redirect(url_for('home'))
+        
+    conn = get_db_connection()
+    conn.execute("DELETE FROM user_progress WHERE user_id = ?", (user_id,))
+    conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for('admin_panel'))
+
+@app.route('/admin/role/<int:user_id>', methods=['POST'])
+def admin_change_role(user_id):
+    if not current_user or current_user.role != 'admin':
+        return redirect(url_for('home'))
+        
+    new_role = request.form.get('new_role')
+    conn = get_db_connection()
+    conn.execute("UPDATE users SET role = ? WHERE id = ?", (new_role, user_id))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for('admin_panel'))
     
 if __name__ == "__main__":
     default_host = "0.0.0.0" if os.environ.get("RENDER") else "127.0.0.1"
