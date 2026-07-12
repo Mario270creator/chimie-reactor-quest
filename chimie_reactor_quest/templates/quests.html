@@ -14,7 +14,7 @@
         <h2>Adaugă o lecție nouă</h2>
         <span class="tiny-muted">Puncte + dificultate</span>
       </div>
-      <form method="post" action="{{ url_for('create_lesson') }}" class="grid-form two">
+      <form method="post" action="{{ url_for('create_lesson') }}" class="grid-form two" id="lessonBuilderForm">
         <label>
           <span>Clasa</span>
           <select name="class_id" required>
@@ -32,13 +32,17 @@
           <input type="text" name="title" placeholder="Lecția 3 · ..." required>
         </label>
         <label class="full">
-          <span>Rezumat</span>
-          <textarea name="summary" rows="3" placeholder="Scurtă descriere a lecției" required></textarea>
+          <span>Rezumat scurt</span>
+          <textarea name="summary" rows="2" placeholder="Scurtă descriere a lecției" required></textarea>
         </label>
+        
+        <!-- EDITORUL PENTRU CONȚINUTUL LECȚIEI -->
         <label class="full">
-          <span>Conținut</span>
-          <textarea name="content" rows="6" placeholder="Explică lecția clar și atractiv." required></textarea>
+          <span>Conținut (folosește <strong>X₂</strong> pentru indici și <strong>X²</strong> pentru ioni)</span>
+          <div id="editor-container" style="height: 250px; border-radius: 8px; background: var(--bg-panel); color: var(--text-color); border: 1px solid var(--border-color);"></div>
+          <input type="hidden" name="content" id="hidden_content">
         </label>
+
         <label>
           <span>Dificultate</span>
           <select name="difficulty">
@@ -66,7 +70,8 @@
         <p class="mission-summary">{{ lesson.summary }}</p>
         <details>
           <summary>Deschide conținutul lecției</summary>
-          <div class="details-body">{{ lesson.content }}</div>
+          <!-- AICI RULĂM HTML-UL PENTRU INDICI -->
+          <div class="details-body">{{ lesson.content | safe }}</div>
         </details>
         <div class="mission-foot">
           <span class="tiny-muted">{{ lesson.difficulty }}</span>
@@ -89,4 +94,36 @@
     </section>
   </div>
 </section>
+
+<!-- SCRIPT-URILE PENTRU EDITORUL CHIMIC -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+  .ql-toolbar { background: var(--bg-alt); border-color: var(--border-color) !important; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+  .ql-container { border-color: var(--border-color) !important; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; font-family: inherit; font-size: 16px; }
+</style>
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if(document.getElementById('editor-container')) {
+      var quill = new Quill('#editor-container', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['clean']
+          ]
+        }
+      });
+
+      var form = document.getElementById('lessonBuilderForm');
+      if(form) {
+        form.addEventListener('submit', function() {
+          document.querySelector('#hidden_content').value = quill.root.innerHTML;
+        });
+      }
+    }
+  });
+</script>
 {% endblock %}
