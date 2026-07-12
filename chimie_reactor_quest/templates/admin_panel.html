@@ -1,75 +1,58 @@
 {% extends "base.html" %}
-
+{% block title %}Panou Administrator · {{ site_name }}{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>🛡️ Panou de Administrare - Chimie Academy</h2>
-        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Înapoi în Dashboard</a>
+<section class="section page-top">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Administrare</div>
+      <h1>Management Utilizatori</h1>
+      <p class="lead">Aici poți șterge conturi sau schimba rolurile utilizatorilor (Elev / Profesor / Admin).</p>
     </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Baza de date utilizatori</h2>
+        <span class="tiny-muted">Atenție la ștergeri!</span>
+      </div>
+      <div class="leaderboard-table full">
+        <div class="leader-row top" style="font-weight: bold; background: var(--bg-alt);">
+          <div class="leader-row-rank">ID</div>
+          <div class="leader-row-name">Nume și Utilizator</div>
+          <div class="leader-row-role">Schimbă Rol</div>
+          <div class="leader-row-score">Acțiuni</div>
+        </div>
+        
+        {% for u in all_users %}
+        <div class="leader-row">
+          <div class="leader-row-rank">#{{ u.id }}</div>
+          <div class="leader-row-name">
+            <strong>{{ u.full_name }}</strong><br>
+            <span class="tiny-muted">@{{ u.username }}</span>
           </div>
+          <div class="leader-row-role">
+            <form method="post" action="{{ url_for('admin_change_role', user_id=u.id) }}" class="stack-form" style="margin:0; width: auto;">
+              <select name="new_role" onchange="this.form.submit()" style="padding: 4px 8px; font-size: 14px;">
+                <option value="elev" {% if u.role == 'elev' %}selected{% endif %}>Elev</option>
+                <option value="profesor" {% if u.role == 'profesor' %}selected{% endif %}>Profesor</option>
+                <option value="admin" {% if u.role == 'admin' %}selected{% endif %}>Admin</option>
+              </select>
+            </form>
+          </div>
+          <div class="leader-row-score">
+            {% if u.id != current_user.id %}
+            <form method="post" action="{{ url_for('admin_delete_user', user_id=u.id) }}" onsubmit="return confirm('Ești sigur că vrei să ștergi acest cont? Toate progresele lui vor fi pierdute!');">
+              <button type="submit" class="btn ghost small" style="color: #ff4d4d; border-color: rgba(255, 77, 77, 0.2);">Șterge</button>
+            </form>
+            {% else %}
+            <span class="tiny-muted">Contul tău</span>
+            {% endif %}
+          </div>
+        </div>
+        {% else %}
+        <div class="empty-state">Nu există alți utilizatori.</div>
         {% endfor %}
-      {% endif %}
-    {% endwith %}
-
-    <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">Management Utilizatori</h5>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nume Utilizator</th>
-                            <th>Email</th>
-                            <th>Rol Curent</th>
-                            <th>Modifică Rol</th>
-                            <th>Acțiuni Slv.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr>
-                            <td>{{ user[0] }}</td>
-                            <td><strong>{{ user[1] }}</strong></td>
-                            <td>{{ user[2] if user[2] else 'Nespecificat' }}</td>
-                            <td>
-                                <span class="badge {% if user[3] == 'admin' %}bg-danger{% elif user[3] == 'teacher' %}bg-info{% else %}bg-primary{% endif %}">
-                                    {{ user[3] | upper }}
-                                </span>
-                            </td>
-                            <td>
-                                <form action="{{ url_for('change_role', user_id=user[0]) }}" method="POST" class="d-inline-flex gap-2">
-                                    <select name="new_role" class="form-select form-select-sm" style="width: auto;">
-                                        <option value="student" {% if user[3] == 'student' %}selected{% endif %}>Student</option>
-                                        <option value="teacher" {% if user[3] == 'teacher' %}selected{% endif %}>Profesor</option>
-                                        <option value="admin" {% if user[3] == 'admin' %}selected{% endif %}>Admin</option>
-                                    </select>
-                                    <button type="submit" class="btn btn-sm btn-success">Actualizează</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="{{ url_for('delete_user', user_id=user[0]) }}" method="POST" onsubmit="return confirm('ATENȚIE! Ești absolut sigur că vrei să ștergi contul lui {{ user[1] }}? Toate datele, punctele și quest-urile salvate vor fi pierdute definitiv!');">
-                                    <button type="submit" class="btn btn-sm btn-danger">Elimină Cont</button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">Nu există alți utilizatori înregistrați pe platformă.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+      </div>
+    </section>
+  </div>
+</section>
 {% endblock %}
