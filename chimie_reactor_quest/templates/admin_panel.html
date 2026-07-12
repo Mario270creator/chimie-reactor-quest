@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🛡️ Panou de Administrare - Chimie Academy</h2>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Înapoi în Dashboard</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Management Utilizatori</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nume Utilizator</th>
+                            <th>Email</th>
+                            <th>Rol Curent</th>
+                            <th>Modifică Rol</th>
+                            <th>Acțiuni Slv.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user[0] }}</td>
+                            <td><strong>{{ user[1] }}</strong></td>
+                            <td>{{ user[2] if user[2] else 'Nespecificat' }}</td>
+                            <td>
+                                <span class="badge {% if user[3] == 'admin' %}bg-danger{% elif user[3] == 'teacher' %}bg-info{% else %}bg-primary{% endif %}">
+                                    {{ user[3] | upper }}
+                                </span>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('change_role', user_id=user[0]) }}" method="POST" class="d-inline-flex gap-2">
+                                    <select name="new_role" class="form-select form-select-sm" style="width: auto;">
+                                        <option value="student" {% if user[3] == 'student' %}selected{% endif %}>Student</option>
+                                        <option value="teacher" {% if user[3] == 'teacher' %}selected{% endif %}>Profesor</option>
+                                        <option value="admin" {% if user[3] == 'admin' %}selected{% endif %}>Admin</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-success">Actualizează</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('delete_user', user_id=user[0]) }}" method="POST" onsubmit="return confirm('ATENȚIE! Ești absolut sigur că vrei să ștergi contul lui {{ user[1] }}? Toate datele, punctele și quest-urile salvate vor fi pierdute definitiv!');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Elimină Cont</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Nu există alți utilizatori înregistrați pe platformă.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
